@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/icon3"
+    tools:context=".LoginActivity">
+
+
+    <FrameLayout
+        android:id="@+id/containers"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_above="@+id/buttonContainer"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="15dp"
+        android:padding="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/end"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginBottom="25dp"
+        >
+
+        <Button
+            android:id="@+id/byemail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="25dp"
+            android:backgroundTint="#307A02"
+            android:text="Email"
+
+
+            />
+
+        <Button
+            android:id="@+id/byphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:backgroundTint="#307A02"
+            android:text="Phone"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have account?"
+            android:layout_marginEnd="4dp"
+
+            />
+
+        <TextView
+            android:id="@+id/switches"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:layout_marginStart="4dp"
+            android:onClick="toSignUp"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

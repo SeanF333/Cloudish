@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".EditProfileActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bar"
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            android:background="#01081B">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/close"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_close"/>
+
+                <TextView
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Profile"
+                    android:textAllCaps="true"
+                    android:fontFamily="sans-serif-black"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"/>
+
+                <ImageView
+                    android:id="@+id/donee"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:src="@drawable/ic_done"/>
+
+            </RelativeLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <ImageView
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="6dp"
+        android:id="@+id/pppp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:background="@drawable/border_square"
+        />
+    <TextView
+        android:id="@+id/change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#606FF6"
+        android:layout_marginBottom="32dp"
+        android:text="Change Profile Picture"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <TextView
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textColor="@color/white"/>
+
+        <EditText
+            android:id="@+id/unnnn"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Name"
+            android:textColor="@color/white"/>
+
+        <EditText
+            android:id="@+id/fnnnn"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/white"/>
+
+        <RelativeLayout
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="Private Account"/>
+
+            <Switch
+                android:id="@+id/switches"
+                android:layout_alignParentRight="true"
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:trackTint="@color/white"
+                android:thumbTint="#E74E0C"
+                android:checked="false"/>
+
+        </RelativeLayout>
+
+        
+    </LinearLayout>
+
+
+</LinearLayout>

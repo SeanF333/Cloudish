@@ -4,9 +4,9 @@
     >
     <item
         android:state_focused="true"
-        android:drawable="@color/oren"
+        android:drawable="@color/orange"
         /> <!-- focused -->
     <item
-        android:drawable="@color/abuabu"
+        android:drawable="@color/grey_out"
         /> <!-- default -->
 </selector>

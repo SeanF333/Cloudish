@@ -15,11 +15,6 @@ import android.widget.EditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Phone_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Phone_F extends Fragment {
 
     EditText notelp;
@@ -33,8 +28,6 @@ public class Phone_F extends Fragment {
     public Phone_F() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

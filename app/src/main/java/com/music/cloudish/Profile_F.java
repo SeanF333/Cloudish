@@ -24,11 +24,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Profile_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Profile_F extends Fragment {
 
 
@@ -83,7 +78,7 @@ public class Profile_F extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(getActivity(), MainActivity.class);
+                Intent i = new Intent(getActivity(), Login_A.class);
                 startActivity(i);
                 getActivity().finishAffinity();
             }

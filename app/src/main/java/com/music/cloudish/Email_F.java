@@ -20,11 +20,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Email_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Email_F extends Fragment {
 
     EditText ema,pass;
@@ -66,7 +61,6 @@ public class Email_F extends Fragment {
 
             }
         });
-
         return view;
     }
 

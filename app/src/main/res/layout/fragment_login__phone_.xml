@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Login_Email_F"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:padding="30dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign in With Your Phone Number"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/main_purple"
+        android:textSize="16sp"/>
+
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/ccp"
+        android:background="@drawable/rounded_outline_purple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ccp_autoDetectCountry="true"
+        app:ccp_showFlag="true"
+        app:ccp_showFullName="true"
+        app:ccp_showNameCode="true"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginTop="5dp"
+        android:id="@+id/phone_number"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number"
+        app:hintTextColor="@color/black"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeErrorColor="@color/orange"
+        app:boxStrokeWidthFocused="2dp"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/black"
+        app:startIconDrawable="@drawable/phone"
+        app:startIconTint="@color/black"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/go"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:fontFamily="@font/poppins_bold"
+        android:backgroundTint="@color/main_purple"
+        app:cornerRadius="30dp"
+        android:text="Go"
+        android:textColor="@color/white" />
+
+
+
+</LinearLayout>

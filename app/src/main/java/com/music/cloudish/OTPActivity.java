@@ -31,8 +31,6 @@ import java.util.concurrent.TimeUnit;
 public class OTPActivity extends AppCompatActivity {
 
     EditText[] otpETs = new EditText[6];
-
-
     Button send;
     ProgressBar pd;
     String verificationCodeBySystem;
@@ -112,8 +110,6 @@ public class OTPActivity extends AppCompatActivity {
 
         sendVerificationCodeToUser(phoneNo);
 
-
-
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,12 +128,10 @@ public class OTPActivity extends AppCompatActivity {
 
     }
 
-
-
     private void sendVerificationCodeToUser(String phoneNo) {
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+62"+phoneNo,
+                "+"+phoneNo,
                 60,
                 TimeUnit.SECONDS,
                 this,
@@ -207,9 +201,6 @@ public class OTPActivity extends AppCompatActivity {
         }else if (tipe==2){
             signInWithCredential(cr);
         }
-
-
-
     }
 
     private void signInWithCredential(PhoneAuthCredential cr) {

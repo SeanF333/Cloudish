@@ -43,8 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
         pass=findViewById(R.id.passRegis);
         notelp=findViewById(R.id.notelpRegis);
         regis1=findViewById(R.id.regis1);
-
-
         auth = FirebaseAuth.getInstance();
 
         regis1.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         auth.createUserWithEmailAndPassword(em, pas).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+            public void onComplete(@NonNull Task<AuthResult> task){
                 if (task.isSuccessful()){
                     FirebaseUser us = auth.getCurrentUser();
                     String uid = us.getUid();

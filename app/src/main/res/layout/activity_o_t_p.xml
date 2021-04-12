@@ -1,101 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/icon5"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".OTPActivity">
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/send_otp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="OTP VERIFICATION"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/main_purple"
+        android:textSize="30sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Enter OTP that we already sent"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="180dp"
         android:layout_alignParentBottom="true"
-        android:gravity="center">
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:orientation="horizontal"
             android:gravity="bottom"
-            >
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/otpET1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/otpinput"
+                android:gravity="center"
                 android:inputType="number"
                 android:maxLength="1"
-                android:gravity="center"
-                android:background="@drawable/otpinput"
-                android:layout_marginEnd="3dp"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/otpET2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/otpinput"
+                android:gravity="center"
                 android:inputType="number"
                 android:maxLength="1"
-                android:gravity="center"
-                android:background="@drawable/otpinput"
-                android:layout_marginEnd="3dp"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/otpET3"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/otpinput"
+                android:gravity="center"
                 android:inputType="number"
                 android:maxLength="1"
-                android:gravity="center"
-                android:background="@drawable/otpinput"
-                android:layout_marginEnd="3dp"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/otpET4"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/otpinput"
+                android:gravity="center"
                 android:inputType="number"
                 android:maxLength="1"
-                android:gravity="center"
-                android:background="@drawable/otpinput"
-                android:layout_marginEnd="3dp"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/otpET5"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/otpinput"
+                android:gravity="center"
                 android:inputType="number"
                 android:maxLength="1"
-                android:gravity="center"
-                android:background="@drawable/otpinput"
-                android:layout_marginEnd="3dp"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/otpET6"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:inputType="number"
-                android:gravity="center"
-                android:maxLength="1"
                 android:background="@drawable/otpinput"
-                android:textSize="20sp"/>
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="20sp" />
         </LinearLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sendBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="30dp"
-            android:backgroundTint="#307A02"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:backgroundTint="@color/pop_orange"
+            android:fontFamily="@font/montserrat_bold"
             android:text="Send"
-            />
-
-
+            app:cornerRadius="40dp"/>
 
     </LinearLayout>
 
@@ -104,20 +139,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginBottom="90dp">
+        android:orientation="horizontal">
 
         <ProgressBar
             android:id="@+id/PD"
-            android:visibility="visible"
             android:layout_width="50dp"
             android:layout_height="50dp"
-
-
-
-            />
+            android:visibility="visible" />
     </LinearLayout>
 
 
-
-</RelativeLayout>
+</LinearLayout>

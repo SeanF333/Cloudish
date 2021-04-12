@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cloudish">
-        <activity android:name=".UploadSongActivity"></activity>
+        <activity android:name=".SignUp_A"></activity>
+        <activity android:name=".Login_A" />
+        <activity android:name=".UploadSongActivity" />
         <activity android:name=".SongInAlbumActivity" />
         <activity android:name=".UploadAlbumActivity" />
         <activity
@@ -33,6 +35,10 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

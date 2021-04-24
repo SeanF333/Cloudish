@@ -4,31 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/white"
     tools:context=".MainHomeActivity">
 
     <FrameLayout
+        android:id="@+id/mainC"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mainC"
         android:layout_above="@+id/bottom">
 
 
     </FrameLayout>
 
     <com.google.android.material.appbar.AppBarLayout
+        android:background="@color/white"
         android:id="@+id/bottom"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:elevation="20dp"
+            app:itemIconSize="24dp"
+            app:itemIconTint="@color/bottom_nav_color"
             app:labelVisibilityMode="unlabeled"
-            app:itemIconTint="#E74E0C"
-            android:background="#01081B"
             app:menu="@menu/bottom_navigation">
 
 

@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -30,13 +32,15 @@ import java.util.concurrent.TimeUnit;
 
 public class OTPActivity extends AppCompatActivity {
 
+    String email, password, username, fullname, phoneNo;
     EditText[] otpETs = new EditText[6];
     Button send;
     ProgressBar pd;
     String verificationCodeBySystem;
-    String phoneNo;
+    FirebaseAuth auth;
     int tipe;
     DatabaseReference ref;
+
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -94,6 +98,8 @@ public class OTPActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_o_t_p);
 
+        // Hook
+        auth = FirebaseAuth.getInstance();
         otpETs[0] = findViewById(R.id.otpET1);
         otpETs[1] = findViewById(R.id.otpET2);
         otpETs[2] = findViewById(R.id.otpET3);
@@ -105,8 +111,17 @@ public class OTPActivity extends AppCompatActivity {
         pd=findViewById(R.id.PD);
         pd.setVisibility(View.GONE);
 
+        // Get item from previous activity
         phoneNo = getIntent().getStringExtra("phone");
         tipe=getIntent().getIntExtra("tipe",1);
+
+        if(tipe == 1){
+            phoneNo = getIntent().getStringExtra("phone");
+            fullname = getIntent().getStringExtra("fullname");
+            username = getIntent().getStringExtra("username");
+            email = getIntent().getStringExtra("email");
+            password = getIntent().getStringExtra("password");
+        }
 
         sendVerificationCodeToUser(phoneNo);
 
@@ -167,37 +182,8 @@ public class OTPActivity extends AppCompatActivity {
     private void verifyCode(String verificationCodeByUser, int tipe){
         PhoneAuthCredential cr = PhoneAuthProvider.getCredential(verificationCodeBySystem, verificationCodeByUser);
         if (tipe==1){
-            FirebaseAuth.getInstance().getCurrentUser().linkWithCredential(cr)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                pd.setVisibility(View.GONE);
-                                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                ref= FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
-                                HashMap<String, Object> hm = new HashMap<>();
-                                hm.put("phone",phoneNo);
-                                ref.updateChildren(hm).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()){
-                                            Intent i = new Intent(OTPActivity.this, MainHomeActivity.class);
-                                            startActivity(i);
-                                            finishAffinity();
-                                        }else {
-                                            Toast.makeText(OTPActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            } else {
-                                pd.setVisibility(View.GONE);
-                                Toast.makeText(OTPActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                            }
-
-                            // ...
-                        }
-
-                    });
+            pd.setVisibility(View.GONE);
+            RegisterWEmail();
         }else if (tipe==2){
             signInWithCredential(cr);
         }
@@ -216,6 +202,41 @@ public class OTPActivity extends AppCompatActivity {
                 }else{
                     pd.setVisibility(View.GONE);
                     Toast.makeText(OTPActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void RegisterWEmail(){
+
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(OTPActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task){
+                if (task.isSuccessful()){
+                    FirebaseUser us = auth.getCurrentUser();
+                    String uid = us.getUid();
+                    ref= FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                    HashMap<String, Object> hm = new HashMap<>();
+                    hm.put("email",email);
+                    hm.put("username", username);
+                    hm.put("fullname", fullname);
+                    hm.put("private", "false");
+                    hm.put("phone",phoneNo);
+                    hm.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/user-default.jpg?alt=media&token=302aba9b-185e-438e-98a7-a14c7ec896f5");
+                    ref.setValue(hm).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Intent i = new Intent(OTPActivity.this, MainHomeActivity.class);
+                                startActivity(i);
+                                finishAffinity();
+                            }else{
+                                Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }else{
+                    Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -3,25 +3,25 @@
 
     <item
         android:id="@+id/home_ic"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/home"
         android:title="Home"
         />
 
     <item
         android:id="@+id/search_ic"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/search_home"
         android:title="Search"
         />
 
     <item
         android:id="@+id/lib_ic"
-        android:icon="@drawable/ic_lib"
+        android:icon="@drawable/album_home"
         android:title="Library"
         />
 
     <item
         android:id="@+id/profile_ic"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/user_home"
         android:title="Profile"
         />
 

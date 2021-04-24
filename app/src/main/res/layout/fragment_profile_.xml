@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/black"
+    android:background="@color/white"
     tools:context=".Profile_F">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +28,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="Profile" />
 
             <LinearLayout
@@ -62,7 +63,7 @@
                         android:text="\@-----"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="24sp"/>
 
                     <TextView
@@ -73,7 +74,7 @@
                         android:text="-----"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="14sp"/>
 
 
@@ -108,7 +109,7 @@
                         android:id="@+id/emailprof"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:layout_marginLeft="10dp"
                         android:textSize="12sp"
                         android:text="---------"/>
@@ -132,7 +133,7 @@
                         android:id="@+id/telpprof"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:layout_marginLeft="10dp"
                         android:textSize="12sp"
                         android:text="-----------"/>
@@ -163,14 +164,14 @@
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:layout_marginBottom="8dp"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="20sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Following"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="14sp"/>
 
                 </LinearLayout>
@@ -189,7 +190,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:layout_marginBottom="8dp"
                         android:textSize="20sp"/>
 
@@ -197,7 +198,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Followers"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="14sp"/>
 
                 </LinearLayout>
@@ -233,7 +234,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="19sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:text="Edit Profile"/>
 
             </LinearLayout>
@@ -257,7 +258,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="19sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:text="Log Out"/>
 
             </LinearLayout>

@@ -19,6 +19,7 @@ import com.music.cloudish.SongInAlbumActivity;
 import java.util.List;
 
 import Else.Album;
+import Else.Global;
 
 public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdaptor.MyViewHolder>{
 
@@ -49,10 +50,20 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), SongInAlbumActivity.class);
-                i.putExtra("an",a.getAlbumname());
-                i.putExtra("cat", a.getAlbumcategory());
-                v.getContext().startActivity(i);
+                if (Global.curAlbum.equals(a.getAlbumname())){
+                    Intent i = new Intent(v.getContext(), SongInAlbumActivity.class);
+                    i.putExtra("an",a.getAlbumname());
+                    i.putExtra("cat", a.getAlbumcategory());
+                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    v.getContext().startActivity(i);
+                }else {
+                    Intent i = new Intent(v.getContext(), SongInAlbumActivity.class);
+                    i.putExtra("an",a.getAlbumname());
+                    i.putExtra("cat", a.getAlbumcategory());
+                    i.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    v.getContext().startActivity(i);
+                }
+
 
             }
         });

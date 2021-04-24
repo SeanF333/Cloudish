@@ -30,6 +30,7 @@ import java.util.List;
 import Adapter.AlbumRecyclerAdaptor;
 import Adapter.SongRecyclerAdaptor;
 import Else.Album;
+import Else.Global;
 import Else.Song;
 
 public class SongInAlbumActivity extends AppCompatActivity {
@@ -48,14 +49,19 @@ public class SongInAlbumActivity extends AppCompatActivity {
     ArrayList<JcAudio> jclist = new ArrayList<>();
     private int curr;
     ValueEventListener val;
+    String albumname, cate;
+    boolean isplay=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_in_album);
 
-        String albumname = getIntent().getStringExtra("an");
-        String cate = getIntent().getStringExtra("cat");
+        albumname = getIntent().getStringExtra("an");
+        cate = getIntent().getStringExtra("cat");
+        if (Global.curAlbum.equals(albumname)){
+            isplay=true;
+        }
         an=findViewById(R.id.altit);
         cat=findViewById(R.id.cattext);
         count=findViewById(R.id.counttext);
@@ -135,7 +141,14 @@ public class SongInAlbumActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if (isplay){
+                    Intent i = new Intent(SongInAlbumActivity.this, MainHomeActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(i);
+                }else {
+                    finish();
+                }
+
             }
         });
 
@@ -156,6 +169,20 @@ public class SongInAlbumActivity extends AppCompatActivity {
         curr=index;
         adapter.setSelectedPos(curr);
         adapter.notifyItemChanged(curr);
+        Global.curAlbum=albumname;
+        isplay=true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isplay){
+            Intent i = new Intent(SongInAlbumActivity.this, MainHomeActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(i);
+        }else {
+            finish();
+        }
+
     }
 
 }

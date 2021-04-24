@@ -183,7 +183,7 @@ public class OTPActivity extends AppCompatActivity {
         PhoneAuthCredential cr = PhoneAuthProvider.getCredential(verificationCodeBySystem, verificationCodeByUser);
         if (tipe==1){
             pd.setVisibility(View.GONE);
-            RegisterWEmail();
+            RegisterWEmail(cr);
         }else if (tipe==2){
             signInWithCredential(cr);
         }
@@ -207,7 +207,7 @@ public class OTPActivity extends AppCompatActivity {
         });
     }
 
-    public void RegisterWEmail(){
+    public void RegisterWEmail(PhoneAuthCredential cr){
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(OTPActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -227,9 +227,20 @@ public class OTPActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
-                                Intent i = new Intent(OTPActivity.this, MainHomeActivity.class);
-                                startActivity(i);
-                                finishAffinity();
+                                FirebaseAuth.getInstance().getCurrentUser().linkWithCredential(cr).addOnCompleteListener(OTPActivity.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            Intent i = new Intent(OTPActivity.this, MainHomeActivity.class);
+                                            startActivity(i);
+                                            finishAffinity();
+                                        } else {
+                                            pd.setVisibility(View.GONE);
+                                            Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
                             }else{
                                 Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
                             }

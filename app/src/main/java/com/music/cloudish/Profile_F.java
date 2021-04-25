@@ -8,9 +8,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,6 +35,7 @@ public class Profile_F extends Fragment {
     TextView uname,fname,email,telp;
     DatabaseReference df;
     ProgressDialog pd;
+    Button verify;
 
     public Profile_F() {
         // Required empty public constructor
@@ -49,6 +53,12 @@ public class Profile_F extends Fragment {
         fname=view.findViewById(R.id.profilefullname);
         email=view.findViewById(R.id.emailprof);
         telp=view.findViewById(R.id.telpprof);
+        verify=view.findViewById(R.id.verify);
+        FirebaseUser us = FirebaseAuth.getInstance().getCurrentUser();
+        us.reload();
+        if (us.isEmailVerified()){
+            verify.setVisibility(View.GONE);
+        }
 
         pd=new ProgressDialog(getActivity());
         pd.setMessage("Loading Data");
@@ -91,6 +101,32 @@ public class Profile_F extends Fragment {
                 Intent i = new Intent(getActivity(), EditProfileActivity.class);
                 startActivity(i);
 
+            }
+        });
+
+        verify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                verify.setEnabled(false);
+                us.sendEmailVerification()
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                // Re-enable button
+                                verify.setEnabled(true);
+
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getActivity(),
+                                            "Verification email sent to " + us.getEmail(),
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(),
+                                            "Failed to send verification email.",
+                                            Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
             }
         });
 

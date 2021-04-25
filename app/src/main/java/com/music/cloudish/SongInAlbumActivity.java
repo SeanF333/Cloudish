@@ -113,7 +113,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
                         Toast.makeText(SongInAlbumActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
-                adapter.setSelectedPos(0);
+                adapter.setSelectedPos(-1);
                 count.setText(String.valueOf(li.size()));
                 rv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();

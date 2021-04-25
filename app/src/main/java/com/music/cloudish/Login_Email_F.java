@@ -70,6 +70,40 @@ public class Login_Email_F extends Fragment {
             }
         });
 
+        forget_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pd = new ProgressDialog(getActivity());
+                pd.setMessage("Sending..");
+                pd.show();
+                Boolean a=validateEmail();
+                if (!a){
+                    pd.dismiss();
+                    return;
+                }
+
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                String em = email.getEditText().getText().toString();
+                auth.sendPasswordResetEmail(em)
+                        .addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if (task.isSuccessful()) {
+                                    pd.dismiss();
+                                    Toast.makeText(getActivity(),
+                                            "Reset password email sent to " + em,
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    pd.dismiss();
+                                    Toast.makeText(getActivity(),
+                                            "Failed to send reset password email.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
+
         return root;
     }
 

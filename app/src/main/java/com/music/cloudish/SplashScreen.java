@@ -70,7 +70,7 @@ public class SplashScreen extends AppCompatActivity {
                     pairs[0] = new Pair<View, String>(logo, "transition_logo");
                     pairs[1] = new Pair<View, String>(title, "transition_text");
 
-                    /// options for animation
+                    // options for animation
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashScreen.this, pairs);
                     startActivity(i, options.toBundle());
                     finish();

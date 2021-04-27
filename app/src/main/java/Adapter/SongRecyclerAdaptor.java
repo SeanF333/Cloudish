@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.music.cloudish.R;
 
 import java.util.ArrayList;
@@ -27,7 +31,29 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
     private int selectedPos;
     private Context context;
     private List<Song> li;
+    private List<String> arrno = new ArrayList<>();
     private RecyclerItemClickListener listener;
+    private int mode=0;
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    public void resetarr(){
+        arrno.clear();
+    }
+
+    public List<String> getArrno() {
+        return arrno;
+    }
+
+    public void setArrno(List<String> arrno) {
+        this.arrno = arrno;
+    }
 
     public SongRecyclerAdaptor(Context context, List<Song> li, RecyclerItemClickListener listener) {
         this.context = context;
@@ -48,14 +74,41 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
 
         Song s = li.get(position);
 
-        if (s!=null){
-            if (selectedPos == position){
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context,R.color.abuabu));
-                holder.status.setVisibility(View.VISIBLE);
-            }else {
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(context,R.color.oren));
-                holder.status.setVisibility(View.INVISIBLE);
+        if (mode==0){
+            if (s!=null){
+                if (selectedPos == position){
+                    holder.itemView.setBackgroundColor(ContextCompat.getColor(context,R.color.abuabu));
+                    holder.status.setVisibility(View.VISIBLE);
+                }else {
+                    holder.itemView.setBackgroundColor(ContextCompat.getColor(context,R.color.oren));
+                    holder.status.setVisibility(View.INVISIBLE);
+                }
             }
+            holder.status.setVisibility(View.VISIBLE);
+            holder.duration.setVisibility(View.VISIBLE);
+            holder.cb.setVisibility(View.INVISIBLE);
+
+        }else {
+            holder.status.setVisibility(View.INVISIBLE);
+            holder.duration.setVisibility(View.INVISIBLE);
+            holder.cb.setVisibility(View.VISIBLE);
+        }
+
+        holder.cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((CompoundButton) view).isChecked()){
+                    arrno.add(li.get(position).getSongLink());
+                } else {
+                    arrno.remove(li.get(position).getSongLink());
+                }
+            }
+        });
+
+        if (holder.cb.isChecked()){
+            arrno.add(li.get(position).getSongLink());
+        }else {
+            arrno.remove(li.get(position).getSongLink());
         }
 
         holder.title.setText(s.getSongTitle());
@@ -75,7 +128,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
 
         TextView title, duration, artist;
         ImageView status;
-
+        CheckBox cb;
 
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,6 +137,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
             duration=itemView.findViewById(R.id.mDuration);
             artist=itemView.findViewById(R.id.mArtist);
             status=itemView.findViewById(R.id.musicstatus);
+            cb=itemView.findViewById(R.id.checkboxx);
         }
 
         public void bind(Song s, RecyclerItemClickListener listener) {

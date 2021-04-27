@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,12 +19,16 @@ import android.widget.Toast;
 
 import com.example.jean.jcplayer.model.JcAudio;
 import com.example.jean.jcplayer.view.JcPlayerView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +42,7 @@ import Else.Song;
 public class SongInAlbumActivity extends AppCompatActivity {
 
     TextView an,cat,count;
-    ImageView back,del;
+    ImageView back,del,yes,no;
     Button addnew;
     ProgressDialog pd;
     DatabaseReference df;
@@ -71,6 +77,8 @@ public class SongInAlbumActivity extends AppCompatActivity {
         rv=findViewById(R.id.songrecycler);
         pbar=findViewById(R.id.pbarsong);
         jcp=findViewById(R.id.jcPlayer);
+        yes=findViewById(R.id.hapusfix);
+        no=findViewById(R.id.backfromdelete);
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this));
         li=new ArrayList<>();
@@ -161,6 +169,223 @@ public class SongInAlbumActivity extends AppCompatActivity {
             }
         });
 
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SongInAlbumActivity.this);
+                builder.setCancelable(true);
+                builder.setTitle("Delete");
+                builder.setMessage("What do you want to do?");
+                builder.setPositiveButton("Delete Music",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                adapter.resetarr();
+                                adapter.setMode(1);
+                                adapter.notifyDataSetChanged();
+                                yes.setVisibility(View.VISIBLE);
+                                no.setVisibility(View.VISIBLE);
+                                del.setVisibility(View.GONE);
+                                back.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                builder.setNegativeButton("Delete Entire Album", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(SongInAlbumActivity.this);
+                        b.setCancelable(true);
+                        b.setTitle("Confirmation");
+                        b.setMessage("Are you sure want to delete "+albumname+" album?");
+                        b.setPositiveButton("Confirm",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        ProgressDialog pdd = new ProgressDialog(SongInAlbumActivity.this);
+                                        pdd.setMessage("Please Wait");
+                                        pdd.show();
+                                        DatabaseReference musicRef = FirebaseDatabase.getInstance().getReference("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                        musicRef.orderByChild("album_name").equalTo(albumname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                if (snapshot.getChildrenCount()>0){
+                                                    for(DataSnapshot dataSnapshot :  snapshot.getChildren())
+                                                    {
+                                                        String link = dataSnapshot.child("songLink").getValue().toString();
+                                                        dataSnapshot.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()){
+                                                                    StorageReference fs = FirebaseStorage.getInstance().getReferenceFromUrl(link);
+                                                                    fs.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            if (task.isSuccessful()){
+
+                                                                                DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                                                                albumRef.orderByChild("albumname").equalTo(albumname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                    @Override
+                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                        for(DataSnapshot dataSnapshot :  snapshot.getChildren())
+                                                                                        {
+                                                                                            dataSnapshot.getRef().setValue(null);
+                                                                                        }
+                                                                                        pdd.dismiss();
+                                                                                        finish();
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }else {
+                                                                    pdd.dismiss();
+                                                                    Toast.makeText(SongInAlbumActivity.this, "Error deleting music", Toast.LENGTH_SHORT).show();
+                                                                }
+
+                                                            }
+                                                        });
+                                                    }
+                                                }else {
+                                                    DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                                    albumRef.orderByChild("albumname").equalTo(albumname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            for(DataSnapshot dataSnapshot :  snapshot.getChildren())
+                                                            {
+                                                                dataSnapshot.getRef().setValue(null);
+                                                            }
+                                                            pdd.dismiss();
+                                                            finish();
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                        }
+                                                    });
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+                                    }
+                                });
+                        b.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        AlertDialog d = b.create();
+                        d.show();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.setMode(0);
+                adapter.notifyDataSetChanged();
+                yes.setVisibility(View.GONE);
+                no.setVisibility(View.GONE);
+                del.setVisibility(View.VISIBLE);
+                back.setVisibility(View.VISIBLE);
+            }
+        });
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.notifyDataSetChanged();
+                List<String> a = adapter.getArrno();
+                if (a.size()>0){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SongInAlbumActivity.this);
+                    builder.setCancelable(true);
+                    builder.setTitle("Confirmation");
+                    builder.setMessage("Are you sure want to delete these "+a.size()+" music(s)?");
+                    builder.setPositiveButton("Confirm",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ProgressDialog pdd = new ProgressDialog(SongInAlbumActivity.this);
+                                    pdd.setMessage("Please Wait");
+                                    pdd.show();
+                                    for (String s: a) {
+                                        DatabaseReference musicRef = FirebaseDatabase.getInstance().getReference("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                        musicRef.orderByChild("songLink").equalTo(s).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                for(DataSnapshot dataSnapshot :  snapshot.getChildren())
+                                                {
+                                                    dataSnapshot.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()){
+                                                                StorageReference fs = FirebaseStorage.getInstance().getReferenceFromUrl(s);
+                                                                fs.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        if (task.isSuccessful()){
+                                                                            pdd.dismiss();
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }else {
+                                                                pdd.dismiss();
+                                                                Toast.makeText(SongInAlbumActivity.this, "Error deleting music", Toast.LENGTH_SHORT).show();
+                                                            }
+
+                                                        }
+                                                    });
+                                                }
+
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+
+
+                                    }
+
+                                }
+                            });
+                    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }else{
+                    Toast.makeText(SongInAlbumActivity.this, "No music selected", Toast.LENGTH_SHORT).show();
+                }
+
+                adapter.setMode(0);
+                adapter.notifyDataSetChanged();
+                yes.setVisibility(View.GONE);
+                no.setVisibility(View.GONE);
+                del.setVisibility(View.VISIBLE);
+                back.setVisibility(View.VISIBLE);
+            }
+
+        });
 
     }
 

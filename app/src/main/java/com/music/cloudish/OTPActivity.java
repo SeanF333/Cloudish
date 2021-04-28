@@ -231,12 +231,12 @@ public class OTPActivity extends AppCompatActivity {
                                 startActivity(i);
                                 finishAffinity();
                             }else{
-                                Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OTPActivity.this, "Error Making Account Inside", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }else{
-                    Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OTPActivity.this, "Error Making Account Outside", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class Profile_F extends Fragment {
 
 
-    LinearLayout ll,ed;
+    LinearLayout ll,ed, layout_post, layout_concert;
     ImageView iv;
     TextView uname,fname,email,telp;
     DatabaseReference df;
@@ -44,17 +45,25 @@ public class Profile_F extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_, container, false);
 
+        // Hook
         iv=view.findViewById(R.id.profilePics);
         uname=view.findViewById(R.id.profileUsername);
         fname=view.findViewById(R.id.profilefullname);
         email=view.findViewById(R.id.emailprof);
         telp=view.findViewById(R.id.telpprof);
+        layout_concert = view.findViewById(R.id.layout_concert);
+        layout_post = view.findViewById(R.id.layout_post);
+        ll=view.findViewById(R.id.logoutll);
+        ed=view.findViewById(R.id.edprof);
 
         pd=new ProgressDialog(getActivity());
         pd.setMessage("Loading Data");
         pd.show();
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Log.d("profileF", uid);
+
         df= FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
         df.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -73,7 +82,8 @@ public class Profile_F extends Fragment {
             }
         });
 
-        ll=view.findViewById(R.id.logoutll);
+        // On Click Listener
+
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,13 +94,28 @@ public class Profile_F extends Fragment {
             }
         });
 
-        ed=view.findViewById(R.id.edprof);
         ed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), EditProfileActivity.class);
                 startActivity(i);
 
+            }
+        });
+
+        layout_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), ViewPost_A.class);
+                startActivity(i);
+            }
+        });
+
+        layout_concert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), ViewConcert_A.class);
+                startActivity(i);
             }
         });
 

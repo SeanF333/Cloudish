@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".AddConcert_Second_A">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Add Track"
+        android:textColor="@color/main_purple" />
+
+    <SearchView
+        android:id="@+id/searchViewTrack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/rounded_corners_white"
+        android:elevation="5dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewTrack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Add Artist "
+        android:textColor="@color/main_purple" />
+
+    <SearchView
+        android:layout_marginTop="10dp"
+        android:elevation="5dp"
+        android:id="@+id/searchViewArtist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/rounded_corners_white"
+        android:iconifiedByDefault="true" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recylcerViewArtist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+        <TextView
+            android:elevation="2dp"
+            android:id="@+id/textViewPlaylist"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corners_white"
+            android:gravity="center"
+            android:text="See your playlist here."
+            android:layout_marginRight="10dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAdd"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:backgroundTint="@color/pop_orange"
+            app:cornerRadius="30dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:text="Add"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/black"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Done"
+        android:textSize="16sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:cornerRadius="30dp"/>
+
+
+
+</LinearLayout>

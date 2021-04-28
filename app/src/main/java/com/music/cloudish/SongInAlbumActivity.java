@@ -57,6 +57,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
     ValueEventListener val;
     String albumname, cate;
     boolean isplay=false;
+    int mode=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +87,15 @@ public class SongInAlbumActivity extends AppCompatActivity {
         adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
             @Override
             public void OnClickListener(Song s, int pos) {
-                changeSelectedSong(pos);
-                jcp.playAudio(jclist.get(pos));
-                jcp.setVisibility(View.VISIBLE);
-                jcp.createNotification();
+                if (mode==0){
+                    changeSelectedSong(pos);
+                    jcp.playAudio(jclist.get(pos));
+                    jcp.setVisibility(View.VISIBLE);
+                    jcp.createNotification();
+                }else {
+
+                }
+
             }
         });
 
@@ -180,6 +186,8 @@ public class SongInAlbumActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                jcp.pause();
+                                mode = 1;
                                 adapter.resetarr();
                                 adapter.setMode(1);
                                 adapter.notifyDataSetChanged();
@@ -200,6 +208,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        jcp.pause();
                                         ProgressDialog pdd = new ProgressDialog(SongInAlbumActivity.this);
                                         pdd.setMessage("Please Wait");
                                         pdd.show();
@@ -297,6 +306,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mode=0;
                 adapter.setMode(0);
                 adapter.notifyDataSetChanged();
                 yes.setVisibility(View.GONE);
@@ -340,6 +350,10 @@ public class SongInAlbumActivity extends AppCompatActivity {
                                                                     public void onComplete(@NonNull Task<Void> task) {
                                                                         if (task.isSuccessful()){
                                                                             pdd.dismiss();
+                                                                            finish();
+                                                                            overridePendingTransition(0, 0);
+                                                                            startActivity(getIntent());
+                                                                            overridePendingTransition(0, 0);
                                                                         }
                                                                     }
                                                                 });
@@ -376,7 +390,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(SongInAlbumActivity.this, "No music selected", Toast.LENGTH_SHORT).show();
                 }
-
+                mode=0;
                 adapter.setMode(0);
                 adapter.notifyDataSetChanged();
                 yes.setVisibility(View.GONE);
@@ -390,12 +404,14 @@ public class SongInAlbumActivity extends AppCompatActivity {
     }
 
     public void changeSelectedSong(int index){
+
         adapter.notifyItemChanged(adapter.getSelectedPos());
         curr=index;
         adapter.setSelectedPos(curr);
         adapter.notifyItemChanged(curr);
         Global.curAlbum=albumname;
         isplay=true;
+
     }
 
     @Override

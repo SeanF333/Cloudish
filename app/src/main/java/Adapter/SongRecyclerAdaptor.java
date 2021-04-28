@@ -88,10 +88,12 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
             holder.duration.setVisibility(View.VISIBLE);
             holder.cb.setVisibility(View.INVISIBLE);
 
+
         }else {
             holder.status.setVisibility(View.INVISIBLE);
             holder.duration.setVisibility(View.INVISIBLE);
             holder.cb.setVisibility(View.VISIBLE);
+
         }
 
         holder.cb.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +132,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
         ImageView status;
         CheckBox cb;
 
+
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -138,6 +141,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
             artist=itemView.findViewById(R.id.mArtist);
             status=itemView.findViewById(R.id.musicstatus);
             cb=itemView.findViewById(R.id.checkboxx);
+
         }
 
         public void bind(Song s, RecyclerItemClickListener listener) {

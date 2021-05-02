@@ -1,8 +1,11 @@
 package Else;
 
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
 
     public String songsCategory, songTitle, artist, album_name, songDuration, songLink, mKey;
+    public Boolean isSelected;
 
     public Song(String songsCategory, String songTitle, String artist, String album_name, String songDuration, String songLink) {
         if (songTitle==null || songTitle.trim().equals("")){
@@ -18,6 +21,7 @@ public class Song {
         this.album_name = album_name;
         this.songDuration = songDuration;
         this.songLink = songLink;
+        this.isSelected = false;
 
     }
 

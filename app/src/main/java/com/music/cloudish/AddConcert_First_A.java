@@ -396,57 +396,23 @@ public class AddConcert_First_A extends AppCompatActivity {
 
     private void saveConcertInformation() {
 
-        // membuat intent untuk aktivitas selanjutnya
-        final Intent intent = new Intent(AddConcert_First_A.this, AddConcert_Second_A.class);
-        final String key = mDatabase.child("Concerts").push().getKey();
-
         if(resultUri != null){
-            Log.d("resultUri", "in");
-            final StorageReference filepath = FirebaseStorage.getInstance().getReference().child("concertImages").child(key);
 
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getApplication().getContentResolver(), resultUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Intent intent = new Intent(AddConcert_First_A.this, AddConcert_Second_A.class);
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
-            byte[] data = baos.toByteArray();
+            intent.putExtra("concertName", concertName);
+            intent.putExtra("concertMainGenre", mainGenre);
+            intent.putExtra("concertDescription", concertDescription);
+            intent.putExtra("concertDuration", concertDurationStr);
+            intent.putExtra("concertDate", concertDate);
+            intent.putExtra("concertTime", concertTime);
+            intent.putExtra("imageUri", resultUri.toString());
 
-            UploadTask uploadTask = filepath.putBytes(data);
+            startActivity(intent);
 
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri downloadUrl) {
-
-                            Map userInfo = new HashMap();
-                            intent.putExtra("concertName", concertName);
-                            intent.putExtra("concertKey", key);
-                            intent.putExtra("concertMainGenre", mainGenre);
-                            intent.putExtra("concertDescription", concertDescription);
-                            intent.putExtra("concertDuration", concertDurationStr);
-                            intent.putExtra("concertDate", concertDate);
-                            intent.putExtra("concertTime", concertTime);
-                            intent.putExtra("concertimageURL", downloadUrl.toString());
-                            startActivity(intent);
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("uploadFail",e.getMessage().toString());
-                        }
-                    });
-                }
-            });
         } else {
-            Log.d("resultUri", "out");
+            Log.d("resultUri", "uri tidak masuk");
         }
     }
 

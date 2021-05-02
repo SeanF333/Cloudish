@@ -26,7 +26,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/rounded_corners_white"
-        android:elevation="5dp" />
+        android:elevation="5dp"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@null" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTrack"
@@ -47,18 +49,19 @@
         android:textColor="@color/main_purple" />
 
     <SearchView
-        android:layout_marginTop="10dp"
-        android:elevation="5dp"
-        android:id="@+id/searchViewArtist"
+        android:id="@+id/searchViewUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/rounded_corners_white"
-        android:iconifiedByDefault="true" />
+        android:elevation="5dp"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@null" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recylcerViewArtist"
+        android:id="@+id/recylcerViewUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -68,22 +71,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        >
+        android:orientation="horizontal">
 
         <TextView
-            android:elevation="2dp"
             android:id="@+id/textViewPlaylist"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_corners_white"
+            android:elevation="2dp"
             android:gravity="center"
-            android:text="See your playlist here."
-            android:layout_marginRight="10dp"/>
+            android:text="See your playlist here." />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonAdd"
@@ -92,25 +94,25 @@
             android:layout_gravity="center"
             android:layout_weight="2"
             android:backgroundTint="@color/pop_orange"
-            app:cornerRadius="30dp"
             android:fontFamily="@font/montserrat_bold"
             android:gravity="center"
             android:text="Add"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            app:cornerRadius="30dp" />
 
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_done"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:backgroundTint="@color/black"
         android:fontFamily="@font/montserrat_bold"
         android:text="Done"
         android:textSize="16sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:cornerRadius="30dp"/>
-
+        app:cornerRadius="30dp" />
 
 
 </LinearLayout>

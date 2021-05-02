@@ -76,6 +76,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
 
         if (mode==0){
             if (s!=null){
+                holder.status.setVisibility(View.VISIBLE);
                 if (selectedPos == position){
                     holder.itemView.setBackgroundColor(ContextCompat.getColor(context,R.color.abuabu));
                     holder.status.setVisibility(View.VISIBLE);
@@ -84,7 +85,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
                     holder.status.setVisibility(View.INVISIBLE);
                 }
             }
-            holder.status.setVisibility(View.VISIBLE);
+
             holder.duration.setVisibility(View.VISIBLE);
             holder.cb.setVisibility(View.INVISIBLE);
 

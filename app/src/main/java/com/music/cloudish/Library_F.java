@@ -41,6 +41,14 @@ public class Library_F extends Fragment {
     List<Album> li;
     ProgressDialog pd;
 
+    public AlbumRecyclerAdaptor getAdapter() {
+        return adapter;
+    }
+
+    public void setAdapter(AlbumRecyclerAdaptor adapter) {
+        this.adapter = adapter;
+    }
+
     public Library_F() {
         // Required empty public constructor
     }

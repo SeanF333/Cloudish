@@ -2,10 +2,12 @@ package Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,6 +49,11 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
         Album a = li.get(position);
         holder.tv.setText(a.getAlbumname());
         Glide.with(context).load(a.getImageurl()).into(holder.iv);
+        if (Global.curAlbum.equals(a.getAlbumname())){
+            holder.ll.setBackgroundColor(Color.YELLOW);
+        }else {
+            holder.ll.setBackgroundColor(Color.WHITE);
+        }
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +87,7 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
             TextView tv;
             ImageView iv;
             CardView cv;
+            LinearLayout ll;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -87,6 +95,7 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
                 tv= itemView.findViewById(R.id.titlealbum);
                 iv=itemView.findViewById(R.id.albumimg);
                 cv=itemView.findViewById(R.id.albumitem);
+                ll=itemView.findViewById(R.id.bckg_album);
             }
         }
 

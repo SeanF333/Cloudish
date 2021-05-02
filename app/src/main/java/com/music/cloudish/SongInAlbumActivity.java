@@ -417,6 +417,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (isplay){
+            Global.flib.getAdapter().notifyDataSetChanged();
             Intent i = new Intent(SongInAlbumActivity.this, MainHomeActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(i);

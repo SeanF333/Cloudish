@@ -2,38 +2,47 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
-    android:id="@+id/albumitem"
+    android:id="@+id/albumitem_search"
     android:layout_width="180dp"
     android:layout_margin="6dp"
     app:cardCornerRadius="4dp"
 
     android:foreground="?android:attr/selectableItemBackground"
-    android:layout_height="205dp">
+    android:layout_height="210dp">
 
     <LinearLayout
-        android:id="@+id/bckg_album"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:scaleType="centerCrop"
             android:background="@color/white"
-            android:id="@+id/albumimg"/>
+            android:id="@+id/albumimgsearch"/>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/black"
-            android:id="@+id/titlealbum"
-            android:maxLines="1"
-            android:textSize="13dp"
-            android:gravity="center"
-            android:text="Title"/>
+            android:orientation="vertical"
+            android:gravity="center_vertical">
 
-        
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:id="@+id/titlealbum"
+                android:maxLines="1"
+                android:textSize="13dp"
+                android:gravity="center"
+                android:text="Title"/>
+
+        </LinearLayout>
+
+
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

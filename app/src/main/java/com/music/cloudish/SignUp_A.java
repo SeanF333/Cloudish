@@ -96,6 +96,7 @@ public class SignUp_A extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getValue() != null){
+                    pd.dismiss();
                     phone_number.setError("This number already exist");
                 }
                 else{
@@ -217,6 +218,7 @@ public class SignUp_A extends AppCompatActivity {
             email.setError(null);
             email.setErrorEnabled(false);
             return true;
+
         }
     }
 

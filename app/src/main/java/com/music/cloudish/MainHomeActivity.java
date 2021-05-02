@@ -11,8 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.common.internal.GmsLogger;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import Else.Global;
 
 public class MainHomeActivity extends AppCompatActivity {
 
@@ -40,6 +43,7 @@ public class MainHomeActivity extends AppCompatActivity {
                         break;
                     case R.id.lib_ic:
                         selected = new Library_F();
+                        Global.flib=(Library_F) selected;
                         break;
                     case R.id.profile_ic:
                         selected=new Profile_F();

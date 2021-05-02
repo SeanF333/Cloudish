@@ -183,7 +183,7 @@ public class OTPActivity extends AppCompatActivity {
         PhoneAuthCredential cr = PhoneAuthProvider.getCredential(verificationCodeBySystem, verificationCodeByUser);
         if (tipe==1){
             pd.setVisibility(View.GONE);
-            RegisterWEmail();
+            RegisterWEmail(cr);
         }else if (tipe==2){
             signInWithCredential(cr);
         }
@@ -207,36 +207,49 @@ public class OTPActivity extends AppCompatActivity {
         });
     }
 
-    public void RegisterWEmail(){
+    public void RegisterWEmail(PhoneAuthCredential cr){
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(OTPActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task){
                 if (task.isSuccessful()){
                     FirebaseUser us = auth.getCurrentUser();
-                    String uid = us.getUid();
-                    ref= FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
-                    HashMap<String, Object> hm = new HashMap<>();
-                    hm.put("email",email);
-                    hm.put("username", username);
-                    hm.put("fullname", fullname);
-                    hm.put("private", "false");
-                    hm.put("phone",phoneNo);
-                    hm.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/user-default.jpg?alt=media&token=302aba9b-185e-438e-98a7-a14c7ec896f5");
-                    ref.setValue(hm).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    us.linkWithCredential(cr).addOnCompleteListener(OTPActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Intent i = new Intent(OTPActivity.this, MainHomeActivity.class);
-                                startActivity(i);
-                                finishAffinity();
-                            }else{
-                                Toast.makeText(OTPActivity.this, "Error Making Account Inside", Toast.LENGTH_SHORT).show();
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                String uid = us.getUid();
+                                ref= FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                                HashMap<String, Object> hm = new HashMap<>();
+                                hm.put("email",email);
+                                hm.put("username", username);
+                                hm.put("fullname", fullname);
+                                hm.put("private", "false");
+                                hm.put("phone",phoneNo);
+                                hm.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/user-default.jpg?alt=media&token=302aba9b-185e-438e-98a7-a14c7ec896f5");
+                                ref.setValue(hm).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()){
+                                            Intent i = new Intent(OTPActivity.this, MainHomeActivity.class);
+                                            startActivity(i);
+                                            finishAffinity();
+
+                                        }else{
+                                            Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
+                            } else {
+                                pd.setVisibility(View.GONE);
+                                Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+
                 }else{
-                    Toast.makeText(OTPActivity.this, "Error Making Account Outside", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OTPActivity.this, "Error Making Account", Toast.LENGTH_SHORT).show();
                 }
             }
         });

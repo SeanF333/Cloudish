@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class Profile_F extends Fragment {
     TextView uname,fname,email,telp;
     DatabaseReference df;
     ProgressDialog pd;
+    Button verify;
 
     public Profile_F() {
         // Required empty public constructor
@@ -45,7 +47,6 @@ public class Profile_F extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_, container, false);
 
-        // Hook
         iv=view.findViewById(R.id.profilePics);
         uname=view.findViewById(R.id.profileUsername);
         fname=view.findViewById(R.id.profilefullname);
@@ -55,6 +56,12 @@ public class Profile_F extends Fragment {
         layout_post = view.findViewById(R.id.layout_post);
         ll=view.findViewById(R.id.logoutll);
         ed=view.findViewById(R.id.edprof);
+        verify=view.findViewById(R.id.verify);
+        FirebaseUser us = FirebaseAuth.getInstance().getCurrentUser();
+        us.reload();
+        if (us.isEmailVerified()){
+            verify.setVisibility(View.GONE);
+        }
 
         pd=new ProgressDialog(getActivity());
         pd.setMessage("Loading Data");
@@ -82,8 +89,7 @@ public class Profile_F extends Fragment {
             }
         });
 
-        // On Click Listener
-
+        ll=view.findViewById(R.id.logoutll);
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +100,7 @@ public class Profile_F extends Fragment {
             }
         });
 
+        ed=view.findViewById(R.id.edprof);
         ed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +123,32 @@ public class Profile_F extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ViewConcert_A.class);
                 startActivity(i);
+            }
+        });
+
+        verify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                verify.setEnabled(false);
+                us.sendEmailVerification()
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                // Re-enable button
+                                verify.setEnabled(true);
+
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getActivity(),
+                                            "Verification email sent to " + us.getEmail(),
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(),
+                                            "Failed to send verification email.",
+                                            Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
             }
         });
 

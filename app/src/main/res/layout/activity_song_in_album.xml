@@ -33,6 +33,14 @@
                     android:layout_alignParentLeft="true"
                     android:src="@drawable/ic_back"/>
 
+                <ImageView
+                    android:id="@+id/backfromdelete"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:layout_alignParentLeft="true"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_close"/>
+
                 <TextView
                     android:id="@+id/altit"
                     android:layout_centerVertical="true"
@@ -52,6 +60,15 @@
                     android:layout_width="29dp"
                     android:layout_height="29dp"
                     android:src="@drawable/ic_delete"/>
+
+                <ImageView
+                    android:id="@+id/hapusfix"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_done"/>
 
 
             </RelativeLayout>

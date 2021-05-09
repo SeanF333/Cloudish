@@ -26,16 +26,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 public class Profile_F extends Fragment {
 
 
     LinearLayout ll,ed;
     ImageView iv;
-    TextView uname,fname,email,telp;
+    TextView uname,fname,email,telp,following,follower;
     DatabaseReference df;
     ProgressDialog pd;
-    Button verify;
+    Button verify,notif;
+    LinearLayout l1,l2;
 
     public Profile_F() {
         // Required empty public constructor
@@ -54,6 +56,11 @@ public class Profile_F extends Fragment {
         email=view.findViewById(R.id.emailprof);
         telp=view.findViewById(R.id.telpprof);
         verify=view.findViewById(R.id.verify);
+        notif=view.findViewById(R.id.notif);
+        follower=view.findViewById(R.id.followers);
+        following=view.findViewById(R.id.following);
+        l1=view.findViewById(R.id.ll_following);
+        l2=view.findViewById(R.id.ll_follower);
         FirebaseUser us = FirebaseAuth.getInstance().getCurrentUser();
         us.reload();
         if (us.isEmailVerified()){
@@ -76,8 +83,45 @@ public class Profile_F extends Fragment {
                     fname.setText(task.getResult().child("fullname").getValue().toString());
                     email.setText(task.getResult().child("email").getValue().toString());
                     telp.setText(task.getResult().child("phone").getValue().toString());
-                    pd.dismiss();
+                    DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Follower").child(uid);
+                    dff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()){
+                                DataSnapshot ds = task.getResult();
+                                long count1 = ds.getChildrenCount();
+                                follower.setText(String.valueOf(count1));
+                                Query dfff = FirebaseDatabase.getInstance().getReference().child("Following").child(uid);
+                                dfff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        if (task.isSuccessful()){
+                                            DataSnapshot dss = task.getResult();
+                                            long count2=0;
+                                            for (DataSnapshot snapshot1 : task.getResult().getChildren()) {
+                                                if ((boolean)snapshot1.getValue()==true){
+                                                    count2++;
+                                                }
+                                            }
+
+                                            following.setText(String.valueOf(count2));
+
+                                            pd.dismiss();
+                                        }else {
+                                            pd.dismiss();
+                                            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }else {
+                                pd.dismiss();
+                                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                 }else{
+                    pd.dismiss();
                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -127,6 +171,40 @@ public class Profile_F extends Fragment {
                                 }
                             }
                         });
+            }
+        });
+
+        notif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), NotificationActivity.class);
+                startActivity(i);
+            }
+        });
+
+        l1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                See_Follower_Following_F ldf = new See_Follower_Following_F ();
+                Bundle args = new Bundle();
+                args.putString("username", uname.getText().toString());
+                args.putInt("mode",1);
+                ldf.setArguments(args);
+
+                getFragmentManager().beginTransaction().replace(R.id.mainC, ldf).commit();
+            }
+        });
+
+        l2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                See_Follower_Following_F ldf = new See_Follower_Following_F ();
+                Bundle args = new Bundle();
+                args.putString("username", uname.getText().toString());
+                args.putInt("mode",2);
+                ldf.setArguments(args);
+
+                getFragmentManager().beginTransaction().replace(R.id.mainC, ldf).commit();
             }
         });
 

@@ -1,5 +1,6 @@
 package com.music.cloudish;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,26 +30,26 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapter.UserSearchRecyclerAdaptor;
+import Adapter.UserFollowerRecyclerAdaptor;
+import Adapter.UserFollowingRecyclerAdaptor;
 import Else.User;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link User_Result_F#newInstance} factory method to
+ * Use the {@link Follower_Result_F#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class User_Result_F extends Fragment {
+public class Follower_Result_F extends Fragment {
 
     RecyclerView rv;
     DatabaseReference df;
-    List<User> liu;
-    List<String> liu2;
-    UserSearchRecyclerAdaptor ura;
+    List<String> liuf;
+    List<Pair<User,String>> liu;
+    UserFollowerRecyclerAdaptor adaptor;
     EditText search;
 
-    public User_Result_F() {
+    public Follower_Result_F() {
         // Required empty public constructor
-
     }
 
 
@@ -54,39 +57,39 @@ public class User_Result_F extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_user__result_, container, false);
-        rv=v.findViewById(R.id.user_result);
+        View view = inflater.inflate(R.layout.fragment_follower__result_, container, false);
+        rv=view.findViewById(R.id.follower_result);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         liu=new ArrayList<>();
-        liu2=new ArrayList<>();
-        ura=new UserSearchRecyclerAdaptor(getContext(), liu);
-        rv.setAdapter(ura);
-        search=getActivity().findViewById(R.id.search_columm);
+        liuf=new ArrayList<>();
+        adaptor=new UserFollowerRecyclerAdaptor(getContext(), liu);
+        rv.setAdapter(adaptor);
+        search=getActivity().findViewById(R.id.search_uname);
 
-        DatabaseReference rrr = FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference rrr = FirebaseDatabase.getInstance().getReference().child("Follower").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         rrr.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()){
-                    liu2.clear();
+                    liuf.clear();
                     DataSnapshot snapshot = task.getResult();
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                        if ((boolean)snapshot1.getValue()==true){
-                            String userid;
-                            userid=snapshot1.getKey().toString();
-                            liu2.add(userid);
-                        }
+                        String userid;
+                        userid=snapshot1.getKey().toString();
+                        liuf.add(userid);
 
                     }
                     if (search.getText().toString().equals("")){
                         readUsers();
                     }else {
-                        searchUsers(search.getText().toString());
+                      searchUsers(search.getText().toString());
                     }
                 }
             }
         });
+
+
 
 
 
@@ -108,8 +111,7 @@ public class User_Result_F extends Fragment {
             }
         });
 
-        return v;
-
+        return view;
     }
 
     private void searchUsers(String s){
@@ -135,13 +137,17 @@ public class User_Result_F extends Fragment {
                     if (email.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                         continue;
                     }
-                    if (username.toLowerCase().startsWith(s.toLowerCase()) || fullname.toLowerCase().startsWith(s.toLowerCase())){
-                        User user = new User(userid,email,fullname,imageurl,phone,Private,username);
-                        liu.add(user);
+                    if (liuf.contains(userid)){
+                        if (username.toLowerCase().startsWith(s.toLowerCase()) || fullname.toLowerCase().startsWith(s.toLowerCase())){
+                            User user = new User(userid,email,fullname,imageurl,phone,Private,username);
+                            Pair<User,String> p = new Pair<>(user,userid);
+                            liu.add(p);
+                        }
                     }
 
+
                 }
-                ura.notifyDataSetChanged();
+                adaptor.notifyDataSetChanged();
             }
 
             @Override
@@ -154,7 +160,7 @@ public class User_Result_F extends Fragment {
     }
 
     private void readUsers(){
-        df=FirebaseDatabase.getInstance().getReference("Users");
+        df= FirebaseDatabase.getInstance().getReference("Users");
         df.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -172,13 +178,14 @@ public class User_Result_F extends Fragment {
                         if (email.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                             continue;
                         }
-                        if (liu2.contains(userid)){
+                        if (liuf.contains(userid)){
                             User user = new User(userid,email,fullname,imageurl,phone,Private,username);
-                            liu.add(user);
+                            Pair<User,String> p = new Pair<>(user,userid);
+                            liu.add(p);
                         }
 
                     }
-                    ura.notifyDataSetChanged();
+                    adaptor.notifyDataSetChanged();
                 }
             }
 
@@ -188,6 +195,4 @@ public class User_Result_F extends Fragment {
             }
         });
     }
-
-
 }

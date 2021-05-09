@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/pastel_blue"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/dummytext"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/userimg"
+        android:layout_toLeftOf="@id/albumpostimg"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_alignParentLeft="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:id="@+id/albumpostimg"/>
+
+    <ImageView
+        android:layout_alignParentLeft="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/userimg"/>
+
+    <TextView
+        android:layout_centerVertical="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/userimg"
+        android:layout_toLeftOf="@+id/ll_confirm"
+        android:id="@+id/textnotif"/>
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_width="115dp"
+        android:id="@+id/ll_confirm"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true">
+
+        <Button
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:text="Del"
+            android:textSize="7dp"
+            android:id="@+id/delrequest"
+            android:layout_marginEnd="5dp"/>
+
+        <Button
+            android:layout_width="55dp"
+            android:layout_height="35dp"
+            android:text="Acc"
+            android:textSize="7dp"
+            android:id="@+id/accrequest"
+            android:layout_marginEnd="5dp"/>
+
+
+    </LinearLayout>
+
+    
+
+</RelativeLayout>

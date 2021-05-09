@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cloudish">
-        <activity android:name=".SignUp_A"></activity>
+        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".SignUp_A" />
         <activity android:name=".Login_A" />
         <activity android:name=".UploadSongActivity" />
         <activity android:name=".SongInAlbumActivity" />

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -38,12 +39,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Else.Song;
+import Else.Utility;
 
 public class UploadSongActivity extends AppCompatActivity {
 
     ImageView close,sv,simg;
     Button select;
-    TextView filen,stit,salb,sart,sdat,sdur;
+    TextView filen;
+    EditText stit,salb,sart,sdat,sdur;
     ProgressBar pbb;
     Spinner sp;
     LinearLayout ll;
@@ -161,7 +164,7 @@ public class UploadSongActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     baru.getDownloadUrl().addOnSuccessListener((OnSuccessListener) (uri) -> {
                         try {
-                            Song s = new Song(selectedcat, titlesong, artistsong, albumname, durasi, uri.toString());
+                            Song s = new Song(selectedcat, stit.getText().toString(), sart.getText().toString(), albumname, durasi, uri.toString());
                             String uploadid=df.push().getKey();
                             df.child(uploadid).setValue(s);
                         }catch (Exception e){
@@ -205,7 +208,7 @@ public class UploadSongActivity extends AppCompatActivity {
                 stit.setText(mmdr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
                 sart.setText(mmdr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
                 sdat.setText(mmdr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
-                sdur.setText(mmdr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                sdur.setText(Utility.convertDur(Long.parseLong(mmdr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))));
 
                 titlesong=mmdr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
                 artistsong=mmdr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);

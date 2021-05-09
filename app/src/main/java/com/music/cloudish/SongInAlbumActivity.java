@@ -104,9 +104,9 @@ public class SongInAlbumActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 li.clear();
+                jclist.clear();
                 for (DataSnapshot dss: snapshot.getChildren()){
                     try {
-//                        Toast.makeText(SongInAlbumActivity.this, dss.getKey(), Toast.LENGTH_LONG).show();
                         String album_name = dss.child("album_name").getValue().toString();
                         String artist = dss.child("artist").getValue().toString();
                         String songDuration = dss.child("songDuration").getValue().toString();
@@ -119,7 +119,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
                         if (album_name.equals(albumname)){
                             li.add(s);
                             checkin = true;
-                            jclist.add(JcAudio.createFromURL(s.getSongTitle(),s.getSongLink()));
+                            jclist.add(JcAudio.createFromURL(songTitle,s.getSongLink()));
                         }
 
 

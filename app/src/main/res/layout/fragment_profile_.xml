@@ -155,7 +155,7 @@
                     android:gravity="center"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp"
-
+                    android:id="@+id/ll_following"
                     android:orientation="vertical">
 
                     <TextView
@@ -183,6 +183,7 @@
                     android:gravity="center"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp"
+                    android:id="@+id/ll_follower"
                     android:orientation="vertical">
 
                     <TextView
@@ -268,6 +269,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Verify Email"
+                android:backgroundTint="#E74E0C"/>
+            <Button
+                android:id="@+id/notif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notification"
                 android:backgroundTint="#E74E0C"/>
 
         </LinearLayout>

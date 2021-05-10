@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -25,6 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +37,8 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,21 +49,21 @@ import Else.Utility;
 public class UploadSongActivity extends AppCompatActivity {
 
     ImageView close,sv,simg;
-    Button select;
+    Button select,img;
     TextView filen;
     EditText stit,salb,sart,sdat,sdur;
     ProgressBar pbb;
     Spinner sp;
     LinearLayout ll;
     String albumname="",selectedcat="";
-    Uri uri;
+    Uri uri,sImgUri;
     StorageReference sr;
     DatabaseReference df;
     StorageTask task;
     MediaMetadataRetriever mmdr;
     byte [] art;
     String titlesong="",artistsong="",albumart1 = "", durasi="";
-
+    int flag=0;
 
 
     @Override
@@ -80,7 +85,7 @@ public class UploadSongActivity extends AppCompatActivity {
         ll=findViewById(R.id.show);
         ll.setVisibility(View.GONE);
         select=findViewById(R.id.selsong);
-
+        img=findViewById(R.id.sel_img);
         albumname=getIntent().getStringExtra("an");
 
         mmdr=new MediaMetadataRetriever();
@@ -93,6 +98,14 @@ public class UploadSongActivity extends AppCompatActivity {
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.setType("audio/*");
                 startActivityForResult(i,101);
+            }
+        });
+
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flag=1;
+                CropImage.activity().setAspectRatio(1,1).setCropShape(CropImageView.CropShape.RECTANGLE).start(UploadSongActivity.this);
             }
         });
 
@@ -162,17 +175,45 @@ public class UploadSongActivity extends AppCompatActivity {
             task=baru.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    baru.getDownloadUrl().addOnSuccessListener((OnSuccessListener) (uri) -> {
-                        try {
-                            Song s = new Song(selectedcat, stit.getText().toString(), sart.getText().toString(), albumname, durasi, uri.toString());
-                            String uploadid=df.push().getKey();
-                            df.child(uploadid).setValue(s);
-                        }catch (Exception e){
-                            Toast.makeText(UploadSongActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                    if (flag==0){
+                        baru.getDownloadUrl().addOnSuccessListener((OnSuccessListener) (uri2) -> {
+                            try {
+                                Song s = new Song(selectedcat, stit.getText().toString(), sart.getText().toString(), albumname, durasi, uri2.toString(),"https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/music-placeholder.png?alt=media&token=3b8a9fb5-faf9-4210-8035-4acab21a8c9b");
+                                String uploadid=df.push().getKey();
+                                df.child(uploadid).setValue(s);
+                            }catch (Exception e){
+                                Toast.makeText(UploadSongActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                            }
 
 
-                    });
+                        });
+                    }else {
+                        StorageReference baru2 = FirebaseStorage.getInstance().getReference().child("SongPics").child(System.currentTimeMillis()+"");
+                        StorageTask st1;
+                        st1=baru2.putFile(sImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                baru.getDownloadUrl().addOnSuccessListener((OnSuccessListener) (uri2) -> {
+                                    try {
+                                        baru2.getDownloadUrl().addOnSuccessListener((OnSuccessListener) (uri) -> {
+                                            try {
+                                                Song s = new Song(selectedcat, stit.getText().toString(), sart.getText().toString(), albumname, durasi, uri2.toString(),uri.toString());
+                                                String uploadid=df.push().getKey();
+                                                df.child(uploadid).setValue(s);
+                                            }catch (Exception e){
+                                                Toast.makeText(UploadSongActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }catch (Exception e){
+                                        Toast.makeText(UploadSongActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                    }
+
+
+                                });
+                            }
+                        });
+                    }
+
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -219,6 +260,10 @@ public class UploadSongActivity extends AppCompatActivity {
                 Toast.makeText(UploadSongActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
+        }else if (requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode==RESULT_OK){
+            CropImage.ActivityResult ar = CropImage.getActivityResult(data);
+            sImgUri=ar.getUri();
+            Glide.with(this).load(sImgUri).into(simg);
         }
 
     }
@@ -247,5 +292,11 @@ public class UploadSongActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+        super.onDestroy();
+    }
 
 }

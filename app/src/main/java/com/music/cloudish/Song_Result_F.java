@@ -127,17 +127,18 @@ public class Song_Result_F extends Fragment {
                 lis.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                        String album_name, artist, songDuration,userid, songLink, songTitle, songsCategory;
+                        String album_name, artist, songDuration,userid, songLink, songTitle, songsCategory,imgLink;
                         album_name=snapshot2.child("album_name").getValue().toString();
                         artist=snapshot2.child("artist").getValue().toString();
                         songDuration=snapshot2.child("songDuration").getValue().toString();
                         songLink=snapshot2.child("songLink").getValue().toString();
                         songTitle=snapshot2.child("songTitle").getValue().toString();
                         songsCategory=snapshot2.child("songsCategory").getValue().toString();
+                        imgLink=snapshot2.child("imgLink").getValue().toString();
                         userid=snapshot1.getKey().toString();
                         if (liu.contains(userid)){
                             if (songTitle.toLowerCase().startsWith(s.toLowerCase()) || album_name.toLowerCase().startsWith(s.toLowerCase()) || artist.toLowerCase().startsWith(s.toLowerCase())){
-                                Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink);
+                                Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink,imgLink);
                                 lis.add(s);
                             }
 
@@ -170,16 +171,17 @@ public class Song_Result_F extends Fragment {
                     lis.clear();
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                            String album_name, artist, songDuration,userid, songLink, songTitle, songsCategory;
+                            String album_name, artist, songDuration,userid, songLink, songTitle, songsCategory,imgLink;
                             album_name=snapshot2.child("album_name").getValue().toString();
                             artist=snapshot2.child("artist").getValue().toString();
                             songDuration=snapshot2.child("songDuration").getValue().toString();
                             songLink=snapshot2.child("songLink").getValue().toString();
                             songTitle=snapshot2.child("songTitle").getValue().toString();
                             songsCategory=snapshot2.child("songsCategory").getValue().toString();
+                            imgLink=snapshot2.child("imgLink").getValue().toString();
                             userid=snapshot1.getKey().toString();
                             if (liu.contains(userid)){
-                                Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink);
+                                Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink,imgLink);
                                 lis.add(s);
 
                             }

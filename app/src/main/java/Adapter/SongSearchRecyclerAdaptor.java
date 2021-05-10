@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.music.cloudish.R;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public class SongSearchRecyclerAdaptor extends RecyclerView.Adapter<SongSearchRe
         holder.tv3.setText(s.getAlbum_name());
         String temp = Utility.convertDur(Long.parseLong(s.getSongDuration()));
         holder.tv4.setText(temp);
+        Glide.with(context).load(s.getImgLink()).into(holder.iv);
 
     }
 

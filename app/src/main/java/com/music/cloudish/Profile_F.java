@@ -1,5 +1,6 @@
 package com.music.cloudish;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.Image;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.internal.GmsLogger;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +29,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
+import Else.Global;
 
 public class Profile_F extends Fragment {
 
@@ -131,6 +135,15 @@ public class Profile_F extends Fragment {
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Global.jcpg!=null){
+                    Global.jcpg.kill();
+                }
+                Global.curCat="";
+                Global.curAlbum="";
+                Global.album="";
+                Global.cat="";
+                NotificationManager nMgr = (NotificationManager) getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
+                nMgr.cancelAll();
                 FirebaseAuth.getInstance().signOut();
                 Intent i = new Intent(getActivity(), Login_A.class);
                 startActivity(i);

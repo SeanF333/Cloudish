@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -135,7 +136,11 @@ public class UploadAlbumActivity extends AppCompatActivity {
                         if (snapshot.getValue()!=null){
                             pd.dismiss();
                             Toast.makeText(ctx, "Album name already exist!", Toast.LENGTH_SHORT).show();
-                        }else {
+                        }else if (name.getText().toString().equals("")){
+                            pd.dismiss();
+                            Toast.makeText(ctx, "Album name cannot empty!", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
                             HashMap<String, Object> hm = new HashMap<>();
                             hm.put("albumname",name.getText().toString());
                             hm.put("category",selectedcat);
@@ -232,6 +237,13 @@ public class UploadAlbumActivity extends AppCompatActivity {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mtm = MimeTypeMap.getSingleton();
         return mtm.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    @Override
+    protected void onDestroy() {
+        NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+        super.onDestroy();
     }
 
 }

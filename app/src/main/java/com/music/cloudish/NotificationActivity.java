@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -77,5 +78,12 @@ public class NotificationActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+        super.onDestroy();
     }
 }

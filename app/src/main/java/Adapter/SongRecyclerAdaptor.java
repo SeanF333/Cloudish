@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.music.cloudish.R;
 
@@ -119,6 +120,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
         String temp = Utility.convertDur(Long.parseLong(s.getSongDuration()));
         holder.duration.setText(temp);
         holder.bind(s,listener);
+        Glide.with(context).load(s.getImgLink()).into(holder.img);
 
     }
 
@@ -130,7 +132,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
     public class SongViewHolder extends RecyclerView.ViewHolder {
 
         TextView title, duration, artist;
-        ImageView status;
+        ImageView status,img;
         CheckBox cb;
 
 
@@ -142,6 +144,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
             artist=itemView.findViewById(R.id.mArtist);
             status=itemView.findViewById(R.id.musicstatus);
             cb=itemView.findViewById(R.id.checkboxx);
+            img=itemView.findViewById(R.id.dummyimagemusic);
 
         }
 

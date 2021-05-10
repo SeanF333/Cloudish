@@ -6,17 +6,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jean.jcplayer.JcPlayerManager;
+import com.example.jean.jcplayer.JcPlayerManagerListener;
+import com.example.jean.jcplayer.general.JcStatus;
 import com.example.jean.jcplayer.model.JcAudio;
 import com.example.jean.jcplayer.view.JcPlayerView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +36,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +45,7 @@ import Adapter.AlbumRecyclerAdaptor;
 import Adapter.SongRecyclerAdaptor;
 import Else.Album;
 import Else.Global;
+import Else.Notification;
 import Else.Song;
 
 public class SongInAlbumActivity extends AppCompatActivity {
@@ -59,15 +68,39 @@ public class SongInAlbumActivity extends AppCompatActivity {
     boolean isplay=false;
     int mode=0;
 
+    public ViewGroup getParent(View view) {
+        return (ViewGroup)view.getParent();
+    }
+
+    public void removeView(View view) {
+        ViewGroup parent = getParent(view);
+        if(parent != null) {
+            parent.removeView(view);
+        }
+    }
+
+    public void replaceView(View currentView, View newView) {
+        ViewGroup parent = getParent(currentView);
+        if(parent == null) {
+            return;
+        }
+        final int index = parent.indexOfChild(currentView);
+        removeView(currentView);
+        removeView(newView);
+        parent.addView(newView, index);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_in_album);
-
-        albumname = getIntent().getStringExtra("an");
-        cate = getIntent().getStringExtra("cat");
-        if (Global.curAlbum.equals(albumname)){
-            isplay=true;
+        if (getIntent().getStringExtra("kode")!=null){
+            albumname = Global.album;
+            cate = Global.cat;
+        }
+        else {
+            albumname = Global.curAlbum;
+            cate = Global.curCat;
         }
         an=findViewById(R.id.altit);
         cat=findViewById(R.id.cattext);
@@ -83,69 +116,132 @@ public class SongInAlbumActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(this));
         li=new ArrayList<>();
-        rv.setAdapter(adapter);
-        adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
-            @Override
-            public void OnClickListener(Song s, int pos) {
-                if (mode==0){
-                    changeSelectedSong(pos);
-                    jcp.playAudio(jclist.get(pos));
-                    jcp.setVisibility(View.VISIBLE);
-                    jcp.createNotification();
-                }else {
-
-                }
-
-            }
-        });
-
-        df= FirebaseDatabase.getInstance().getReference().child("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        val=df.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                li.clear();
-                jclist.clear();
-                for (DataSnapshot dss: snapshot.getChildren()){
-                    try {
-                        String album_name = dss.child("album_name").getValue().toString();
-                        String artist = dss.child("artist").getValue().toString();
-                        String songDuration = dss.child("songDuration").getValue().toString();
-                        String songLink = dss.child("songLink").getValue().toString();
-                        String songTitle = dss.child("songTitle").getValue().toString();
-                        String songsCategory = dss.child("songsCategory").getValue().toString();
-                        Song s = new Song(songsCategory, songTitle, artist,album_name,songDuration,songLink);
-                        s.setmKey(dss.getKey());
-                        curr=0;
-                        if (album_name.equals(albumname)){
-                            li.add(s);
-                            checkin = true;
-                            jclist.add(JcAudio.createFromURL(songTitle,s.getSongLink()));
-                        }
 
 
-                    }catch (Exception e){
-                        Toast.makeText(SongInAlbumActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+
+        if (Global.curAlbum.equals(albumname)){
+            isplay=true;
+            pbar.setVisibility(View.GONE);
+            replaceView(jcp,Global.jcpg);
+            jcp.setVisibility(View.VISIBLE);
+            li=Global.li;
+            adapter=Global.adapter;
+            rv.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }else {
+            adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
+                @Override
+                public void OnClickListener(Song s, int pos) {
+                    if (mode==0){
+                        changeSelectedSong(pos);
+                        Global.jcpg=jcp;
+                        Global.adapter=adapter;
+                        Global.li=li;
+                        jcp.playAudio(jclist.get(pos));
+                        jcp.setVisibility(View.VISIBLE);
+                        jcp.setJcPlayerManagerListener(new JcPlayerManagerListener() {
+                            @Override
+                            public void onPreparedAudio(@NotNull JcStatus jcStatus) {
+                                List<JcAudio> templi = jcp.getMyPlaylist();
+                                int idx = templi.indexOf(jcp.getCurrentAudio());
+                                adapter.setSelectedPos(idx);
+                                adapter.notifyDataSetChanged();
+
+                            }
+
+                            @Override
+                            public void onCompletedAudio() {
+
+                            }
+
+                            @Override
+                            public void onPaused(@NotNull JcStatus jcStatus) {
+
+                            }
+
+                            @Override
+                            public void onContinueAudio(@NotNull JcStatus jcStatus) {
+
+                            }
+
+                            @Override
+                            public void onPlaying(@NotNull JcStatus jcStatus) {
+
+                            }
+
+                            @Override
+                            public void onTimeChanged(@NotNull JcStatus jcStatus) {
+
+                            }
+
+                            @Override
+                            public void onStopped(@NotNull JcStatus jcStatus) {
+
+                            }
+
+                            @Override
+                            public void onJcpError(@NotNull Throwable throwable) {
+
+                            }
+                        });
+                        jcp.createNotification();
+
+                    }else {
+
                     }
+
                 }
-                adapter.setSelectedPos(-1);
-                count.setText(String.valueOf(li.size()));
-                rv.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                pbar.setVisibility(View.GONE);
-                if (checkin){
-                    jcp.initPlaylist(jclist, null);
+            });
+            df= FirebaseDatabase.getInstance().getReference().child("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            val=df.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    li.clear();
+                    jclist.clear();
+                    for (DataSnapshot dss: snapshot.getChildren()){
+                        try {
+                            String album_name = dss.child("album_name").getValue().toString();
+                            String artist = dss.child("artist").getValue().toString();
+                            String songDuration = dss.child("songDuration").getValue().toString();
+                            String songLink = dss.child("songLink").getValue().toString();
+                            String songTitle = dss.child("songTitle").getValue().toString();
+                            String songsCategory = dss.child("songsCategory").getValue().toString();
+                            String imgLink = dss.child("imgLink").getValue().toString();
+                            Song s = new Song(songsCategory, songTitle, artist,album_name,songDuration,songLink, imgLink);
+                            s.setmKey(dss.getKey());
+                            curr=0;
+                            if (album_name.equals(albumname)){
+                                li.add(s);
+                                checkin = true;
+                                jclist.add(JcAudio.createFromURL(songTitle,s.getSongLink()));
+                            }
 
-                }else {
-                    Toast.makeText(SongInAlbumActivity.this, "There is no song", Toast.LENGTH_SHORT).show();
+
+                        }catch (Exception e){
+                            Toast.makeText(SongInAlbumActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    adapter.setSelectedPos(-1);
+                    count.setText(String.valueOf(li.size()));
+                    rv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    pbar.setVisibility(View.GONE);
+                    if (checkin){
+                        jcp.initPlaylist(jclist, null);
+
+                    }else {
+                        Toast.makeText(SongInAlbumActivity.this, "There is no song", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    pbar.setVisibility(View.GONE);
+                }
+            });
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                pbar.setVisibility(View.GONE);
-            }
-        });
 
 
 
@@ -410,6 +506,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
         adapter.setSelectedPos(curr);
         adapter.notifyItemChanged(curr);
         Global.curAlbum=albumname;
+        Global.curCat=cate;
         isplay=true;
 
     }
@@ -425,6 +522,13 @@ public class SongInAlbumActivity extends AppCompatActivity {
             finish();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+        super.onDestroy();
     }
 
 }

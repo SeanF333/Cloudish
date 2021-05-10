@@ -131,12 +131,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:background="@drawable/border_square"
-            android:id="@+id/songimg"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_gravity="center_horizontal"/>
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:layout_marginRight="20dp"
+                android:background="@drawable/border_square"
+                android:id="@+id/songimg"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/sel_img"
+                android:layout_gravity="bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"/>
+
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_marginTop="12dp"

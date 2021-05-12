@@ -8,7 +8,6 @@
     android:padding="10dp"
     tools:context=".Library_F">
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addfab"
         android:layout_width="wrap_content"
@@ -43,7 +42,8 @@
         android:id="@+id/albumrecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/libheader">
+        android:layout_below="@+id/libheader"
+        android:layout_marginTop="0dp">
 
 
     </androidx.recyclerview.widget.RecyclerView>

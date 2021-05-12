@@ -53,13 +53,13 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
         holder.tv2.setText(a.getFullname());
         Glide.with(context).load(a.getImageurl()).into(holder.iv);
         holder.btn.setVisibility(View.INVISIBLE);
-        isFollowing(a.getUserid(), holder.btn);
+        isFollowing(a.getId(), holder.btn);
 
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(a.getUserid()).setValue(true);
-                FirebaseDatabase.getInstance().getReference().child("Follower").child(a.getUserid()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(true);
+                FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(a.getId()).setValue(true);
+                FirebaseDatabase.getInstance().getReference().child("Follower").child(a.getId()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(true);
                 notifyDataSetChanged();
             }
         });

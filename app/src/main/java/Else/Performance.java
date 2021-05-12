@@ -28,4 +28,10 @@ public class Performance implements Serializable {
     public void setSongList(List<Song> songList) {
         this.songList = songList;
     }
+
+    public void addListOfSong(List<Song> songs){
+        for(Song s : songs){
+            songList.add(s);
+        }
+    }
 }

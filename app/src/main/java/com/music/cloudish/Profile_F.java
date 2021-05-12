@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -57,6 +58,7 @@ public class Profile_F extends Fragment {
         ll=view.findViewById(R.id.logoutll);
         ed=view.findViewById(R.id.edprof);
         verify=view.findViewById(R.id.verify);
+
         FirebaseUser us = FirebaseAuth.getInstance().getCurrentUser();
         us.reload();
         if (us.isEmailVerified()){

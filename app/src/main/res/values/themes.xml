@@ -20,7 +20,6 @@
     <style name="LabelStyle">
         <item name="android:background">@drawable/bg_label</item>
         <item name="android:textColor">#FFF</item>
-        
     </style>
 
     <style name="MyHintStyle" parent="@android:style/TextAppearance">
@@ -32,6 +31,5 @@
     <item name="colorControlNormal">@color/white</item>
     <item name="colorControlActivated">@color/main_purple</item>
     <item name="android:textColorPrimary">@color/white</item>
-    <item name="android:textSize">13sp</item>
     </style>
 </resources>

@@ -224,6 +224,14 @@ public class Profile_F extends Fragment {
             }
         });
 
+        layout_concert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), ViewConcert_A.class);
+                startActivity(i);
+            }
+        });
+
 
         return view;
     }

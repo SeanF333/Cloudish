@@ -485,7 +485,7 @@ public class AddConcert_Second_A extends AppCompatActivity implements UserListen
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()){
 
-                    String songId, album_name, artist, songDuration, songLink, songTitle, songCategory;
+                    String songId, album_name, artist, songDuration, songLink, songTitle, songCategory, imgLink;
 
                     songTitle = ds.child("songTitle").getValue().toString();
                     songId = ds.getKey();
@@ -493,11 +493,12 @@ public class AddConcert_Second_A extends AppCompatActivity implements UserListen
                     artist = ds.child("artist").getValue().toString();
                     songDuration = ds.child("songDuration").getValue().toString();
                     songLink = ds.child("songLink").getValue().toString();
+                    imgLink = ds.child("imgLink").getValue().toString();
 
                     songCategory = ds.child("songsCategory").getValue().toString();
 
                     if(songTitle.toLowerCase().contains(query.toLowerCase())){
-                        Song s = new Song(songCategory, songTitle, artist, album_name, songDuration, songLink);
+                        Song s = new Song(songCategory, songTitle, artist, album_name, songDuration, songLink, imgLink);
                         s.setmKey(songId);
                         songSearchList.add(s);
                     }

@@ -57,15 +57,15 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
         holder.tv2.setText(a.getFullname());
         Glide.with(context).load(a.getImageurl()).into(holder.iv);
         holder.btn.setVisibility(View.INVISIBLE);
-        isFollowing(a.getUserid(), holder.btn);
+        isFollowing(a.getId(), holder.btn);
 
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (a.getPrivate().equals("true")){
-                    FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(a.getUserid()).setValue(false);
-                    Notification n = new Notification(a.getUserid(),FirebaseAuth.getInstance().getCurrentUser().getUid(),"","","0");
-                    DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(a.getUserid());
+                if (a.getIsprivate().equals("true")){
+                    FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(a.getId()).setValue(false);
+                    Notification n = new Notification(a.getId(),FirebaseAuth.getInstance().getCurrentUser().getUid(),"","","0");
+                    DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(a.getId());
                     String uploadid=dff.push().getKey();
                     dff.child(uploadid).setValue(n);
                     holder.btn.setText("Requested");
@@ -78,8 +78,8 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             if (task.isSuccessful()){
                                 String uname = task.getResult().child("username").getValue().toString();
-                                Notification n = new Notification(a.getUserid(),FirebaseAuth.getInstance().getCurrentUser().getUid(),uname+" has starting to follow you.","","2");
-                                DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(a.getUserid());
+                                Notification n = new Notification(a.getId(),FirebaseAuth.getInstance().getCurrentUser().getUid(),uname+" has starting to follow you.","","2");
+                                DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(a.getId());
                                 String uploadid=dff.push().getKey();
                                 dff.child(uploadid).setValue(n);
 
@@ -89,11 +89,11 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
                         }
                     });
 
-                    FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(a.getUserid()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(a.getId()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
-                                FirebaseDatabase.getInstance().getReference().child("Follower").child(a.getUserid()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                FirebaseDatabase.getInstance().getReference().child("Follower").child(a.getId()).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()){

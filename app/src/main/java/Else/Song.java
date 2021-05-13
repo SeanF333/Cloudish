@@ -3,6 +3,7 @@ package Else;
 public class Song {
 
     public String songsCategory, songTitle, artist, album_name, songDuration, songLink, mKey, imgLink;
+    public Boolean isSelected;
 
     public Song(String songsCategory, String songTitle, String artist, String album_name, String songDuration, String songLink, String imgLink) {
         if (songTitle==null || songTitle.trim().equals("")){
@@ -19,6 +20,7 @@ public class Song {
         this.songDuration = songDuration;
         this.songLink = songLink;
         this.imgLink = imgLink;
+        this.isSelected = false;
 
     }
 

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,70 +28,67 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import Adapter.AlbumSearchRecyclerAdaptor;
+import Adapter.UserFollowingRecyclerAdaptor;
 import Adapter.UserSearchRecyclerAdaptor;
 import Else.Album;
 import Else.User;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Album_Result_F#newInstance} factory method to
+ * Use the {@link Following_Result_F#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Album_Result_F extends Fragment {
+public class Following_Result_F extends Fragment {
 
     RecyclerView rv;
     DatabaseReference df;
-    List<String> liu;
-    List<Pair<Album,String>> lia;
-    AlbumSearchRecyclerAdaptor asra;
+    List<String> liuf;
+    List<Pair<User,String>> liu;
+    UserFollowingRecyclerAdaptor adaptor;
     EditText search;
 
-    public Album_Result_F() {
+    public Following_Result_F() {
         // Required empty public constructor
     }
 
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_album__result_, container, false);
-        rv=v.findViewById(R.id.album_result);
-        rv.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        View view = inflater.inflate(R.layout.fragment_following__result_, container, false);
+        rv=view.findViewById(R.id.following_result);
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
         liu=new ArrayList<>();
-        lia=new ArrayList<>();
-        asra= new AlbumSearchRecyclerAdaptor(getContext(),lia);
-        rv.setAdapter(asra);
-        search=getActivity().findViewById(R.id.search_columm);
+        liuf=new ArrayList<>();
+        adaptor=new UserFollowingRecyclerAdaptor(getContext(), liu);
+        rv.setAdapter(adaptor);
+        search=getActivity().findViewById(R.id.search_uname);
 
         DatabaseReference rrr = FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         rrr.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()){
-                    liu.clear();
+                    liuf.clear();
                     DataSnapshot snapshot = task.getResult();
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         if ((boolean)snapshot1.getValue()==true){
                             String userid;
                             userid=snapshot1.getKey().toString();
-                            liu.add(userid);
+                            liuf.add(userid);
                         }
 
                     }
                     if (search.getText().toString().equals("")){
-                        readAlbums();
+                        readUsers();
                     }else {
-                        searchAlbums(search.getText().toString());
+                      searchUsers(search.getText().toString());
                     }
-
                 }
-
-
             }
         });
 
@@ -105,9 +101,7 @@ public class Album_Result_F extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchAlbums(s.toString());
-
-
+                searchUsers(s.toString());
 
             }
 
@@ -117,46 +111,43 @@ public class Album_Result_F extends Fragment {
             }
         });
 
-        return v;
+        return view;
     }
 
-    private void searchAlbums(String s){
-
+    private void searchUsers(String s){
         if (s.equals("")){
-            readAlbums();
+            readUsers();
             return;
         }
+        Query q = FirebaseDatabase.getInstance().getReference("Users");
 
-
-
-        Query q = FirebaseDatabase.getInstance().getReference("Album");
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                lia.clear();
+                liu.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                        String albumname, category, imageurl,userid;
-                        albumname=snapshot2.child("albumname").getValue().toString();
-                        category=snapshot2.child("category").getValue().toString();
-                        imageurl=snapshot2.child("imageurl").getValue().toString();
-                        userid=snapshot1.getKey().toString();
-                        if (liu.contains(userid)){
-                            if (albumname.toLowerCase().startsWith(s.toLowerCase())){
-                                Album a = new Album(albumname,category,imageurl);
-                                Pair<Album,String> p = new Pair<>(a,userid);
-                                lia.add(p);
-                            }
-
+                    String email, fullname, imageurl, phone, Private, username, userid;
+                    email=snapshot1.child("email").getValue().toString();
+                    fullname=snapshot1.child("fullname").getValue().toString();
+                    imageurl=snapshot1.child("imageurl").getValue().toString();
+                    phone=snapshot1.child("phone").getValue().toString();
+                    Private=snapshot1.child("private").getValue().toString();
+                    username=snapshot1.child("username").getValue().toString();
+                    userid=snapshot1.getKey().toString();
+                    if (email.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                        continue;
+                    }
+                    if (liuf.contains(userid)){
+                        if (username.toLowerCase().startsWith(s.toLowerCase()) || fullname.toLowerCase().startsWith(s.toLowerCase())){
+                            User user = new User(userid,email,fullname,imageurl,phone,Private,username);
+                            Pair<User,String> p = new Pair<>(user,userid);
+                            liu.add(p);
                         }
-
                     }
 
 
-
                 }
-
-                asra.notifyDataSetChanged();
+                adaptor.notifyDataSetChanged();
             }
 
             @Override
@@ -166,44 +157,36 @@ public class Album_Result_F extends Fragment {
         });
 
 
-
-
-
     }
 
-    private void readAlbums(){
-        Query q = FirebaseDatabase.getInstance().getReference("Album");
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void readUsers(){
+        df=FirebaseDatabase.getInstance().getReference("Users");
+        df.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (search.getText().toString().equals("")){
-                    lia.clear();
+                    liu.clear();
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                        for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                            String albumname, category, imageurl,userid;
-                            albumname=snapshot2.child("albumname").getValue().toString();
-                            category=snapshot2.child("category").getValue().toString();
-                            imageurl=snapshot2.child("imageurl").getValue().toString();
-                            userid=snapshot1.getKey().toString();
-                            if (liu.contains(userid)){
-
-                                Album a = new Album(albumname,category,imageurl);
-                                Pair<Album,String> p = new Pair<>(a,userid);
-                                lia.add(p);
-
-
-                            }
-
+                        String email, fullname, imageurl, phone, Private, username,userid;
+                        email=snapshot1.child("email").getValue().toString();
+                        fullname=snapshot1.child("fullname").getValue().toString();
+                        imageurl=snapshot1.child("imageurl").getValue().toString();
+                        phone=snapshot1.child("phone").getValue().toString();
+                        Private=snapshot1.child("private").getValue().toString();
+                        username=snapshot1.child("username").getValue().toString();
+                        userid=snapshot1.getKey().toString();
+                        if (email.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                            continue;
+                        }
+                        if (liuf.contains(userid)){
+                            User user = new User(userid,email,fullname,imageurl,phone,Private,username);
+                            Pair<User,String> p = new Pair<>(user,userid);
+                            liu.add(p);
                         }
 
-
-
                     }
-
-                    asra.notifyDataSetChanged();
-
+                    adaptor.notifyDataSetChanged();
                 }
-
             }
 
             @Override

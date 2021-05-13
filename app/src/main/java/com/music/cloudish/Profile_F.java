@@ -1,5 +1,6 @@
 package com.music.cloudish;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.Image;
@@ -26,16 +27,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
+import Else.Global;
 
 public class Profile_F extends Fragment {
 
 
-    LinearLayout ll,ed, layout_post, layout_concert;
+    LinearLayout ll,ed,layout_post, layout_concert;
     ImageView iv;
-    TextView uname,fname,email,telp;
+    TextView uname,fname,email,telp, following,follower;
     DatabaseReference df;
     ProgressDialog pd;
-    Button verify;
+    Button verify,notif;
+    LinearLayout l1,l2;
 
     public Profile_F() {
         // Required empty public constructor
@@ -53,12 +58,16 @@ public class Profile_F extends Fragment {
         fname=view.findViewById(R.id.profilefullname);
         email=view.findViewById(R.id.emailprof);
         telp=view.findViewById(R.id.telpprof);
+        verify=view.findViewById(R.id.verify);
         layout_concert = view.findViewById(R.id.layout_concert);
         layout_post = view.findViewById(R.id.layout_post);
         ll=view.findViewById(R.id.logoutll);
         ed=view.findViewById(R.id.edprof);
-        verify=view.findViewById(R.id.verify);
-
+        notif=view.findViewById(R.id.notif);
+        follower=view.findViewById(R.id.followers);
+        following=view.findViewById(R.id.following);
+        l1=view.findViewById(R.id.ll_following);
+        l2=view.findViewById(R.id.ll_follower);
         FirebaseUser us = FirebaseAuth.getInstance().getCurrentUser();
         us.reload();
         if (us.isEmailVerified()){
@@ -70,9 +79,6 @@ public class Profile_F extends Fragment {
         pd.show();
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        Log.d("profileF", uid);
-
         df= FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
         df.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -84,6 +90,42 @@ public class Profile_F extends Fragment {
                     fname.setText(task.getResult().child("fullname").getValue().toString());
                     email.setText(task.getResult().child("email").getValue().toString());
                     telp.setText(task.getResult().child("phone").getValue().toString());
+                    DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Follower").child(uid);
+                    dff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()){
+                                DataSnapshot ds = task.getResult();
+                                long count1 = ds.getChildrenCount();
+                                follower.setText(String.valueOf(count1));
+                                Query dfff = FirebaseDatabase.getInstance().getReference().child("Following").child(uid);
+                                dfff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        if (task.isSuccessful()){
+                                            DataSnapshot dss = task.getResult();
+                                            long count2=0;
+                                            for (DataSnapshot snapshot1 : task.getResult().getChildren()) {
+                                                if ((boolean)snapshot1.getValue()==true){
+                                                    count2++;
+                                                }
+                                            }
+
+                                            following.setText(String.valueOf(count2));
+
+                                            pd.dismiss();
+                                        }else {
+                                            pd.dismiss();
+                                            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }else {
+                                pd.dismiss();
+                                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                     pd.dismiss();
                 }else{
                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
@@ -95,6 +137,15 @@ public class Profile_F extends Fragment {
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Global.jcpg!=null){
+                    Global.jcpg.kill();
+                }
+                Global.curCat="";
+                Global.curAlbum="";
+                Global.album="";
+                Global.cat="";
+                NotificationManager nMgr = (NotificationManager) getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
+                nMgr.cancelAll();
                 FirebaseAuth.getInstance().signOut();
                 Intent i = new Intent(getActivity(), Login_A.class);
                 startActivity(i);
@@ -109,22 +160,6 @@ public class Profile_F extends Fragment {
                 Intent i = new Intent(getActivity(), EditProfileActivity.class);
                 startActivity(i);
 
-            }
-        });
-
-        layout_post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), ViewPost_A.class);
-                startActivity(i);
-            }
-        });
-
-        layout_concert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), ViewConcert_A.class);
-                startActivity(i);
             }
         });
 
@@ -153,6 +188,42 @@ public class Profile_F extends Fragment {
                         });
             }
         });
+
+
+        notif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), NotificationActivity.class);
+                startActivity(i);
+            }
+        });
+
+        l1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                See_Follower_Following_F ldf = new See_Follower_Following_F ();
+                Bundle args = new Bundle();
+                args.putString("username", uname.getText().toString());
+                args.putInt("mode",1);
+                ldf.setArguments(args);
+
+                getFragmentManager().beginTransaction().replace(R.id.mainC, ldf).commit();
+            }
+        });
+
+        l2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                See_Follower_Following_F ldf = new See_Follower_Following_F ();
+                Bundle args = new Bundle();
+                args.putString("username", uname.getText().toString());
+                args.putInt("mode",2);
+                ldf.setArguments(args);
+
+                getFragmentManager().beginTransaction().replace(R.id.mainC, ldf).commit();
+            }
+        });
+
 
         return view;
     }

@@ -19,6 +19,7 @@
         <activity android:name=".ViewConcert_A" />
         <activity android:name=".ViewPost_A" />
         <activity android:name=".SignUp_A" />
+        <activity android:name=".NotificationActivity"></activity>
         <activity android:name=".Login_A" />
         <activity android:name=".UploadSongActivity" />
         <activity android:name=".SongInAlbumActivity" />

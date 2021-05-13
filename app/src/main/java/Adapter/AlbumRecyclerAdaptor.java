@@ -59,14 +59,16 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
             public void onClick(View v) {
                 if (Global.curAlbum.equals(a.getAlbumname())){
                     Intent i = new Intent(v.getContext(), SongInAlbumActivity.class);
-                    i.putExtra("an",a.getAlbumname());
-                    i.putExtra("cat", a.getAlbumcategory());
+                    Global.album=a.getAlbumname();
+                    Global.cat=a.getAlbumcategory();
+                    i.putExtra("kode","1");
                     i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     v.getContext().startActivity(i);
                 }else {
                     Intent i = new Intent(v.getContext(), SongInAlbumActivity.class);
-                    i.putExtra("an",a.getAlbumname());
-                    i.putExtra("cat", a.getAlbumcategory());
+                    Global.album=a.getAlbumname();
+                    Global.cat=a.getAlbumcategory();
+                    i.putExtra("kode","1");
                     i.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     v.getContext().startActivity(i);
                 }

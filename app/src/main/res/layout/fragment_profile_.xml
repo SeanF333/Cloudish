@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -12,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,71 +22,75 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/montserrat_bold"
+                android:textAllCaps="true"
+                android:fontFamily="sans-serif-black"
+                android:textSize="20sp"
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="My Profile"
-                android:textAllCaps="false"
-                android:textColor="@color/main_purple"
-                android:textSize="20sp" />
+                android:textColor="@color/black"
+                android:text="Profile" />
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
                 android:orientation="horizontal"
-                android:paddingLeft="12dp"
                 android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingLeft="12dp"
                 android:paddingRight="12dp"
-                android:paddingBottom="15dp">
+                >
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/profilePics"
                     android:layout_width="110dp"
                     android:layout_height="110dp"
-                    android:background="@drawable/border_square" />
+                    android:background="@drawable/border_square"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="12dp">
+                    android:paddingLeft="12dp"
+                    android:orientation="vertical">
 
                     <TextView
+                        android:layout_marginTop="14dp"
                         android:id="@+id/profileUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/montserrat"
-                        android:maxLines="1"
                         android:text="\@-----"
-                        android:textColor="@color/bold_grey"
-                        android:textSize="18sp" />
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"/>
 
                     <TextView
+                        android:layout_marginTop="12dp"
                         android:id="@+id/profilefullname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/montserrat"
-                        android:maxLines="1"
                         android:text="-----"
-                        android:textColor="@color/bold_grey"
-                        android:textSize="14sp" />
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"/>
+
+
                 </LinearLayout>
+
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
                 android:background="@drawable/bottom_border"
                 android:orientation="vertical"
-
-                android:paddingBottom="15dp">
+                >
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/verify"
@@ -102,56 +105,51 @@
                     android:textColor="@color/white"
                     />
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="29dp"
                         android:layout_height="29dp"
                         android:layout_marginLeft="22dp"
-                        android:src="@drawable/ic_email"
-                        app:tint="@color/pop_orange" />
+                        android:src="@drawable/ic_email"/>
 
                     <TextView
                         android:id="@+id/emailprof"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_marginLeft="10dp"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="My Email"
-                        android:textColor="@color/bold_grey"
-                        android:textSize="14sp" />
+                        android:textSize="12sp"
+                        android:text="---------"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="29dp"
                         android:layout_height="29dp"
                         android:layout_marginLeft="22dp"
-                        android:src="@drawable/ic_phone"
-                        app:tint="@color/pop_orange" />
+                        android:src="@drawable/ic_phone"/>
 
                     <TextView
                         android:id="@+id/telpprof"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_marginLeft="10dp"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="My Phone Number"
-                        android:textColor="@color/bold_grey"
-                        android:textSize="14sp" />
+                        android:textSize="12sp"
+                        android:text="-----------"/>
 
                 </LinearLayout>
 
@@ -166,13 +164,16 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_purple"
                 android:orientation="horizontal"
-                android:padding="20dp">
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+
                     android:orientation="vertical">
 
                     <TextView
@@ -223,6 +224,7 @@
                 </LinearLayout>
 
 
+
             </LinearLayout>
 
 
@@ -232,7 +234,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:id="@+id/layout_post"
@@ -285,57 +286,60 @@
 
             </LinearLayout>
 
-
             <LinearLayout
                 android:id="@+id/edprof"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:layout_marginLeft="12dp"
                     android:layout_width="39dp"
                     android:layout_height="39dp"
-                    android:layout_marginLeft="12dp"
-                    android:src="@drawable/ic_edit"
-                    android:tint="@color/pop_orange"
-                    tools:ignore="UseAppTint" />
+                    android:src="@drawable/ic_edit"/>
 
                 <TextView
+                    android:layout_marginLeft="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="Edit Profile"
+                    android:textSize="19sp"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:text="Edit Profile"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/logoutll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:layout_marginLeft="12dp"
                     android:layout_width="39dp"
                     android:layout_height="39dp"
-                    android:layout_marginLeft="12dp"
-                    android:src="@drawable/ic_logout"
-                    app:tint="@color/pop_orange" />
+                    android:src="@drawable/ic_logout"/>
 
                 <TextView
+                    android:layout_marginLeft="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="Log Out"
+                    android:textSize="19sp"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:text="Log Out"/>
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/notif"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notification"
+                android:backgroundTint="#E74E0C"/>
 
 
         </LinearLayout>

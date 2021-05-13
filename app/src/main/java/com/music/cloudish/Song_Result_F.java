@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -67,29 +69,29 @@ public class Song_Result_F extends Fragment {
         search=getActivity().findViewById(R.id.search_columm);
 
         DatabaseReference rrr = FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        rrr.addListenerForSingleValueEvent(new ValueEventListener() {
+        rrr.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                liu.clear();
-                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    String userid;
-                    userid=snapshot1.getKey().toString();
-                    liu.add(userid);
-                }
-            }
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    liu.clear();
+                    DataSnapshot snapshot = task.getResult();
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        if ((boolean)snapshot1.getValue()==true){
+                            String userid;
+                            userid=snapshot1.getKey().toString();
+                            liu.add(userid);
+                        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                    if (search.getText().toString().equals("")){
+                        readSongs();
+                    }else {
+                        searchSongs(search.getText().toString());
+                    }
+                }
 
             }
         });
-
-        if (search.getText().toString().equals("")){
-            readSongs();
-        }else {
-            searchSongs(search.getText().toString());
-        }
-
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,17 +127,18 @@ public class Song_Result_F extends Fragment {
                 lis.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                        String album_name, artist, songDuration,userid, songLink, songTitle, songsCategory;
+                        String album_name, artist, songDuration,userid, songLink, songTitle, songsCategory,imgLink;
                         album_name=snapshot2.child("album_name").getValue().toString();
                         artist=snapshot2.child("artist").getValue().toString();
                         songDuration=snapshot2.child("songDuration").getValue().toString();
                         songLink=snapshot2.child("songLink").getValue().toString();
                         songTitle=snapshot2.child("songTitle").getValue().toString();
                         songsCategory=snapshot2.child("songsCategory").getValue().toString();
+                        imgLink=snapshot2.child("imgLink").getValue().toString();
                         userid=snapshot1.getKey().toString();
                         if (liu.contains(userid)){
                             if (songTitle.toLowerCase().startsWith(s.toLowerCase()) || album_name.toLowerCase().startsWith(s.toLowerCase()) || artist.toLowerCase().startsWith(s.toLowerCase())){
-                                Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink);
+                                Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink,imgLink);
                                 lis.add(s);
                             }
 
@@ -168,16 +171,17 @@ public class Song_Result_F extends Fragment {
                     lis.clear();
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                            String album_name, artist, songDuration,userid, songLink, songTitle, songsCategory;
+                            String album_name, artist, songDuration,userid, songLink, songTitle, songsCategory,imgLink;
                             album_name=snapshot2.child("album_name").getValue().toString();
                             artist=snapshot2.child("artist").getValue().toString();
                             songDuration=snapshot2.child("songDuration").getValue().toString();
                             songLink=snapshot2.child("songLink").getValue().toString();
                             songTitle=snapshot2.child("songTitle").getValue().toString();
                             songsCategory=snapshot2.child("songsCategory").getValue().toString();
+                            imgLink=snapshot2.child("imgLink").getValue().toString();
                             userid=snapshot1.getKey().toString();
                             if (liu.contains(userid)){
-                                Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink);
+                                Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink,imgLink);
                                 lis.add(s);
 
                             }

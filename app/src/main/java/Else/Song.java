@@ -1,14 +1,10 @@
 package Else;
 
-import java.io.Serializable;
-import java.util.List;
+public class Song {
 
-public class Song implements Serializable {
+    public String songsCategory, songTitle, artist, album_name, songDuration, songLink, mKey, imgLink;
 
-    public String songsCategory, songTitle, artist, album_name, songDuration, songLink, mKey;
-    public Boolean isSelected;
-
-    public Song(String songsCategory, String songTitle, String artist, String album_name, String songDuration, String songLink) {
+    public Song(String songsCategory, String songTitle, String artist, String album_name, String songDuration, String songLink, String imgLink) {
         if (songTitle==null || songTitle.trim().equals("")){
             songTitle="No Title";
         }
@@ -22,8 +18,16 @@ public class Song implements Serializable {
         this.album_name = album_name;
         this.songDuration = songDuration;
         this.songLink = songLink;
-        this.isSelected = false;
+        this.imgLink = imgLink;
 
+    }
+
+    public String getImgLink() {
+        return imgLink;
+    }
+
+    public void setImgLink(String imgLink) {
+        this.imgLink = imgLink;
     }
 
     public String getSongsCategory() {
@@ -81,5 +85,4 @@ public class Song implements Serializable {
     public void setmKey(String mKey) {
         this.mKey = mKey;
     }
-
 }

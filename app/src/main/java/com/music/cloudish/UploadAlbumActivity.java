@@ -150,7 +150,7 @@ public class UploadAlbumActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
                                         uploadImage();
-                                        finish();
+
                                     }else{
                                         pd.dismiss();
                                         Toast.makeText(UploadAlbumActivity.this, "Error", Toast.LENGTH_SHORT).show();
@@ -193,6 +193,7 @@ public class UploadAlbumActivity extends AppCompatActivity {
                 hm.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/musicalbum.jpg?alt=media&token=5e66a85d-dec1-48a0-836b-61ad71f1fb0c");
                 y.updateChildren(hm);
                 pd.dismiss();
+                finish();
             }
             else {
                 StorageReference baru = sr.child(System.currentTimeMillis()+"");
@@ -215,21 +216,25 @@ public class UploadAlbumActivity extends AppCompatActivity {
                             hm.put("imageurl", ""+myuri);
                             y.updateChildren(hm);
                             pd.dismiss();
+                            finish();
 
                         }else {
-                            Toast.makeText(UploadAlbumActivity.this, "Error1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UploadAlbumActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UploadAlbumActivity.this, "Error2", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UploadAlbumActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
             }
 
         }else {
             Toast.makeText(UploadAlbumActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

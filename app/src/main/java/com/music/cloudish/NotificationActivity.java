@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import Adapter.NotificationRecyclerAdaptor;
+import Else.Global;
 import Else.Notification;
 
 public class NotificationActivity extends AppCompatActivity {
@@ -78,6 +79,11 @@ public class NotificationActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override

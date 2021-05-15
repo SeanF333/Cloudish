@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -23,7 +24,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.music.cloudish.NotificationActivity;
 import com.music.cloudish.R;
 
 import java.util.List;
@@ -101,6 +104,9 @@ public class NotificationRecyclerAdaptor extends RecyclerView.Adapter<Notificati
             holder.tv2.setVisibility(View.VISIBLE);
             holder.ll.setVisibility(View.GONE);
             holder.tv.setVisibility(View.GONE);
+            setup(n.getPublisherid(), holder.iv1, 1);
+            setup2(n.getAlbum_name(), holder.iv2);
+            holder.tv2.setText(n.getText());
         }
 
     }
@@ -142,6 +148,22 @@ public class NotificationRecyclerAdaptor extends RecyclerView.Adapter<Notificati
                 }
             });
         }
+    }
+
+    private void setup2(String albumname, ImageView iv){
+        Query df = FirebaseDatabase.getInstance().getReference().child("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("albumname").equalTo(albumname);
+        df.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    for (DataSnapshot sn1: task.getResult().getChildren()) {
+                        String link = sn1.child("imageurl").getValue().toString();
+                        Glide.with(context).load(link).into(iv);
+                    }
+
+                }
+            }
+        });
     }
 
     private void getUser(String publisherid, ImageView iv, TextView tv){

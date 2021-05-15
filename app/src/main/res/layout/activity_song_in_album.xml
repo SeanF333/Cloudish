@@ -85,12 +85,14 @@
         android:padding="16dp"
         android:background="#594947">
 
-        
+
+
         <LinearLayout
             android:id="@+id/catsection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_below="@+id/owneralbum"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true">
 
@@ -157,6 +159,33 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/owneralbum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:textSize="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Owner : "
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:textSize="12dp"
+                android:id="@+id/ownertext"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="---------"/>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/songaddbutt"
             android:layout_width="wrap_content"
@@ -165,6 +194,28 @@
             android:layout_alignParentBottom="true"
             android:backgroundTint="#E74E0C"
             android:text="Add New Song" />
+
+        <ImageView
+            android:id="@+id/btnLove"
+            android:visibility="gone"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_lovr"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/btnUnlove"
+            android:visibility="gone"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_lovr"
+            android:backgroundTint="@color/orange"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"/>
 
 
     </RelativeLayout>

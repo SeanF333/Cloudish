@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import Else.Global;
+
 public class Search_Ad extends FragmentStatePagerAdapter {
 
     private String[] tabTitles = new String[]{"User","Album","Song"};
@@ -39,6 +41,7 @@ public class Search_Ad extends FragmentStatePagerAdapter {
                 return urf;
             case 1:
                 Album_Result_F arf = new Album_Result_F();
+                Global.arf=arf;
                 return arf;
             case 2:
                 Song_Result_F srf = new Song_Result_F();

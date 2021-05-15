@@ -54,7 +54,14 @@ public class Album_Result_F extends Fragment {
         // Required empty public constructor
     }
 
-    
+    public AlbumSearchRecyclerAdaptor getAsra() {
+        return asra;
+    }
+
+    public void setAsra(AlbumSearchRecyclerAdaptor asra) {
+        this.asra = asra;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

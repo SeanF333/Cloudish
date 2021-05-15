@@ -44,7 +44,7 @@ public class Song_Result_F extends Fragment {
 
     RecyclerView rv;
     DatabaseReference df;
-    List<Song> lis;
+    List<Pair<Pair<Song,String>,String>> lis;
     SongSearchRecyclerAdaptor ssra;
     EditText search;
     List<String> liu;
@@ -136,10 +136,13 @@ public class Song_Result_F extends Fragment {
                         songsCategory=snapshot2.child("songsCategory").getValue().toString();
                         imgLink=snapshot2.child("imgLink").getValue().toString();
                         userid=snapshot1.getKey().toString();
+                        String sid = snapshot2.getKey().toString();
                         if (liu.contains(userid)){
                             if (songTitle.toLowerCase().startsWith(s.toLowerCase()) || album_name.toLowerCase().startsWith(s.toLowerCase()) || artist.toLowerCase().startsWith(s.toLowerCase())){
                                 Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink,imgLink);
-                                lis.add(s);
+                                Pair<Song,String> p1 = new Pair<>(s,sid);
+                                Pair<Pair<Song,String>,String> p2 = new Pair<>(p1,userid);
+                                lis.add(p2);
                             }
 
                         }
@@ -180,9 +183,13 @@ public class Song_Result_F extends Fragment {
                             songsCategory=snapshot2.child("songsCategory").getValue().toString();
                             imgLink=snapshot2.child("imgLink").getValue().toString();
                             userid=snapshot1.getKey().toString();
+                            String sid = snapshot2.getKey().toString();
                             if (liu.contains(userid)){
                                 Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink,imgLink);
-                                lis.add(s);
+                                Pair<Song,String> p1 = new Pair<>(s,sid);
+                                Pair<Pair<Song,String>,String> p2 = new Pair<>(p1,userid);
+                                lis.add(p2);
+
 
                             }
 

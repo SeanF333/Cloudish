@@ -5,6 +5,7 @@
     android:clickable="true"
     android:padding="6dp"
     android:focusable="true"
+    android:id="@+id/search_song_item"
     android:background="@color/white">
 
     <ImageView

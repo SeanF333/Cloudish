@@ -1,17 +1,29 @@
 package Else;
 
-public class User {
+import java.io.Serializable;
 
-    private String userid, email, fullname, imageurl, phone, Private, username;
+public class User implements Serializable {
 
-    public User(String userid, String email, String fullname, String imageurl, String phone, String Private, String username) {
+    private String id, email, fullname, imageurl, phone, isprivate, username;
+    public Boolean isSelected;
+
+    public User(String id, String email, String fullname, String imageurl, String phone, String isprivate, String username) {
+        this.id = id;
         this.email = email;
-        this.userid=userid;
         this.fullname = fullname;
         this.imageurl = imageurl;
         this.phone = phone;
-        this.Private = Private;
+        this.isprivate = isprivate;
         this.username = username;
+        this.isSelected = false;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -46,12 +58,12 @@ public class User {
         this.phone = phone;
     }
 
-    public String getPrivate() {
-        return Private;
+    public String getIsprivate() {
+        return isprivate;
     }
 
-    public void setPrivate(String aPrivate) {
-        Private = aPrivate;
+    public void setIsprivate(String isprivate) {
+        this.isprivate = isprivate;
     }
 
     public String getUsername() {
@@ -62,11 +74,4 @@ public class User {
         this.username = username;
     }
 
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
 }

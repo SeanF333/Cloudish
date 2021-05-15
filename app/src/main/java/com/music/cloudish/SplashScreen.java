@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -70,7 +71,7 @@ public class SplashScreen extends AppCompatActivity {
                     pairs[0] = new Pair<View, String>(logo, "transition_logo");
                     pairs[1] = new Pair<View, String>(title, "transition_text");
 
-                    /// options for animation
+                    // options for animation
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashScreen.this, pairs);
                     startActivity(i, options.toBundle());
                     finish();

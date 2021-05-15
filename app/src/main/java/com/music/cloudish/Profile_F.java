@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.internal.GmsLogger;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,9 +34,9 @@ import Else.Global;
 public class Profile_F extends Fragment {
 
 
-    LinearLayout ll,ed;
+    LinearLayout ll,ed,layout_post, layout_concert;
     ImageView iv;
-    TextView uname,fname,email,telp,following,follower;
+    TextView uname,fname,email,telp, following,follower;
     DatabaseReference df;
     ProgressDialog pd;
     Button verify,notif;
@@ -60,6 +59,10 @@ public class Profile_F extends Fragment {
         email=view.findViewById(R.id.emailprof);
         telp=view.findViewById(R.id.telpprof);
         verify=view.findViewById(R.id.verify);
+        layout_concert = view.findViewById(R.id.layout_concert);
+        layout_post = view.findViewById(R.id.layout_post);
+        ll=view.findViewById(R.id.logoutll);
+        ed=view.findViewById(R.id.edprof);
         notif=view.findViewById(R.id.notif);
         follower=view.findViewById(R.id.followers);
         following=view.findViewById(R.id.following);
@@ -123,9 +126,8 @@ public class Profile_F extends Fragment {
                             }
                         }
                     });
-
-                }else{
                     pd.dismiss();
+                }else{
                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -187,6 +189,7 @@ public class Profile_F extends Fragment {
             }
         });
 
+
         notif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,6 +223,15 @@ public class Profile_F extends Fragment {
                 getFragmentManager().beginTransaction().replace(R.id.mainC, ldf).commit();
             }
         });
+
+        layout_concert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), ViewConcert_A.class);
+                startActivity(i);
+            }
+        });
+
 
         return view;
     }

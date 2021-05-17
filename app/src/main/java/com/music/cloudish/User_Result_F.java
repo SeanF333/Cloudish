@@ -62,7 +62,12 @@ public class User_Result_F extends Fragment {
         liu2=new ArrayList<>();
         ura=new UserSearchRecyclerAdaptor(getContext(), liu);
         rv.setAdapter(ura);
-        search=getActivity().findViewById(R.id.search_columm);
+        try {
+            search=getActivity().findViewById(R.id.search_columm);
+        }catch (Exception e){
+
+        }
+
 
         DatabaseReference rrr = FirebaseDatabase.getInstance().getReference().child("Following").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         rrr.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {

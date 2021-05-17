@@ -44,6 +44,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import Else.Album;
+import Else.Global;
+
 public class UploadAlbumActivity extends AppCompatActivity {
 
     ImageView iv,close,done;
@@ -191,9 +194,19 @@ public class UploadAlbumActivity extends AppCompatActivity {
             if (mImageUri.equals(Uri.parse("https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/musicalbum.jpg?alt=media&token=5e66a85d-dec1-48a0-836b-61ad71f1fb0c"))){
                 HashMap<String, Object> hm = new HashMap<>();
                 hm.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/musicalbum.jpg?alt=media&token=5e66a85d-dec1-48a0-836b-61ad71f1fb0c");
-                y.updateChildren(hm);
-                pd.dismiss();
-                finish();
+                y.updateChildren(hm).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        pd.dismiss();
+                        try {
+                            Album baru = new Album(name.getText().toString(),selectedcat,"https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/musicalbum.jpg?alt=media&token=5e66a85d-dec1-48a0-836b-61ad71f1fb0c");
+                            Global.flib.getAdapter().getLi().add(baru);
+                            Global.flib.getAdapter().notifyDataSetChanged();
+                        }catch (Exception e){}
+                        finish();
+                    }
+                });
+
             }
             else {
                 StorageReference baru = sr.child(System.currentTimeMillis()+"");
@@ -214,9 +227,19 @@ public class UploadAlbumActivity extends AppCompatActivity {
                             String myuri = downloaduri.toString();
                             HashMap<String, Object> hm = new HashMap<>();
                             hm.put("imageurl", ""+myuri);
-                            y.updateChildren(hm);
-                            pd.dismiss();
-                            finish();
+                            y.updateChildren(hm).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    pd.dismiss();
+                                    try {
+                                        Album baru = new Album(name.getText().toString(),selectedcat,myuri);
+                                        Global.flib.getAdapter().getLi().add(baru);
+                                        Global.flib.getAdapter().notifyDataSetChanged();
+                                    }catch (Exception e){}
+                                    finish();
+                                }
+                            });
+
 
                         }else {
                             Toast.makeText(UploadAlbumActivity.this, "Error", Toast.LENGTH_SHORT).show();

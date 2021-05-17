@@ -62,6 +62,24 @@
                     android:src="@drawable/ic_delete"/>
 
                 <ImageView
+                    android:id="@+id/addtoalbum"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_move"/>
+
+                <ImageView
+                    android:id="@+id/addfix"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_done"/>
+
+                <ImageView
                     android:id="@+id/hapusfix"
                     android:layout_marginRight="20dp"
                     android:layout_alignParentRight="true"

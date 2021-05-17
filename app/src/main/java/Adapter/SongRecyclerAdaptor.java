@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
     private int selectedPos;
     private Context context;
     private List<Song> li;
+    private List<Song> arrsong = new ArrayList<>();
     private List<String> arrno = new ArrayList<>();
     private RecyclerItemClickListener listener;
     private int mode=0;
@@ -44,8 +46,21 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
         this.mode = mode;
     }
 
+
     public void resetarr(){
         arrno.clear();
+    }
+
+    public void resetarrsong(){
+        arrsong.clear();
+    }
+
+    public List<Song> getArrsong() {
+        return arrsong;
+    }
+
+    public void setArrsong(List<Song> arrsong) {
+        this.arrsong = arrsong;
     }
 
     public List<String> getArrno() {
@@ -103,16 +118,20 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
             public void onClick(View view) {
                 if(((CompoundButton) view).isChecked()){
                     arrno.add(li.get(position).getSongLink());
+                    arrsong.add(li.get(position));
                 } else {
                     arrno.remove(li.get(position).getSongLink());
+                    arrsong.remove(li.get(position));
                 }
             }
         });
 
         if (holder.cb.isChecked()){
             arrno.add(li.get(position).getSongLink());
+            arrsong.add(li.get(position));
         }else {
             arrno.remove(li.get(position).getSongLink());
+            arrsong.remove(li.get(position));
         }
 
         holder.title.setText(s.getSongTitle());
@@ -134,6 +153,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
         TextView title, duration, artist;
         ImageView status,img;
         CheckBox cb;
+        RelativeLayout rl;
 
 
         public SongViewHolder(@NonNull View itemView) {
@@ -145,6 +165,7 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
             status=itemView.findViewById(R.id.musicstatus);
             cb=itemView.findViewById(R.id.checkboxx);
             img=itemView.findViewById(R.id.dummyimagemusic);
+            rl =itemView.findViewById(R.id.rlsong);
 
         }
 
@@ -152,7 +173,10 @@ public class SongRecyclerAdaptor extends RecyclerView.Adapter<SongRecyclerAdapto
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.OnClickListener(s, getAdapterPosition());
+                    if (mode==0){
+                        listener.OnClickListener(s, getAdapterPosition());
+                    }
+
                 }
             });
         }

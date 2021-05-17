@@ -39,6 +39,14 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
         this.li = li;
     }
 
+    public List<Album> getLi() {
+        return li;
+    }
+
+    public void setLi(List<Album> li) {
+        this.li = li;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -97,6 +105,8 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
         });
 
 
+
+
     }
 
     @Override
@@ -119,6 +129,10 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
                 cv=itemView.findViewById(R.id.albumitem);
                 ll=itemView.findViewById(R.id.bckg_album);
                 count=itemView.findViewById(R.id.countlike);
+            }
+
+            public void hide(){
+                itemView.setVisibility(View.GONE);
             }
         }
 

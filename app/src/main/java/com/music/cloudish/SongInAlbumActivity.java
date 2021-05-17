@@ -12,9 +12,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -33,6 +35,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -53,7 +56,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
 
     LinearLayout ll;
     TextView an,cat,count,own;
-    ImageView back,del,yes,no,love,unlove;
+    ImageView back,del,yes,no,love,unlove,addto,yesadd;
     Button addnew;
     ProgressDialog pd;
     DatabaseReference df;
@@ -104,6 +107,8 @@ public class SongInAlbumActivity extends AppCompatActivity {
         }else {
             modedisplay=Global.modealbumglobal;
         }
+        addto=findViewById(R.id.addtoalbum);
+        yesadd=findViewById(R.id.addfix);
         ll=findViewById(R.id.owneralbum);
         an=findViewById(R.id.altit);
         cat=findViewById(R.id.cattext);
@@ -124,7 +129,9 @@ public class SongInAlbumActivity extends AppCompatActivity {
         li=new ArrayList<>();
 
 
+
         if (modedisplay==1){
+
             if (getIntent().getStringExtra("kode")!=null){
                 albumname = Global.album;
                 cate = Global.cat;
@@ -168,6 +175,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
             del.setVisibility(View.GONE);
             addnew.setVisibility(View.GONE);
             ll.setVisibility(View.VISIBLE);
+            addto.setVisibility(View.VISIBLE);
 
             DatabaseReference uref = FirebaseDatabase.getInstance().getReference().child("Users").child(uidowner);
             uref.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -184,72 +192,74 @@ public class SongInAlbumActivity extends AppCompatActivity {
                             jcp.setVisibility(View.VISIBLE);
                             li=Global.li;
                             adapter=Global.adapter;
+                            adapter.setMode(mode);
+                            adapter.notifyDataSetChanged();
                             rv.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         }else {
                             adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
                                 @Override
                                 public void OnClickListener(Song s, int pos) {
-                                    if (mode==0){
-                                        changeSelectedSong(pos);
-                                        Global.jcpg=jcp;
-                                        Global.adapter=adapter;
-                                        Global.li=li;
-                                        jcp.playAudio(jclist.get(pos));
-                                        jcp.setVisibility(View.VISIBLE);
-                                        jcp.setJcPlayerManagerListener(new JcPlayerManagerListener() {
-                                            @Override
-                                            public void onPreparedAudio(@NotNull JcStatus jcStatus) {
-                                                List<JcAudio> templi = jcp.getMyPlaylist();
-                                                int idx = templi.indexOf(jcp.getCurrentAudio());
-                                                adapter.setSelectedPos(idx);
-                                                adapter.notifyDataSetChanged();
 
-                                            }
+                                    changeSelectedSong(pos);
+                                    Global.jcpg=jcp;
+                                    Global.adapter=adapter;
+                                    Global.li=li;
+                                    jcp.playAudio(jclist.get(pos));
+                                    jcp.setVisibility(View.VISIBLE);
+                                    jcp.setJcPlayerManagerListener(new JcPlayerManagerListener() {
+                                        @Override
+                                        public void onPreparedAudio(@NotNull JcStatus jcStatus) {
+                                            List<JcAudio> templi = jcp.getMyPlaylist();
+                                            int idx = templi.indexOf(jcp.getCurrentAudio());
+                                            adapter.setSelectedPos(idx);
+                                            adapter.notifyDataSetChanged();
 
-                                            @Override
-                                            public void onCompletedAudio() {
+                                        }
 
-                                            }
+                                        @Override
+                                        public void onCompletedAudio() {
 
-                                            @Override
-                                            public void onPaused(@NotNull JcStatus jcStatus) {
+                                        }
 
-                                            }
+                                        @Override
+                                        public void onPaused(@NotNull JcStatus jcStatus) {
 
-                                            @Override
-                                            public void onContinueAudio(@NotNull JcStatus jcStatus) {
+                                        }
 
-                                            }
+                                        @Override
+                                        public void onContinueAudio(@NotNull JcStatus jcStatus) {
 
-                                            @Override
-                                            public void onPlaying(@NotNull JcStatus jcStatus) {
+                                        }
 
-                                            }
+                                        @Override
+                                        public void onPlaying(@NotNull JcStatus jcStatus) {
 
-                                            @Override
-                                            public void onTimeChanged(@NotNull JcStatus jcStatus) {
+                                        }
 
-                                            }
+                                        @Override
+                                        public void onTimeChanged(@NotNull JcStatus jcStatus) {
 
-                                            @Override
-                                            public void onStopped(@NotNull JcStatus jcStatus) {
+                                        }
 
-                                            }
+                                        @Override
+                                        public void onStopped(@NotNull JcStatus jcStatus) {
 
-                                            @Override
-                                            public void onJcpError(@NotNull Throwable throwable) {
+                                        }
 
-                                            }
-                                        });
-                                        jcp.createNotification();
+                                        @Override
+                                        public void onJcpError(@NotNull Throwable throwable) {
 
-                                    }else {
+                                        }
+                                    });
+                                    jcp.createNotification();
 
-                                    }
+
 
                                 }
                             });
+                            adapter.setMode(mode);
+                            adapter.notifyDataSetChanged();
                             df= FirebaseDatabase.getInstance().getReference().child("Songs").child(uidowner);
                             val=df.addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -391,72 +401,74 @@ public class SongInAlbumActivity extends AppCompatActivity {
                 jcp.setVisibility(View.VISIBLE);
                 li=Global.li;
                 adapter=Global.adapter;
+                adapter.setMode(mode);
+                adapter.notifyDataSetChanged();
                 rv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }else {
                 adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
                     @Override
                     public void OnClickListener(Song s, int pos) {
-                        if (mode==0){
-                            changeSelectedSong(pos);
-                            Global.jcpg=jcp;
-                            Global.adapter=adapter;
-                            Global.li=li;
-                            jcp.playAudio(jclist.get(pos));
-                            jcp.setVisibility(View.VISIBLE);
-                            jcp.setJcPlayerManagerListener(new JcPlayerManagerListener() {
-                                @Override
-                                public void onPreparedAudio(@NotNull JcStatus jcStatus) {
-                                    List<JcAudio> templi = jcp.getMyPlaylist();
-                                    int idx = templi.indexOf(jcp.getCurrentAudio());
-                                    adapter.setSelectedPos(idx);
-                                    adapter.notifyDataSetChanged();
 
-                                }
+                        changeSelectedSong(pos);
+                        Global.jcpg=jcp;
+                        Global.adapter=adapter;
+                        Global.li=li;
+                        jcp.playAudio(jclist.get(pos));
+                        jcp.setVisibility(View.VISIBLE);
+                        jcp.setJcPlayerManagerListener(new JcPlayerManagerListener() {
+                            @Override
+                            public void onPreparedAudio(@NotNull JcStatus jcStatus) {
+                                List<JcAudio> templi = jcp.getMyPlaylist();
+                                int idx = templi.indexOf(jcp.getCurrentAudio());
+                                adapter.setSelectedPos(idx);
+                                adapter.notifyDataSetChanged();
 
-                                @Override
-                                public void onCompletedAudio() {
+                            }
 
-                                }
+                            @Override
+                            public void onCompletedAudio() {
 
-                                @Override
-                                public void onPaused(@NotNull JcStatus jcStatus) {
+                            }
 
-                                }
+                            @Override
+                            public void onPaused(@NotNull JcStatus jcStatus) {
 
-                                @Override
-                                public void onContinueAudio(@NotNull JcStatus jcStatus) {
+                            }
 
-                                }
+                            @Override
+                            public void onContinueAudio(@NotNull JcStatus jcStatus) {
 
-                                @Override
-                                public void onPlaying(@NotNull JcStatus jcStatus) {
+                            }
 
-                                }
+                            @Override
+                            public void onPlaying(@NotNull JcStatus jcStatus) {
 
-                                @Override
-                                public void onTimeChanged(@NotNull JcStatus jcStatus) {
+                            }
 
-                                }
+                            @Override
+                            public void onTimeChanged(@NotNull JcStatus jcStatus) {
 
-                                @Override
-                                public void onStopped(@NotNull JcStatus jcStatus) {
+                            }
 
-                                }
+                            @Override
+                            public void onStopped(@NotNull JcStatus jcStatus) {
 
-                                @Override
-                                public void onJcpError(@NotNull Throwable throwable) {
+                            }
 
-                                }
-                            });
-                            jcp.createNotification();
+                            @Override
+                            public void onJcpError(@NotNull Throwable throwable) {
 
-                        }else {
+                            }
+                        });
+                        jcp.createNotification();
 
-                        }
+
 
                     }
                 });
+                adapter.setMode(mode);
+                adapter.notifyDataSetChanged();
                 df= FirebaseDatabase.getInstance().getReference().child("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 val=df.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -492,7 +504,12 @@ public class SongInAlbumActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                         pbar.setVisibility(View.GONE);
                         if (checkin){
-                            jcp.initPlaylist(jclist, null);
+                            try {
+                                jcp.initPlaylist(jclist, null);
+                            }catch (Exception e){
+
+                            }
+
 
                         }else {
                             Toast.makeText(SongInAlbumActivity.this, "There is no song", Toast.LENGTH_SHORT).show();
@@ -636,6 +653,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
                                 jcp.pause();
                                 mode = 1;
                                 adapter.resetarr();
+                                adapter.resetarrsong();
                                 adapter.setMode(1);
                                 adapter.notifyDataSetChanged();
                                 yes.setVisibility(View.VISIBLE);
@@ -664,47 +682,66 @@ public class SongInAlbumActivity extends AppCompatActivity {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                 if (snapshot.getChildrenCount()>0){
+                                                    Global.curAlbum="";
+                                                    Global.curCat="";
+                                                    try {
+                                                        Global.flib.getAdapter().notifyDataSetChanged();
+                                                    }catch (Exception e){
+
+                                                    }
                                                     for(DataSnapshot dataSnapshot :  snapshot.getChildren())
                                                     {
+                                                        String categsong = dataSnapshot.child("songsCategory").getValue().toString();
                                                         String link = dataSnapshot.child("songLink").getValue().toString();
                                                         dataSnapshot.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if (task.isSuccessful()){
-                                                                    StorageReference fs = FirebaseStorage.getInstance().getReferenceFromUrl(link);
-                                                                    fs.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                                            if (task.isSuccessful()){
 
-                                                                                DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                                                                                albumRef.orderByChild("albumname").equalTo(albumname).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                    @Override
-                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                                        for(DataSnapshot dataSnapshot :  snapshot.getChildren())
-                                                                                        {
-                                                                                            dataSnapshot.getRef().setValue(null);
-                                                                                        }
-                                                                                        pdd.dismiss();
-                                                                                        finish();
-                                                                                    }
 
-                                                                                    @Override
-                                                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                                                    }
-                                                                                });
-                                                                            }
-                                                                        }
-                                                                    });
                                                                 }else {
-                                                                    pdd.dismiss();
+//                                                                    pdd.dismiss();
                                                                     Toast.makeText(SongInAlbumActivity.this, "Error deleting music", Toast.LENGTH_SHORT).show();
                                                                 }
 
                                                             }
                                                         });
                                                     }
+                                                    DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+                                                    albumRef.orderByChild("albumname").equalTo(albumname).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            for(DataSnapshot dataSnapshot :  snapshot.getChildren())
+                                                            {
+                                                                dataSnapshot.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        Global.curAlbum="";
+                                                                        Global.curCat="";
+                                                                        Global.justdeleted=albumname;
+                                                                        try {
+                                                                            Global.flib.getAdapter().getLi().removeIf(obj -> obj.getAlbumname().equals(albumname));
+                                                                            Global.flib.getAdapter().notifyDataSetChanged();
+                                                                        }catch (Exception e){
+
+                                                                        }
+                                                                        DatabaseReference likeRef = FirebaseDatabase.getInstance().getReference("Like").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(albumname);
+                                                                        likeRef.setValue(null);
+
+                                                                        pdd.dismiss();
+                                                                        finish();
+                                                                    }
+                                                                });
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                        }
+                                                    });
+
                                                 }else {
                                                     DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
                                                     albumRef.orderByChild("albumname").equalTo(albumname).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -712,10 +749,27 @@ public class SongInAlbumActivity extends AppCompatActivity {
                                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                             for(DataSnapshot dataSnapshot :  snapshot.getChildren())
                                                             {
-                                                                dataSnapshot.getRef().setValue(null);
+                                                                dataSnapshot.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        Global.curAlbum="";
+                                                                        Global.curCat="";
+                                                                        Global.justdeleted=albumname;
+                                                                        try {
+                                                                            Global.flib.getAdapter().getLi().removeIf(obj -> obj.getAlbumname().equals(albumname));
+                                                                            Global.flib.getAdapter().notifyDataSetChanged();
+                                                                        }catch (Exception e){
+
+                                                                        }
+                                                                        DatabaseReference likeRef = FirebaseDatabase.getInstance().getReference("Like").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(albumname);
+                                                                        likeRef.setValue(null);
+
+                                                                        pdd.dismiss();
+                                                                        finish();
+                                                                    }
+                                                                });
                                                             }
-                                                            pdd.dismiss();
-                                                            finish();
+
                                                         }
 
                                                         @Override
@@ -750,15 +804,129 @@ public class SongInAlbumActivity extends AppCompatActivity {
             }
         });
 
+        addto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jcp.pause();
+                mode = 1;
+                adapter.resetarrsong();
+                adapter.resetarr();
+                adapter.setMode(1);
+                adapter.notifyDataSetChanged();
+                yesadd.setVisibility(View.VISIBLE);
+                no.setVisibility(View.VISIBLE);
+                addto.setVisibility(View.GONE);
+                back.setVisibility(View.INVISIBLE);
+            }
+        });
+
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (modedisplay==1){
+                    mode=0;
+                    adapter.setMode(0);
+                    adapter.notifyDataSetChanged();
+                    yesadd.setVisibility(View.GONE);
+                    no.setVisibility(View.GONE);
+                    addto.setVisibility(View.VISIBLE);
+                    back.setVisibility(View.VISIBLE);
+                }else {
+                    mode=0;
+                    adapter.setMode(0);
+                    adapter.notifyDataSetChanged();
+                    yes.setVisibility(View.GONE);
+                    no.setVisibility(View.GONE);
+                    del.setVisibility(View.VISIBLE);
+                    back.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+        yesadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.notifyDataSetChanged();
+                List<Song> a = adapter.getArrsong();
+                int first = a.size();
+                if (a.size()>0){
+                    AlertDialog.Builder b = new AlertDialog.Builder(SongInAlbumActivity.this);
+                    b.setCancelable(true);
+                    b.setTitle("Input Album Name");
+                    final EditText input = new EditText(SongInAlbumActivity.this);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    LinearLayout ll = new LinearLayout(SongInAlbumActivity.this);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    lp.setMargins(40, 40, 40, 40);
+                    input.setLayoutParams(lp);
+                    ll.addView(input);
+                    b.setView(ll);
+                    b.setPositiveButton("Confirm", null);
+                    b.setNegativeButton("Cancel", null);
+                    AlertDialog d = b.create();
+                    d.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            Button btn = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                            btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    ProgressDialog pdd = new ProgressDialog(SongInAlbumActivity.this);
+                                    pdd.setMessage("Please Wait");
+                                    pdd.show();
+                                    String aname = input.getText().toString();
+                                    Query dfff = FirebaseDatabase.getInstance().getReference().child("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("albumname").equalTo(aname);
+                                    dfff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                            if (task.isSuccessful()){
+                                                if (task.getResult().exists()){
+                                                    DatabaseReference dfr = FirebaseDatabase.getInstance().getReference().child("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                    for (int i=0; i<first; i++) {
+                                                        Song s = a.get(i);
+                                                        s.setAlbum_name(aname);
+                                                        s.setSongsCategory("Copy");
+                                                        String uploadid = dfr.push().getKey();
+                                                        dfr.child(uploadid).setValue(s).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                                            }
+                                                        });
+                                                    }
+                                                    Toast.makeText(SongInAlbumActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                                    d.dismiss();
+                                                    pdd.dismiss();
+
+                                                }else {
+                                                    Toast.makeText(SongInAlbumActivity.this,"You don't have album with that name", Toast.LENGTH_SHORT).show();
+                                                    pdd.dismiss();
+                                                }
+                                            }else {
+                                                Toast.makeText(SongInAlbumActivity.this,"Error", Toast.LENGTH_SHORT).show();
+                                                pdd.dismiss();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                    d.show();
+
+
+
+                }else{
+                    Toast.makeText(SongInAlbumActivity.this, "No music selected", Toast.LENGTH_SHORT).show();
+                }
                 mode=0;
                 adapter.setMode(0);
                 adapter.notifyDataSetChanged();
-                yes.setVisibility(View.GONE);
+                yesadd.setVisibility(View.GONE);
                 no.setVisibility(View.GONE);
-                del.setVisibility(View.VISIBLE);
+                addto.setVisibility(View.VISIBLE);
                 back.setVisibility(View.VISIBLE);
             }
         });
@@ -768,6 +936,8 @@ public class SongInAlbumActivity extends AppCompatActivity {
             public void onClick(View v) {
                 adapter.notifyDataSetChanged();
                 List<String> a = adapter.getArrno();
+                List<Song> sss = adapter.getArrsong();
+                int cnt = a.size();
                 if (a.size()>0){
                     AlertDialog.Builder builder = new AlertDialog.Builder(SongInAlbumActivity.this);
                     builder.setCancelable(true);
@@ -780,9 +950,10 @@ public class SongInAlbumActivity extends AppCompatActivity {
                                     ProgressDialog pdd = new ProgressDialog(SongInAlbumActivity.this);
                                     pdd.setMessage("Please Wait");
                                     pdd.show();
-                                    for (String s: a) {
+                                    for (int i=0; i<cnt; i++) {
+                                        String s = a.get(i);
                                         DatabaseReference musicRef = FirebaseDatabase.getInstance().getReference("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                                        musicRef.orderByChild("songLink").equalTo(s).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        musicRef.orderByChild("songLink").equalTo(s).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                 for(DataSnapshot dataSnapshot :  snapshot.getChildren())
@@ -791,19 +962,24 @@ public class SongInAlbumActivity extends AppCompatActivity {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if (task.isSuccessful()){
-                                                                StorageReference fs = FirebaseStorage.getInstance().getReferenceFromUrl(s);
-                                                                fs.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                    @Override
-                                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                                        if (task.isSuccessful()){
-                                                                            pdd.dismiss();
-                                                                            finish();
-                                                                            overridePendingTransition(0, 0);
-                                                                            startActivity(getIntent());
-                                                                            overridePendingTransition(0, 0);
-                                                                        }
-                                                                    }
-                                                                });
+                                                                Global.curAlbum="";
+                                                                Global.curCat="";
+                                                                try {
+                                                                    Global.flib.getAdapter().notifyDataSetChanged();
+                                                                }catch (Exception e){
+
+                                                                }
+                                                                pdd.dismiss();
+                                                                finish();
+                                                                overridePendingTransition(0, 0);
+                                                                Global.album=albumname;
+                                                                Global.cat=cate;
+                                                                Global.modealbum=0;
+                                                                Intent i = getIntent();
+                                                                i.putExtra("kode","1");
+                                                                i.putExtra("albummode","0");
+                                                                startActivity(i);
+                                                                overridePendingTransition(0, 0);
                                                             }else {
                                                                 pdd.dismiss();
                                                                 Toast.makeText(SongInAlbumActivity.this, "Error deleting music", Toast.LENGTH_SHORT).show();
@@ -812,8 +988,6 @@ public class SongInAlbumActivity extends AppCompatActivity {
                                                         }
                                                     });
                                                 }
-
-
                                             }
 
                                             @Override
@@ -821,7 +995,6 @@ public class SongInAlbumActivity extends AppCompatActivity {
 
                                             }
                                         });
-
 
                                     }
 

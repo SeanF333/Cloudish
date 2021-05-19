@@ -138,7 +138,7 @@ public class Song_Result_F extends Fragment {
                         userid=snapshot1.getKey().toString();
                         String sid = snapshot2.getKey().toString();
                         if (liu.contains(userid)){
-                            if (songTitle.toLowerCase().startsWith(s.toLowerCase()) || album_name.toLowerCase().startsWith(s.toLowerCase()) || artist.toLowerCase().startsWith(s.toLowerCase())){
+                            if (songTitle.toLowerCase().contains(s.toLowerCase()) || album_name.toLowerCase().contains(s.toLowerCase()) || artist.toLowerCase().contains(s.toLowerCase())){
                                 Song s = new Song(songsCategory,songTitle,artist,album_name,songDuration,songLink,imgLink);
                                 Pair<Song,String> p1 = new Pair<>(s,sid);
                                 Pair<Pair<Song,String>,String> p2 = new Pair<>(p1,userid);

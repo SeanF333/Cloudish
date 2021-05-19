@@ -12,7 +12,7 @@ import Else.Global;
 
 public class Search_Ad extends FragmentStatePagerAdapter {
 
-    private String[] tabTitles = new String[]{"User","Album","Song"};
+    private String[] tabTitles = new String[]{"User","Album","Song","Concert"};
     private Context context;
     int totalTabs;
 
@@ -46,6 +46,9 @@ public class Search_Ad extends FragmentStatePagerAdapter {
             case 2:
                 Song_Result_F srf = new Song_Result_F();
                 return srf;
+            case 3:
+                Concert_Result_F crf = new Concert_Result_F();
+                return crf;
             default:
                 return null;
         }

@@ -4,11 +4,13 @@ public class Album {
     String albumname;
     String imageurl;
     String category;
+    public Boolean isSelected;
 
     public Album(String albumname, String category, String imageurl) {
         this.albumname = albumname;
         this.imageurl = imageurl;
         this.category = category;
+        this.isSelected = false;
     }
 
     public Album() {

@@ -39,6 +39,7 @@ public class Search_F extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("User"));
         tabLayout.addTab(tabLayout.newTab().setText("Album"));
         tabLayout.addTab(tabLayout.newTab().setText("Song"));
+        tabLayout.addTab(tabLayout.newTab().setText("Concert"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabTextColors(getResources().getColor(R.color.main_purple), getResources().getColor(R.color.abuabu));
         tabLayout.setupWithViewPager(viewPager);

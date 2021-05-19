@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.AlertDialog;
 import android.app.NotificationManager;
@@ -13,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,13 +49,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Adapter.AlbumRecyclerAdaptor;
+import Adapter.AlbumRecylerAdapter;
 import Adapter.SongRecyclerAdaptor;
 import Else.Album;
 import Else.Global;
 import Else.Notification;
 import Else.Song;
+import Listener.AlbumListener;
 
-public class SongInAlbumActivity extends AppCompatActivity {
+public class SongInAlbumActivity extends AppCompatActivity implements AlbumListener {
 
     LinearLayout ll;
     TextView an,cat,count,own;
@@ -74,6 +79,8 @@ public class SongInAlbumActivity extends AppCompatActivity {
     int mode=0;
     int modedisplay=0;
     String uidowner;
+    ArrayList<Album> arl = new ArrayList<>();
+    AlbumRecylerAdapter aaaa;
 
     public ViewGroup getParent(View view) {
         return (ViewGroup)view.getParent();
@@ -196,6 +203,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
                             rv.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
+                            count.setText(li.size()+"");
                         }else {
                             adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
                                 @Override
@@ -405,6 +413,7 @@ public class SongInAlbumActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 rv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                count.setText(li.size()+"");
             }else {
                 adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
                     @Override
@@ -851,70 +860,135 @@ public class SongInAlbumActivity extends AppCompatActivity {
                 List<Song> a = adapter.getArrsong();
                 int first = a.size();
                 if (a.size()>0){
+                    ProgressDialog progressDialog = new ProgressDialog(SongInAlbumActivity.this);
+                    progressDialog.show();
+                    arl.clear();
+                    final View view = getLayoutInflater().inflate(R.layout.alert_dialog_input, null);
                     AlertDialog.Builder b = new AlertDialog.Builder(SongInAlbumActivity.this);
+                    b.setView(view);
                     b.setCancelable(true);
                     b.setTitle("Input Album Name");
-                    final EditText input = new EditText(SongInAlbumActivity.this);
-                    input.setInputType(InputType.TYPE_CLASS_TEXT);
-                    LinearLayout ll = new LinearLayout(SongInAlbumActivity.this);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                    lp.setMargins(40, 40, 40, 40);
-                    input.setLayoutParams(lp);
-                    ll.addView(input);
-                    b.setView(ll);
-                    b.setPositiveButton("Confirm", null);
-                    b.setNegativeButton("Cancel", null);
-                    AlertDialog d = b.create();
-                    d.setOnShowListener(new DialogInterface.OnShowListener() {
+                    DatabaseReference dfrc = FirebaseDatabase.getInstance().getReference().child("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    dfrc.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onShow(DialogInterface dialog) {
-                            Button btn = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                            btn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    ProgressDialog pdd = new ProgressDialog(SongInAlbumActivity.this);
-                                    pdd.setMessage("Please Wait");
-                                    pdd.show();
-                                    String aname = input.getText().toString();
-                                    Query dfff = FirebaseDatabase.getInstance().getReference().child("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("albumname").equalTo(aname);
-                                    dfff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                            if (task.isSuccessful()){
-                                                if (task.getResult().exists()){
-                                                    DatabaseReference dfr = FirebaseDatabase.getInstance().getReference().child("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                                    for (int i=0; i<first; i++) {
-                                                        Song s = a.get(i);
-                                                        s.setAlbum_name(aname);
-                                                        s.setSongsCategory("Copy");
-                                                        String uploadid = dfr.push().getKey();
-                                                        dfr.child(uploadid).setValue(s).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-
-                                                            }
-                                                        });
-                                                    }
-                                                    Toast.makeText(SongInAlbumActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                                    d.dismiss();
-                                                    pdd.dismiss();
-
-                                                }else {
-                                                    Toast.makeText(SongInAlbumActivity.this,"You don't have album with that name", Toast.LENGTH_SHORT).show();
-                                                    pdd.dismiss();
-                                                }
-                                            }else {
-                                                Toast.makeText(SongInAlbumActivity.this,"Error", Toast.LENGTH_SHORT).show();
-                                                pdd.dismiss();
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    String aname = ds.child("albumname").getValue().toString();
+                                    String acat = ds.child("category").getValue().toString();
+                                    String imageUrl = ds.child("imageurl").getValue().toString();
+                                    Album newalbum = new Album(aname,acat,imageUrl);
+                                    arl.add(newalbum);
+                                }
+                                progressDialog.dismiss();
+                                RecyclerView rvv = (RecyclerView) view.findViewById(R.id.recDialog);
+                                aaaa = new AlbumRecylerAdapter(arl,SongInAlbumActivity.this);
+                                rvv.setHasFixedSize(true);
+                                rvv.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.HORIZONTAL));
+                                rvv.setAdapter(aaaa);
+                                SearchView sv = (SearchView) view.findViewById(R.id.search_add_to_album);
+//                                    sv.setVisibility(View.GONE);
+                                sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                    @Override
+                                    public boolean onQueryTextSubmit(String query) {
+                                        ArrayList<Album> alllll = new ArrayList<>();
+                                        for (Album ab : arl) {
+                                            if (ab.getAlbumname().toLowerCase().contains(query.toLowerCase())){
+                                                alllll.add(ab);
                                             }
                                         }
-                                    });
-                                }
-                            });
+                                        aaaa = new AlbumRecylerAdapter(alllll,SongInAlbumActivity.this);
+                                        rvv.setHasFixedSize(true);
+                                        rvv.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.HORIZONTAL));
+                                        rvv.setAdapter(aaaa);
+                                        return true;
+                                    }
+
+                                    @Override
+                                    public boolean onQueryTextChange(String newText) {
+                                        ArrayList<Album> alllll = new ArrayList<>();
+                                        for (Album ab : arl) {
+                                            if (ab.getAlbumname().toLowerCase().contains(newText.toLowerCase())){
+                                                alllll.add(ab);
+                                            }
+                                        }
+                                        aaaa = new AlbumRecylerAdapter(alllll,SongInAlbumActivity.this);
+                                        rvv.setHasFixedSize(true);
+                                        rvv.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.HORIZONTAL));
+                                        rvv.setAdapter(aaaa);
+                                        return true;
+                                    }
+                                });
+                                b.setPositiveButton("Confirm", null);
+                                b.setNegativeButton("Cancel", null);
+                                AlertDialog d = b.create();
+                                d.setOnShowListener(new DialogInterface.OnShowListener() {
+                                    @Override
+                                    public void onShow(DialogInterface dialog) {
+                                        Button btn = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                                        btn.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+
+                                                ProgressDialog pdd = new ProgressDialog(SongInAlbumActivity.this);
+                                                pdd.setMessage("Please Wait");
+                                                pdd.show();
+
+                                                for (Album alb : aaaa.getSelectedAlbum()) {
+                                                    Query dfff = FirebaseDatabase.getInstance().getReference().child("Album").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("albumname").equalTo(alb.getAlbumname());
+                                                    dfff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                            if (task.isSuccessful()){
+                                                                if (task.getResult().exists()){
+                                                                    DatabaseReference dfr = FirebaseDatabase.getInstance().getReference().child("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                                    for (int i=0; i<first; i++) {
+                                                                        Song s = a.get(i);
+                                                                        s.setAlbum_name(alb.getAlbumname());
+                                                                        s.setSongsCategory("Copy");
+                                                                        String uploadid = dfr.push().getKey();
+                                                                        dfr.child(uploadid).setValue(s).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                    Toast.makeText(SongInAlbumActivity.this, "Success", Toast.LENGTH_SHORT).show();
+
+                                                                }else {
+                                                                    Toast.makeText(SongInAlbumActivity.this,"You don't have album with that name", Toast.LENGTH_SHORT).show();
+
+                                                                }
+                                                            }else {
+                                                                Toast.makeText(SongInAlbumActivity.this,"Error", Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                                if (aaaa.getSelectedAlbum().size()==0){
+                                                    Toast.makeText(SongInAlbumActivity.this,"No Album Selected", Toast.LENGTH_SHORT).show();
+                                                }else {
+                                                    Toast.makeText(SongInAlbumActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                                }
+                                                d.dismiss();
+                                                pdd.dismiss();
+
+                                            }
+                                        });
+                                    }
+                                });
+                                d.show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
-                    d.show();
+
 
 
 
@@ -1077,4 +1151,8 @@ public class SongInAlbumActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onAlbumAction(Boolean isSelected) {
+
+    }
 }

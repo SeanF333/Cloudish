@@ -149,7 +149,7 @@ public class Album_Result_F extends Fragment {
                         imageurl=snapshot2.child("imageurl").getValue().toString();
                         userid=snapshot1.getKey().toString();
                         if (liu.contains(userid)){
-                            if (albumname.toLowerCase().startsWith(s.toLowerCase())){
+                            if (albumname.toLowerCase().contains(s.toLowerCase())){
                                 Album a = new Album(albumname,category,imageurl);
                                 Pair<Album,String> p = new Pair<>(a,userid);
                                 lia.add(p);

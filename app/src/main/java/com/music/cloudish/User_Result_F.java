@@ -140,7 +140,7 @@ public class User_Result_F extends Fragment {
                     if (email.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                         continue;
                     }
-                    if (username.toLowerCase().startsWith(s.toLowerCase()) || fullname.toLowerCase().startsWith(s.toLowerCase())){
+                    if (username.toLowerCase().contains(s.toLowerCase()) || fullname.toLowerCase().contains(s.toLowerCase())){
                         User user = new User(userid,email,fullname,imageurl,phone,Private,username);
                         liu.add(user);
                     }

@@ -46,6 +46,7 @@ import com.google.firebase.storage.StorageReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import Adapter.AlbumRecyclerAdaptor;
@@ -204,6 +205,7 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
                             rv.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                             count.setText(li.size()+"");
+
                         }else {
                             adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
                                 @Override
@@ -237,7 +239,10 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
 
                                         @Override
                                         public void onContinueAudio(@NotNull JcStatus jcStatus) {
-
+                                            List<JcAudio> templi = jcp.getMyPlaylist();
+                                            int idx = templi.indexOf(jcp.getCurrentAudio());
+                                            adapter.setSelectedPos(idx);
+                                            adapter.notifyDataSetChanged();
                                         }
 
                                         @Override
@@ -311,6 +316,7 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
                                         adapter.setSelectedPos(-1);
                                     }
                                     count.setText(String.valueOf(li.size()));
+                                    
                                     rv.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                     pbar.setVisibility(View.GONE);
@@ -351,7 +357,10 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
 
                                                 @Override
                                                 public void onContinueAudio(@NotNull JcStatus jcStatus) {
-
+                                                    List<JcAudio> templi = jcp.getMyPlaylist();
+                                                    int idx = templi.indexOf(jcp.getCurrentAudio());
+                                                    adapter.setSelectedPos(idx);
+                                                    adapter.notifyDataSetChanged();
                                                 }
 
                                                 @Override
@@ -379,7 +388,6 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
 
 
                                     }else {
-                                        Toast.makeText(SongInAlbumActivity.this, "There is no song", Toast.LENGTH_SHORT).show();
                                     }
 
                                 }
@@ -414,6 +422,7 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
                 rv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 count.setText(li.size()+"");
+
             }else {
                 adapter=new SongRecyclerAdaptor(getApplicationContext(), li, new SongRecyclerAdaptor.RecyclerItemClickListener() {
                     @Override
@@ -447,7 +456,10 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
 
                             @Override
                             public void onContinueAudio(@NotNull JcStatus jcStatus) {
-
+                                List<JcAudio> templi = jcp.getMyPlaylist();
+                                int idx = templi.indexOf(jcp.getCurrentAudio());
+                                adapter.setSelectedPos(idx);
+                                adapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -509,6 +521,7 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
                         }
                         adapter.setSelectedPos(-1);
                         count.setText(String.valueOf(li.size()));
+
                         rv.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         pbar.setVisibility(View.GONE);
@@ -521,7 +534,6 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
 
 
                         }else {
-                            Toast.makeText(SongInAlbumActivity.this, "There is no song", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -593,19 +605,43 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()){
-                            pd.dismiss();
-                            unlove.setVisibility(View.GONE);
-                            love.setVisibility(View.VISIBLE);
-                            try {
-                                Global.flib.getAdapter().notifyDataSetChanged();
-                            }catch (Exception e){
+                            Query dbrf = FirebaseDatabase.getInstance().getReference().child("Notification").child(uidowner).orderByChild("publisherid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            dbrf.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        for (DataSnapshot dsp : task.getResult().getChildren()) {
+                                            String message = dsp.child("text").getValue().toString();
+                                            if (!message.endsWith("like your album '"+albumname+"'.")){
+                                                continue;
+                                            }
+                                            dsp.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    pd.dismiss();
+                                                    unlove.setVisibility(View.GONE);
+                                                    love.setVisibility(View.VISIBLE);
+                                                    try {
+                                                        Global.flib.getAdapter().notifyDataSetChanged();
+                                                    }catch (Exception e){
 
-                            }
-                            try {
-                                Global.arf.getAsra().notifyDataSetChanged();
-                            }catch (Exception e){
+                                                    }
+                                                    try {
+                                                        Global.arf.getAsra().notifyDataSetChanged();
+                                                    }catch (Exception e){
 
-                            }
+                                                    }
+                                                }
+                                            });
+                                            break;
+                                        }
+                                    }else {
+                                        pd.dismiss();
+                                        Toast.makeText(SongInAlbumActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
                         }else {
                             pd.dismiss();
                             Toast.makeText(SongInAlbumActivity.this, "Error", Toast.LENGTH_SHORT).show();
@@ -1009,7 +1045,9 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
             @Override
             public void onClick(View v) {
                 adapter.notifyDataSetChanged();
-                List<String> a = adapter.getArrno();
+                List<String> a = new ArrayList<>();
+                a.addAll(adapter.getArrno());
+                Collections.sort(a);
                 List<Song> sss = adapter.getArrsong();
                 int cnt = a.size();
                 if (a.size()>0){
@@ -1026,41 +1064,34 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
                                     pdd.show();
                                     for (int i=0; i<cnt; i++) {
                                         String s = a.get(i);
+                                        int freq = Collections.frequency(a,s);
+                                        Global.freqcount = 0;
                                         DatabaseReference musicRef = FirebaseDatabase.getInstance().getReference("Songs").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-                                        musicRef.orderByChild("songLink").equalTo(s).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        musicRef.orderByChild("songLink").equalTo(s).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                 for(DataSnapshot dataSnapshot :  snapshot.getChildren())
                                                 {
+                                                    String tesalbum = dataSnapshot.child("album_name").getValue().toString();
+                                                    if (!tesalbum.equals(albumname)){
+                                                        continue;
+                                                    }
                                                     dataSnapshot.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if (task.isSuccessful()){
-                                                                Global.curAlbum="";
-                                                                Global.curCat="";
-                                                                try {
-                                                                    Global.flib.getAdapter().notifyDataSetChanged();
-                                                                }catch (Exception e){
 
-                                                                }
-                                                                pdd.dismiss();
-                                                                finish();
-                                                                overridePendingTransition(0, 0);
-                                                                Global.album=albumname;
-                                                                Global.cat=cate;
-                                                                Global.modealbum=0;
-                                                                Intent i = getIntent();
-                                                                i.putExtra("kode","1");
-                                                                i.putExtra("albummode","0");
-                                                                startActivity(i);
-                                                                overridePendingTransition(0, 0);
                                                             }else {
-                                                                pdd.dismiss();
                                                                 Toast.makeText(SongInAlbumActivity.this, "Error deleting music", Toast.LENGTH_SHORT).show();
                                                             }
 
                                                         }
                                                     });
+                                                    Global.freqcount++;
+                                                    if (Global.freqcount==freq){
+                                                        break;
+                                                    }
+
                                                 }
                                             }
 
@@ -1069,8 +1100,26 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
 
                                             }
                                         });
+                                        i+=(freq-1);
+                                    }
+                                    Global.curAlbum="";
+                                    Global.curCat="";
+                                    try {
+                                        Global.flib.getAdapter().notifyDataSetChanged();
+                                    }catch (Exception e){
 
                                     }
+                                    pdd.dismiss();
+                                    finish();
+                                    overridePendingTransition(0, 0);
+                                    Global.album=albumname;
+                                    Global.cat=cate;
+                                    Global.modealbum=0;
+                                    Intent i = getIntent();
+                                    i.putExtra("kode","1");
+                                    i.putExtra("albummode","0");
+                                    startActivity(i);
+                                    overridePendingTransition(0, 0);
 
                                 }
                             });

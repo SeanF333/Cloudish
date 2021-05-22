@@ -8,9 +8,11 @@ import androidx.fragment.app.FragmentManager;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.common.internal.GmsLogger;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -60,13 +62,32 @@ public class MainHomeActivity extends AppCompatActivity {
 
     }
 
+    boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onBackPressed() {
-        if (Global.jcpg!=null && Global.jcpg.isPaused()){
-            Global.jcpg.kill();
+        if (doubleBackToExitPressedOnce) {
+            if (Global.jcpg!=null && Global.jcpg.isPaused()){
+                Global.jcpg.kill();
+            }
+            moveTaskToBack(true);
+        }else {
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to push app to background", Toast.LENGTH_SHORT).show();
         }
-        moveTaskToBack(true);
+
+
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
+
+
 
     @Override
     protected void onDestroy() {

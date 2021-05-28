@@ -148,14 +148,14 @@ public class SignUp_A extends AppCompatActivity {
 
         String val = password.getEditText().getText().toString().trim();
         _password = val;
-
         String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,20}$";
 
         if (val.isEmpty()) {
             password.setError("Field can not be empty");
             return false;
         } else if (!isValidPassword(val, regex)) {
-            password.setError("Password is too weak!");
+//            password.setError("Password is too weak! Use uppercase & special characters!");
+            Toast.makeText(SignUp_A.this, "Password is weak use uppercase and special characters", Toast.LENGTH_LONG).show();
             return false;
         } else {
             password.setError(null);

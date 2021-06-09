@@ -1,6 +1,7 @@
 package Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.music.cloudish.R;
+import com.music.cloudish.UserHome_A;
 
 import java.util.List;
 
@@ -58,6 +60,15 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
         Glide.with(context).load(a.getImageurl()).into(holder.iv);
         holder.btn.setVisibility(View.INVISIBLE);
         isFollowing(a.getId(), holder.btn);
+
+        holder.rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), UserHome_A.class);
+                i.putExtra("artist_id", a.getId());
+                v.getContext().startActivity(i);
+            }
+        });
 
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,8 +174,7 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
             tv2=itemView.findViewById(R.id.fullnameS);
             iv=itemView.findViewById(R.id.userpics);
             btn=itemView.findViewById(R.id.btnFol);
-
-
+            rl = itemView.findViewById(R.id.layout_user_card);
 
         }
     }

@@ -11,9 +11,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners_white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="20dp">
+        android:padding="10dp">
 
         <ImageView
             android:layout_width="30dp"
@@ -26,8 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:ellipsize="end"
+            android:fontFamily="@font/poppins_medium"
             android:hint="Search"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 

@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:background="@color/black"
+    android:padding="10dp"
     tools:context=".UploadAlbumActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bar"
-        >
+        android:background="@color/white">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarUA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbarUA"
-            android:background="#01081B">
+            android:background="@color/white">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -30,26 +31,28 @@
                     android:layout_width="29dp"
                     android:layout_height="29dp"
                     android:layout_alignParentLeft="true"
-                    android:src="@drawable/ic_close"/>
+                    android:src="@drawable/ic_close"
+                    app:tint="@color/pop_orange" />
 
                 <TextView
-                    android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@+id/closeUA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/closeUA"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="Create New Album"
-                    android:textAllCaps="true"
-                    android:fontFamily="sans-serif-black"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"/>
+                    android:textAllCaps="false"
+                    android:textColor="@color/main_purple"
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/doneeUA"
-                    android:layout_marginRight="20dp"
-                    android:layout_alignParentRight="true"
                     android:layout_width="29dp"
                     android:layout_height="29dp"
-                    android:src="@drawable/ic_done"/>
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_done"
+                    app:tint="@color/pop_orange" />
 
             </RelativeLayout>
 
@@ -62,84 +65,82 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_marginTop="24dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="0dp"
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/albumpp"
             android:layout_width="190dp"
             android:layout_height="190dp"
-            android:background="@drawable/border_square"
-            />
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="0dp"
+            android:elevation="5dp" />
 
         <Button
             android:id="@+id/selectC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:layout_marginBottom="0dp"
+            android:backgroundTint="@color/pop_orange"
+            android:fontFamily="@font/poppins_medium"
+            android:padding="10dp"
             android:text="Select Cover"
-            android:backgroundTint="#E74E0C"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="0dp"/>
-
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         android:orientation="vertical">
 
         <TextView
-            android:paddingLeft="21dp"
-            android:paddingRight="21dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
             android:text="Album Name"
-            android:textColor="@color/white"/>
+            android:textColor="@color/black" />
 
         <EditText
             android:id="@+id/unnnnUA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/white"/>
+            android:backgroundTint="@color/grey_out"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black" />
 
         <TextView
-            android:layout_marginTop="20dp"
-            android:paddingLeft="21dp"
-            android:paddingRight="21dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:paddingLeft="21dp"
+            android:paddingRight="21dp"
             android:text="Category"
-            android:textColor="@color/white"/>
+            android:textColor="@color/black" />
 
         <Spinner
-            android:layout_marginLeft="21dp"
-            android:layout_marginRight="21dp"
             android:id="@+id/spin"
             android:layout_width="match_parent"
-            android:backgroundTint="@color/white"
-            android:popupBackground="@color/white"
-
             android:layout_height="40dp"
-            android:layout_weight="1">
+            android:layout_marginLeft="21dp"
+            android:layout_marginRight="21dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/black"
+            android:popupBackground="@color/white">
 
         </Spinner>
 
 
-
-
-
     </LinearLayout>
-
 
 
 </LinearLayout>

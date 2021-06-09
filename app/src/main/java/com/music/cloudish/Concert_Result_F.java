@@ -37,11 +37,6 @@ import Adapter.SongSearchRecyclerAdaptor;
 import Else.Concert;
 import Else.Song;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Concert_Result_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Concert_Result_F extends Fragment {
 
     RecyclerView rv;
@@ -60,7 +55,6 @@ public class Concert_Result_F extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_concert__result_, container, false);
-
         rv=v.findViewById(R.id.concert_search_result);
         rv.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL));
 
@@ -84,7 +78,6 @@ public class Concert_Result_F extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 searchConcert(s.toString());
-
             }
 
             @Override
@@ -139,15 +132,11 @@ public class Concert_Result_F extends Fragment {
                                 e.printStackTrace();
                             }
 
-                            Concert concert = new Concert(id, image_url,  main_genre, name, description, date, time, duration);
+                            Concert concert = new Concert(id, image_url,  main_genre, name, description, date, time, ds.getKey(), duration);
                             lic.add(concert);
 
                         }
-
-
-
                     }
-
                     cra.notifyDataSetChanged();
                 }
 
@@ -196,7 +185,7 @@ public class Concert_Result_F extends Fragment {
                                     e.printStackTrace();
                                 }
 
-                                Concert concert = new Concert(id, image_url,  main_genre, name, description, date, time, duration);
+                                Concert concert = new Concert(id, image_url,  main_genre, name, description, date, time, ds.getKey(), duration);
                                 lic.add(concert);
                             }
 

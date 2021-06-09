@@ -14,12 +14,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cloudish">
-        <activity android:name=".AddConcert_Second_A"></activity>
+        <activity android:name=".UserHome_A">
+
+        </activity>
+        <activity android:name=".AddPost_A" />
+        <activity android:name=".Detail_Playlist_A" />
+        <activity android:name=".ViewConcertDetail_A" />
+        <activity android:name=".AddConcert_Second_A" />
         <activity android:name=".AddConcert_First_A" />
         <activity android:name=".ViewConcert_A" />
         <activity android:name=".ViewPost_A" />
         <activity android:name=".SignUp_A" />
-        <activity android:name=".NotificationActivity"></activity>
+        <activity android:name=".NotificationActivity" />
         <activity android:name=".Login_A" />
         <activity android:name=".UploadSongActivity" />
         <activity android:name=".SongInAlbumActivity" />

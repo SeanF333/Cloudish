@@ -35,11 +35,6 @@ import Adapter.UserSearchRecyclerAdaptor;
 import Else.Album;
 import Else.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Following_Result_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Following_Result_F extends Fragment {
 
     RecyclerView rv;
@@ -144,8 +139,6 @@ public class Following_Result_F extends Fragment {
                             liu.add(p);
                         }
                     }
-
-
                 }
                 adaptor.notifyDataSetChanged();
             }

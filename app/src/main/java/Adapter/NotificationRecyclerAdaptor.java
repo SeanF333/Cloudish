@@ -60,7 +60,6 @@ public class NotificationRecyclerAdaptor extends RecyclerView.Adapter<Notificati
         Pair<Notification,String> p = li.get(position);
         Notification n = p.first;
 
-
         if (n.getMode().equals("0")){
             holder.iv2.setVisibility(View.GONE);
             holder.tv2.setVisibility(View.GONE);

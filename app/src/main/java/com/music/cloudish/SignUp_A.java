@@ -67,7 +67,7 @@ public class SignUp_A extends AppCompatActivity {
 
     private void gotoMainActivity() {
 
-        Boolean a,b,c,d,e;
+        Boolean a,b,c,d;
 
         a = validateEmail();
         b = validateFullname();
@@ -87,8 +87,11 @@ public class SignUp_A extends AppCompatActivity {
         String _tempPhoneNumber = phone_number.getEditText().getText().toString().trim();
         _phone_number = ccp.getSelectedCountryCode()+_tempPhoneNumber;
 
-        if(_phone_number.isEmpty()){
+        Log.d("SignUpA ini", _phone_number);
+
+        if(_tempPhoneNumber.isEmpty()){
             phone_number.setError("Field cannot be empty");
+            pd.dismiss();
         }
 
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
@@ -100,7 +103,6 @@ public class SignUp_A extends AppCompatActivity {
                     phone_number.setError("This number already exist");
                 }
                 else{
-                    phone_number.setErrorEnabled(false);
 
                     Boolean a,b,c,d,e;
 
@@ -125,7 +127,6 @@ public class SignUp_A extends AppCompatActivity {
                         startActivity(in);
                         finishAffinity();
                     }
-
                 }
             }
 
@@ -159,7 +160,6 @@ public class SignUp_A extends AppCompatActivity {
             return false;
         } else {
             password.setError(null);
-            password.setErrorEnabled(false);
             return true;
         }
 
@@ -183,7 +183,6 @@ public class SignUp_A extends AppCompatActivity {
         } else {
             // Check if username exist
             username.setError(null);
-            username.setErrorEnabled(false);
             return true;
         }
     }
@@ -197,7 +196,6 @@ public class SignUp_A extends AppCompatActivity {
             return false;
         } else {
             fullname.setError(null);
-            fullname.setErrorEnabled(false);
             return true;
         }
     }
@@ -216,7 +214,6 @@ public class SignUp_A extends AppCompatActivity {
             return false;
         } else {
             email.setError(null);
-            email.setErrorEnabled(false);
             return true;
 
         }

@@ -1,5 +1,6 @@
-package Adapter;
+ package Adapter;
 
+import android.content.Intent;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.music.cloudish.R;
+import com.music.cloudish.ViewConcertDetail_A;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -82,7 +84,10 @@ public class ConcertRecyclerAdapter extends RecyclerView.Adapter<ConcertRecycler
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("clicked", "clicked");
+                    Intent i = new Intent(view.getContext(), ViewConcertDetail_A.class);
+                    i.putExtra("concertId", concert.getId());
+                    i.putExtra("concertMadeBy", concert.getUserId());
+                    view.getContext().startActivity(i);
                 }
             });
 

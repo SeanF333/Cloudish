@@ -8,16 +8,15 @@
     tools:context=".NotificationActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/barnotif"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarnotif"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbarnotif"
-            android:background="#01081B">
+            android:background="@color/white">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -29,18 +28,20 @@
                     android:layout_width="29dp"
                     android:layout_height="29dp"
                     android:layout_alignParentLeft="true"
-                    android:src="@drawable/ic_close"/>
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/ic_close" />
 
                 <TextView
-                    android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@+id/closenotif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_toRightOf="@+id/closenotif"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="Notification"
-                    android:textAllCaps="true"
-                    android:fontFamily="sans-serif-black"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"/>
+                    android:textAllCaps="false"
+                    android:textColor="@color/main_purple"
+                    android:textSize="20sp" />
 
 
             </RelativeLayout>
@@ -52,9 +53,9 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recNotif"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
-        android:id="@+id/recNotif"/>
+        android:layout_marginTop="5dp" />
 
 </LinearLayout>

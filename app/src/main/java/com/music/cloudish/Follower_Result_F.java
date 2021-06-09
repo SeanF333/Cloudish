@@ -34,11 +34,6 @@ import Adapter.UserFollowerRecyclerAdaptor;
 import Adapter.UserFollowingRecyclerAdaptor;
 import Else.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Follower_Result_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Follower_Result_F extends Fragment {
 
     RecyclerView rv;
@@ -90,9 +85,7 @@ public class Follower_Result_F extends Fragment {
         });
 
 
-
-
-
+        
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

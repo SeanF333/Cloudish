@@ -6,25 +6,23 @@
     android:layout_margin="10dp"
     android:background="@color/white"
     app:cardCornerRadius="30dp"
-    app:cardElevation="5dp"
-    >
+    app:cardElevation="5dp">
 
     <RelativeLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false"
-        >
+        android:clickable="false">
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/concert_image"
             android:layout_width="150dp"
             android:layout_height="200dp"
+            android:elevation="20dp"
             android:scaleType="centerCrop"
-            app:riv_corner_radius_bottom_right="0dp"
-            app:riv_corner_radius="10dip"
             app:riv_border_width="0dp"
-            android:elevation="20dp"/>
+            app:riv_corner_radius="10dip"
+            app:riv_corner_radius_bottom_right="0dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +37,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:ellipsize="end"
                 android:fontFamily="@font/montserrat_bold"
+                android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -47,17 +47,20 @@
                 android:id="@+id/concert_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:padding="10dp" />
 
             <TextView
                 android:id="@+id/concert_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:padding="10dp" />
 
 
         </LinearLayout>
-
 
 
     </RelativeLayout>

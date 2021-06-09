@@ -5,12 +5,12 @@ import java.util.Date;
 
 public class Concert {
 
-    private String id, imageurl, main_genre, name, description, time;
+    private String id, imageurl, main_genre, name, description, time, userId;
     private Integer duration;
     private Date date;
 
 
-    public Concert(String id, String imageurl, String main_genre, String name, String description, Date date, String time, Integer duration) {
+    public Concert(String id, String imageurl, String main_genre, String name, String description, Date date, String time, String userId, Integer duration) {
         this.id = id;
         this.imageurl = imageurl;
         this.main_genre = main_genre;
@@ -19,6 +19,15 @@ public class Concert {
         this.date = date;
         this.time = time;
         this.duration = duration;
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Integer getDuration() {

@@ -1,6 +1,9 @@
 package Adapter;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.music.cloudish.AddConcert_Second_A;
+import com.music.cloudish.Detail_Playlist_A;
 import com.music.cloudish.R;
+import com.music.cloudish.ViewConcertDetail_A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +79,6 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         ImageView user_image, image_selected;
         TextView user_name;
 
-
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -89,6 +94,8 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
 
             Glide.with(view.getContext()).load(profile_url).into(user_image);
             user_name.setText(user.getFullname());
+            user_name.setGravity(Gravity.CENTER);
+
 
             if(user.isSelected){
                 image_selected.setVisibility(View.VISIBLE);
@@ -99,20 +106,19 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
             user_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Log.d("userClicked", user.getFullname());
-
-                    if(user.isSelected){
-                        image_selected.setVisibility(View.GONE);
-                        user.isSelected = false;
-
-                        if(getSelectedUser().size() == 0){
-                            userListener.onUserAction(false);
+                    if(v.getContext().getClass().equals(AddConcert_Second_A.class)){
+                        Log.d("userClicked", user.getFullname());
+                        if(user.isSelected){
+                            image_selected.setVisibility(View.GONE);
+                            user.isSelected = false;
+                            if(getSelectedUser().size() == 0){
+                                userListener.onUserAction(false);
+                            }
+                        }else{
+                            image_selected.setVisibility(View.VISIBLE);
+                            user.isSelected = true;
+                            userListener.onUserAction(true);
                         }
-                    }else{
-                        image_selected.setVisibility(View.VISIBLE);
-                        user.isSelected = true;
-                        userListener.onUserAction(true);
                     }
                 }
             });
@@ -120,9 +126,6 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
             user_layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-
-                    Log.d("longClicked", user.getFullname());
-
                     return false;
                 }
             });

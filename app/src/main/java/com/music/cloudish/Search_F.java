@@ -12,11 +12,6 @@ import android.widget.EditText;
 
 import com.google.android.material.tabs.TabLayout;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Search_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Search_F extends Fragment {
 
 
@@ -47,8 +42,6 @@ public class Search_F extends Fragment {
         final Search_Ad adapter = new Search_Ad(getActivity().getSupportFragmentManager(), getActivity(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
 
         return v;
     }

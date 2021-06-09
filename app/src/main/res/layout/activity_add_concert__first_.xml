@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -26,25 +26,28 @@
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/imgConcert"
-            android:layout_width="360dp"
+            android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="10dp"
             android:elevation="7dp"
-            app:riv_corner_radius="20dp"
-            android:src="@drawable/raissa_poster"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/tap_here"
+            app:riv_corner_radius="40dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="10dp"
             android:alpha="0.8"
             android:background="@drawable/rounded_purple"
             android:elevation="15dp"
             android:orientation="vertical"
-            android:padding="25dp">
+            android:padding="20dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_layout"
@@ -58,6 +61,7 @@
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/white"
+                app:errorEnabled="true"
                 app:hintTextAppearance="@style/MyHintStyle"
                 app:hintTextColor="@color/white"
                 app:startIconDrawable="@drawable/title"
@@ -70,30 +74,31 @@
                     android:fontFamily="@font/montserrat"
                     android:inputType="text"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:layout_marginTop="10dp"
                 android:id="@+id/txtMainGenre"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginTop="10dp"
                 android:alpha="1"
                 android:background="@drawable/rounded_corners_white"
                 android:drawableEnd="@drawable/drop_down"
                 android:gravity="center_vertical"
                 android:hint="Select Main Genre"
                 android:padding="12dp"
-                android:textColorHint="@color/black" />
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginTop="10dp"
                 android:id="@+id/description_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:hint="Description"
                 android:textColorHint="@color/white"
@@ -101,6 +106,7 @@
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/white"
+                app:errorEnabled="true"
                 app:hintTextAppearance="@style/MyHintStyle"
                 app:hintTextColor="@color/white"
                 app:startIconDrawable="@drawable/hashtag_26"
@@ -113,16 +119,16 @@
                     android:fontFamily="@font/montserrat"
                     android:inputType="text"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginTop="10dp"
                 android:id="@+id/duration_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:hint="Duration (in minutes)"
                 android:textColorHint="@color/white"
@@ -130,6 +136,7 @@
                 app:boxStrokeWidthFocused="0dp"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/white"
+                app:errorEnabled="true"
                 app:hintTextAppearance="@style/MyHintStyle"
                 app:hintTextColor="@color/white"
                 app:startIconDrawable="@drawable/clock"
@@ -142,15 +149,15 @@
                     android:fontFamily="@font/montserrat"
                     android:inputType="number"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <TextView
-                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="Date"
                 android:textColor="@color/white"
@@ -177,11 +184,11 @@
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    app:cornerRadius="30dp"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Time"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    app:cornerRadius="30dp" />
 
                 <TextView
                     android:id="@+id/txtChosenTime"
@@ -213,9 +220,9 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/black"
                     android:fontFamily="@font/montserrat_bold"
-                    app:cornerRadius="30dp"
                     android:text="Next"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    app:cornerRadius="30dp" />
 
 
             </LinearLayout>
@@ -226,7 +233,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="50dp"
             android:orientation="vertical" />
 
 

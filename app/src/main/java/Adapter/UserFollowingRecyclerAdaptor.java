@@ -133,8 +133,6 @@ public class UserFollowingRecyclerAdaptor extends RecyclerView.Adapter<UserFollo
             btn=itemView.findViewById(R.id.btnUnfol);
             btn2=itemView.findViewById(R.id.btnFollow);
 
-
-
         }
     }
 }

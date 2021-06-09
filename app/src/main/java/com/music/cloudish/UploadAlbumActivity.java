@@ -101,7 +101,7 @@ public class UploadAlbumActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedcat=parent.getItemAtPosition(position).toString();
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
                 ((TextView) parent.getChildAt(0)).setTextSize(16);
                 Toast.makeText(UploadAlbumActivity.this, "Selected "+selectedcat, Toast.LENGTH_SHORT).show();
             }
@@ -116,7 +116,6 @@ public class UploadAlbumActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CropImage.activity().setAspectRatio(1,1).setCropShape(CropImageView.CropShape.RECTANGLE).start(UploadAlbumActivity.this);
-
             }
         });
 

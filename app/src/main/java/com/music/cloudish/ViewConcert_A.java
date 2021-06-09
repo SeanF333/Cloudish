@@ -118,7 +118,7 @@ public class ViewConcert_A extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Integer duration = Integer.valueOf(ds.child("duration").getValue().toString());
-                        Concert concert = new Concert(id, image_url,  main_genre, name, description, date, time, duration);
+                        Concert concert = new Concert(id, image_url,  main_genre, name, description, date, time, currentUserId, duration);
                         concertArrayList.add(concert);
                     }
                     ConcertRecyclerAdapter concertRecyclerAdapter = new ConcertRecyclerAdapter(concertArrayList);

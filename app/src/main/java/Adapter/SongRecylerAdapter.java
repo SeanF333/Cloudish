@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.music.cloudish.AddConcert_Second_A;
 import com.music.cloudish.R;
 
 import java.lang.reflect.Array;
@@ -96,18 +97,20 @@ public class SongRecylerAdapter extends RecyclerView.Adapter<SongRecylerAdapter.
                 public void onClick(View v) {
 
                     Log.d("songClicked", songtitle);
-                    if(song.isSelected){
-                        imageSelected.setVisibility(View.GONE);
-                        song.isSelected = false;
+                    if(v.getContext().getClass().equals(AddConcert_Second_A.class)){
+                        if(song.isSelected){
+                            imageSelected.setVisibility(View.GONE);
+                            song.isSelected = false;
 
-                        if(getSelectedSong().size() == 0){
-                            songListener.onSongAction(false);
+                            if(getSelectedSong().size() == 0){
+                                songListener.onSongAction(false);
+                            }
+
+                        }else if(!song.isSelected){
+                            imageSelected.setVisibility(View.VISIBLE);
+                            song.isSelected = true;
+                            songListener.onSongAction(true);
                         }
-
-                    }else if(!song.isSelected){
-                        imageSelected.setVisibility(View.VISIBLE);
-                        song.isSelected = true;
-                        songListener.onSongAction(true);
                     }
                 }
             });

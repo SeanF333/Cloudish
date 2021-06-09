@@ -21,8 +21,10 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.music.cloudish.R;
 
 import java.util.List;
@@ -80,9 +82,32 @@ public class UserFollowingRecyclerAdaptor extends RecyclerView.Adapter<UserFollo
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()){
-                                                        liu.remove(position);
-                                                        pd.dismiss();
-                                                        notifyDataSetChanged();
+                                                        Query q = FirebaseDatabase.getInstance().getReference().child("Notification").child(a.getId()).orderByChild("publisherid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                        q.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                                if (task.isSuccessful()){
+                                                                    for(DataSnapshot dsnap : task.getResult().getChildren()){
+                                                                        String messagee = dsnap.child("text").getValue().toString();
+                                                                        if (!messagee.endsWith("starting to follow you.")){
+                                                                            continue;
+                                                                        }
+                                                                        dsnap.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                liu.remove(position);
+                                                                                pd.dismiss();
+                                                                                notifyDataSetChanged();
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }else {
+                                                                    pd.dismiss();
+                                                                    Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
+
                                                     }else {
                                                         pd.dismiss();
                                                         Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();

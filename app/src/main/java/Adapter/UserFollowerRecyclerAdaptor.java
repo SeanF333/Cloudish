@@ -21,8 +21,10 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.music.cloudish.MainHomeActivity;
 import com.music.cloudish.R;
 import com.music.cloudish.SongInAlbumActivity;
@@ -81,9 +83,52 @@ public class UserFollowerRecyclerAdaptor extends RecyclerView.Adapter<UserFollow
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()){
-                                                        liu.remove(position);
-                                                        pd.dismiss();
-                                                        notifyDataSetChanged();
+                                                        Query dfff = FirebaseDatabase.getInstance().getReference().child("Notification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("publisherid").equalTo(a.getId());
+                                                        dfff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                                if (task.isSuccessful()){
+                                                                    for (DataSnapshot dsn : task.getResult().getChildren()){
+                                                                        String message = dsn.child("text").getValue().toString();
+                                                                        if (!message.endsWith("starting to follow you.")){
+                                                                            continue;
+                                                                        }
+                                                                        dsn.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                Query dffff = FirebaseDatabase.getInstance().getReference().child("Notification").child(a.getId()).orderByChild("publisherid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                                                dffff.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                                                    @Override
+                                                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                                                        if (task.isSuccessful()){
+                                                                                            for (DataSnapshot snap : task.getResult().getChildren()){
+                                                                                                String messagee = snap.child("text").getValue().toString();
+                                                                                                if (!messagee.endsWith("accepted your following request")){
+                                                                                                    continue;
+                                                                                                }
+                                                                                                snap.getRef().setValue(null);
+                                                                                                break;
+                                                                                            }
+                                                                                            liu.remove(position);
+                                                                                            pd.dismiss();
+                                                                                            notifyDataSetChanged();
+                                                                                        }else {
+                                                                                            pd.dismiss();
+                                                                                            Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+                                                                                        }
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        });
+                                                                        break;
+                                                                    }
+                                                                }else {
+                                                                    pd.dismiss();
+                                                                    Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
+
                                                     }else {
                                                         pd.dismiss();
                                                         Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();

@@ -31,4 +31,5 @@ public class Global {
     public static int postoset=0;
     public static int idx=0;
     public static String justdeleted = "";
+    public static int freqcount = 0;
 }

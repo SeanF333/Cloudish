@@ -6,18 +6,25 @@ import java.time.format.DateTimeFormatter;
 
 public class Post {
 
-    private String imageurl, caption, poster_id, poster_name, poster_imageurl;
+    private String imageurl, caption, poster_id, poster_name, poster_imageurl, post_id;
     private LocalDateTime datetime;
-    private Integer countLikes;
 
-    public Post(String imageurl, String caption, String poster_id, LocalDateTime datetime, String poster_imageurl, String poster_name, Integer countLikes ){
+    public Post(String post_id, String imageurl, String caption, String poster_id, LocalDateTime datetime, String poster_imageurl, String poster_name){
+        this.post_id = post_id;
         this.imageurl = imageurl;
         this.caption = caption;
         this.poster_id = poster_id;
         this.datetime = datetime;
-        this.countLikes = countLikes;
         this.poster_name = poster_name;
         this.poster_imageurl = poster_imageurl;
+    }
+
+    public String getPost_id() {
+        return post_id;
+    }
+
+    public void setPost_id(String post_id) {
+        this.post_id = post_id;
     }
 
     public String getPoster_name() {
@@ -26,14 +33,6 @@ public class Post {
 
     public void setPoster_name(String poster_name) {
         this.poster_name = poster_name;
-    }
-
-    public Integer getCountLikes() {
-        return countLikes;
-    }
-
-    public void setCountLikes(Integer countLikes) {
-        this.countLikes = countLikes;
     }
 
     public String getImageurl() {

@@ -97,16 +97,11 @@ public class AlbumRecyclerAdaptor extends RecyclerView.Adapter<AlbumRecyclerAdap
                                 v.getContext().startActivity(i);
                             }
 
-
                         }
                     });
                 }
             }
         });
-
-
-
-
     }
 
     @Override

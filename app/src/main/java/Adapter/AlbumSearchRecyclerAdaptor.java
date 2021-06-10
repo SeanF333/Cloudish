@@ -37,8 +37,6 @@ public class AlbumSearchRecyclerAdaptor extends RecyclerView.Adapter<AlbumSearch
     private Context context;
     private List<Pair<Album,String>> lia;
 
-
-
     public AlbumSearchRecyclerAdaptor(Context context, List<Pair<Album,String>> lia) {
         this.context = context;
         this.lia = lia;

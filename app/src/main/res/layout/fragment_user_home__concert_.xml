@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".UserHome_Concert_F">
 
+    <TextView
+        android:id="@+id/no_concert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Concert"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/result_concert"
         android:layout_width="match_parent"

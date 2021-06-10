@@ -36,10 +36,10 @@ public class UserHome_Ad extends FragmentPagerAdapter {
                 UserHome_Post_F userHome_post_f = new UserHome_Post_F(userid);
                 return userHome_post_f;
             case 1:
-                UserHome_Album_F userHome_album_f = new UserHome_Album_F();
+                UserHome_Album_F userHome_album_f = new UserHome_Album_F(userid);
                 return userHome_album_f;
             case 2:
-                UserHome_Concert_F userHome_concert_f = new UserHome_Concert_F();
+                UserHome_Concert_F userHome_concert_f = new UserHome_Concert_F(userid);
                 return userHome_concert_f;
             default:
                 return null;

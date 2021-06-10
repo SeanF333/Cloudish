@@ -57,7 +57,7 @@ public class UserHome_A extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Album"));
         tabLayout.addTab(tabLayout.newTab().setText("Concert"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabTextColors(getResources().getColor(R.color.white), getResources().getColor(R.color.white));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.main_purple), getResources().getColor(R.color.pop_orange));
 
         // Optional
         nestedScrollView.setFillViewport (true);

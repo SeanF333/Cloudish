@@ -17,16 +17,16 @@
             android:id="@+id/name_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/main_purple"
+            android:background="@color/white"
             app:layout_scrollFlags="scroll|snap"
             app:title="Hai"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/black" />
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:background="@color/main_purple"
+            android:background="@color/white"
             android:gravity="center"
             app:layout_scrollFlags="scroll">
 
@@ -141,7 +141,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/main_purple"
+            android:background="@color/white"
             android:gravity="center"
             app:layout_scrollFlags="enterAlways">
 
@@ -149,7 +149,7 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/main_purple"
+                android:background="@color/white"
                 app:tabIndicatorColor="@color/white"
                 app:tabTextColor="@color/white">
 

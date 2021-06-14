@@ -20,4 +20,10 @@
         \nUt enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
         \nQuis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur,
         \nvel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</string>
+    <string name="title_activity_liked__album_">Liked_Album_Activity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>

@@ -98,13 +98,21 @@ public class NotificationRecyclerAdaptor extends RecyclerView.Adapter<Notificati
             holder.ll.setVisibility(View.GONE);
             setup(n.getPublisherid(), holder.iv1, 1);
             holder.tv.setText(n.getText());
-        }else {
+        }else if (n.getMode().equals("1")){
             holder.iv2.setVisibility(View.VISIBLE);
             holder.tv2.setVisibility(View.VISIBLE);
             holder.ll.setVisibility(View.GONE);
             holder.tv.setVisibility(View.GONE);
             setup(n.getPublisherid(), holder.iv1, 1);
             setup2(n.getAlbum_name(), holder.iv2);
+            holder.tv2.setText(n.getText());
+        }else {
+            holder.iv2.setVisibility(View.VISIBLE);
+            holder.tv2.setVisibility(View.VISIBLE);
+            holder.ll.setVisibility(View.GONE);
+            holder.tv.setVisibility(View.GONE);
+            setup(n.getPublisherid(), holder.iv1, 1);
+            setup3(n.getAlbum_name(), holder.iv2);
             holder.tv2.setText(n.getText());
         }
 
@@ -159,6 +167,20 @@ public class NotificationRecyclerAdaptor extends RecyclerView.Adapter<Notificati
                         String link = sn1.child("imageurl").getValue().toString();
                         Glide.with(context).load(link).into(iv);
                     }
+
+                }
+            }
+        });
+    }
+
+    private void setup3(String postid, ImageView iv){
+        Query df = FirebaseDatabase.getInstance().getReference().child("Posts").child(postid);
+        df.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    String link = task.getResult().child("imageurl").getValue().toString();
+                    Glide.with(context).load(link).into(iv);
 
                 }
             }

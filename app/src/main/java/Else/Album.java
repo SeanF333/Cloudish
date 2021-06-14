@@ -5,12 +5,21 @@ public class Album {
     String imageurl;
     String category;
     public Boolean isSelected;
+    int likecount;
 
     public Album(String albumname, String category, String imageurl) {
         this.albumname = albumname;
         this.imageurl = imageurl;
         this.category = category;
         this.isSelected = false;
+    }
+
+    public int getLikecount() {
+        return likecount;
+    }
+
+    public void setLikecount(int likecount) {
+        this.likecount = likecount;
     }
 
     public Album() {

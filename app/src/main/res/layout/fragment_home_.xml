@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home_F">
+    tools:context=".Home_F"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/header_home"
@@ -19,5 +20,136 @@
         android:paddingBottom="10dp"
         android:textColor="@color/main_purple"
         android:text="Feeds" />
+
+    <LinearLayout
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/horizontalScrollView"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/layout_bg"
+                    android:id="@+id/liked"
+                    android:layout_width="210dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:src="@drawable/liked"
+                        android:layout_width="60dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_height="60dp"/>
+                    <TextView
+                        android:textSize="12dp"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loved Album"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/featured"
+                    android:layout_width="210dp"
+                    android:background="@drawable/layout_bg"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:src="@drawable/hits"
+                        android:layout_width="60dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_height="60dp"/>
+                    <TextView
+                        android:textSize="12dp"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Featured Album"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/hits"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="210dp"
+                    android:background="@drawable/layout_bg"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:src="@drawable/hits1"
+                        android:layout_width="60dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_height="60dp"/>
+                    <TextView
+                        android:textSize="12dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hits Album"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/post_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:fontFamily="@font/montserrat_bold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:textSize="18sp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/main_purple"
+        android:text="Posts" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/no_post_feed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Post"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <ProgressBar
+            android:id="@+id/pbfeeds"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recPostFeeds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
 
 </LinearLayout>

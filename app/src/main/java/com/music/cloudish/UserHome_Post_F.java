@@ -55,7 +55,7 @@ public class UserHome_Post_F extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Set Adapter
-        postRecyclerAdapter = new PostRecyclerAdapter(postlist);
+        postRecyclerAdapter = new PostRecyclerAdapter(postlist,getContext());
         postRecycler.setHasFixedSize(true);
         postRecycler.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL));
         postRecycler.setAdapter(postRecyclerAdapter);

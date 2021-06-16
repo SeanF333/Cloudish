@@ -153,6 +153,7 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
                 uidowner=Global.ownerUser;
             }
 
+
             if (getIntent().getStringExtra("songid")!=null){
                 Global.songid=getIntent().getStringExtra("songid");
                 Global.innermode=1;
@@ -663,9 +664,10 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
                     }catch (Exception e){
 
                     }
-                    Intent i = new Intent(SongInAlbumActivity.this, MainHomeActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(i);
+                    finish();
+//                    Intent i = new Intent(SongInAlbumActivity.this, MainHomeActivity.class);
+//                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                    startActivity(i);
                 }else {
                     finish();
                 }
@@ -1182,9 +1184,7 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
             }catch (Exception e){
 
             }
-            Intent i = new Intent(SongInAlbumActivity.this, MainHomeActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(i);
+            finish();
         }else {
             finish();
         }

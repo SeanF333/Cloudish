@@ -17,6 +17,10 @@
         <activity android:name=".PromoteAlbum"></activity>
         <activity android:name=".ViewMyPost_A" />
         <activity android:name=".UserHome_A" />
+        <activity android:name=".Hits_Album_A"></activity>
+        <activity android:name=".Featured_Album_A" />
+        <activity android:name=".Liked_Album_A" />
+        <activity android:name=".UserHome_A" />
         <activity android:name=".AddPost_A" />
         <activity android:name=".Detail_Playlist_A" />
         <activity android:name=".ViewConcertDetail_A" />

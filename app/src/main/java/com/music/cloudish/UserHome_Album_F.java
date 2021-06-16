@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +20,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Adapter.AlbumRecyclerAdaptor;
+import Adapter.AlbumSearchRecyclerAdaptor;
 import Else.Album;
 
 public class UserHome_Album_F extends Fragment {
 
     private String userid;
     RecyclerView albumRecycler;
-    AlbumRecyclerAdaptor albumRecyclerAdaptor;
-    ArrayList<Album> albumlist = new ArrayList<>();
+    AlbumSearchRecyclerAdaptor albumRecyclerAdaptor;
+    List<Pair<Album,String>> albumlist = new ArrayList<>();
     DatabaseReference mDatabase;
     TextView no_album;;
 
@@ -50,7 +53,7 @@ public class UserHome_Album_F extends Fragment {
 
         // Set Adapter
         albumRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        albumRecyclerAdaptor = new AlbumRecyclerAdaptor(getContext(), albumlist);
+        albumRecyclerAdaptor = new AlbumSearchRecyclerAdaptor(getContext(), albumlist);
         albumRecycler.setAdapter(albumRecyclerAdaptor);
 
         // Load album info from database
@@ -65,7 +68,7 @@ public class UserHome_Album_F extends Fragment {
                     for(DataSnapshot s : snapshot.getChildren()){
                         Album album = s.getValue(Album.class);
                         album.setAlbumcategory(s.child("category").getValue().toString());
-                        albumlist.add(album);
+                        albumlist.add(new Pair<>(album,userid));
                         albumRecyclerAdaptor.notifyDataSetChanged();
                     }
                 }else{

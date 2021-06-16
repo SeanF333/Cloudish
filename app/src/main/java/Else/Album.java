@@ -6,6 +6,7 @@ public class Album {
     String imageurl;
     String category;
     public Boolean isSelected;
+    int likecount;
 
     public Album(String albumname, String category, String imageurl) {
         this.albumname = albumname;
@@ -40,6 +41,14 @@ public class Album {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public int getLikecount() {
+        return likecount;
+    }
+
+    public void setLikecount(int likecount) {
+        this.likecount = likecount;
     }
 
     public String getAlbumname() {

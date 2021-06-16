@@ -1,10 +1,14 @@
 package Else;
 
+import android.app.Activity;
+import android.content.Context;
+
 import androidx.fragment.app.Fragment;
 
 import com.example.jean.jcplayer.view.JcPlayerView;
 import com.music.cloudish.Album_Result_F;
 import com.music.cloudish.Library_F;
+import com.music.cloudish.MainHomeActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,4 +36,6 @@ public class Global {
     public static int idx=0;
     public static String justdeleted = "";
     public static int freqcount = 0;
+
+
 }

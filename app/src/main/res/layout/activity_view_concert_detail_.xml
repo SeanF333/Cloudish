@@ -12,8 +12,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:background="@drawable/concert_bg3"
+        android:layout_height="150dp"
+        android:background="@drawable/purple_overlay"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme">
 
@@ -39,15 +39,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:alpha="0.8"
-                android:background="@drawable/rounded_purple"
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
                 android:padding="20dp"
                 android:text="Concert Name"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="18sp"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"/>
 
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -130,7 +128,6 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/rounded_corners_white"
-                android:elevation="5dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="10dp">

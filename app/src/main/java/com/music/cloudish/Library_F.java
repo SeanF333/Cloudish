@@ -28,11 +28,6 @@ import java.util.List;
 import Adapter.AlbumRecyclerAdaptor;
 import Else.Album;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Library_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Library_F extends Fragment {
 
     FloatingActionButton add;
@@ -54,7 +49,6 @@ public class Library_F extends Fragment {
         // Required empty public constructor
     }
 
-    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,6 +80,7 @@ public class Library_F extends Fragment {
                 li.clear();
                 for(DataSnapshot sn : snapshot.getChildren()){
                     Album bum = sn.getValue(Album.class);
+                    bum.setAlbumid(sn.getKey());
                     bum.setAlbumcategory(sn.child("category").getValue().toString());
                     li.add(bum);
                 }

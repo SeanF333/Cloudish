@@ -65,7 +65,6 @@ public class AlbumSearchRecyclerAdaptor extends RecyclerView.Adapter<AlbumSearch
                     Glide.with(context).load(a.getImageurl()).into(holder.iv);
                     holder.tv.setText(a.getAlbumname());
 
-
                     if (Global.extAlbum.equals(a.getAlbumname())){
                         holder.ll.setBackgroundColor(Color.YELLOW);
                     }else {

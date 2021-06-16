@@ -1,6 +1,7 @@
 package Else;
 
 public class Album {
+    String albumid;
     String albumname;
     String imageurl;
     String category;
@@ -13,7 +14,32 @@ public class Album {
         this.isSelected = false;
     }
 
-    public Album() {
+    public Album(){
+
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
+    }
+
+    public String getAlbumid() {
+        return albumid;
+    }
+
+    public void setAlbumid(String albumid) {
+        this.albumid = albumid;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getAlbumname() {

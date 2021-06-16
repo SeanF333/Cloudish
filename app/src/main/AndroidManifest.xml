@@ -14,9 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cloudish">
-        <activity android:name=".UserHome_A">
-
-        </activity>
+        <activity android:name=".PromoteAlbum"></activity>
+        <activity android:name=".ViewMyPost_A" />
+        <activity android:name=".UserHome_A" />
         <activity android:name=".AddPost_A" />
         <activity android:name=".Detail_Playlist_A" />
         <activity android:name=".ViewConcertDetail_A" />

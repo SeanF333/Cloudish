@@ -136,8 +136,6 @@ public class SongInAlbumActivity extends AppCompatActivity implements AlbumListe
         rv.setLayoutManager(new LinearLayoutManager(this));
         li=new ArrayList<>();
 
-
-
         if (modedisplay==1){
 
             if (getIntent().getStringExtra("kode")!=null){

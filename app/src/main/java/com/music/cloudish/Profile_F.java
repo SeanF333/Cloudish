@@ -34,7 +34,7 @@ import Else.Global;
 public class Profile_F extends Fragment {
 
 
-    LinearLayout ll, ed, layout_post, layout_concert;
+    LinearLayout ll, ed, layout_post, layout_concert, layout_promote;
     ImageView iv;
     TextView uname, fname, email, telp, following, follower;
     DatabaseReference df;
@@ -61,6 +61,7 @@ public class Profile_F extends Fragment {
         verify = view.findViewById(R.id.verify);
         layout_concert = view.findViewById(R.id.layout_concert);
         layout_post = view.findViewById(R.id.layout_post);
+        layout_promote = view.findViewById(R.id.layout_promote);
         ll = view.findViewById(R.id.logoutll);
         ed = view.findViewById(R.id.edprof);
         notif = view.findViewById(R.id.layout_notif);
@@ -126,8 +127,17 @@ public class Profile_F extends Fragment {
                     });
                     pd.dismiss();
                 } else {
+                    pd.dismiss();
                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        layout_promote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), PromoteAlbum.class);
+                startActivity(i);
             }
         });
 
@@ -225,7 +235,7 @@ public class Profile_F extends Fragment {
         layout_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), AddPost_A.class);
+                Intent i = new Intent(getActivity(), ViewMyPost_A.class);
                 startActivity(i);
             }
         });

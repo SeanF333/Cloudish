@@ -50,13 +50,10 @@ public class Login_A extends AppCompatActivity {
                 goToSignUpScreen();
             }
         });
-
-
     }
 
     private void goToSignUpScreen() {
         Intent i = new Intent(Login_A.this, SignUp_A.class);
         startActivity(i);
-        finish();
     }
 }

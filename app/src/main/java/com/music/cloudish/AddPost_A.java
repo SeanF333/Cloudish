@@ -43,7 +43,7 @@ public class AddPost_A extends AppCompatActivity {
     ImageView image;
     TextInputLayout caption_layout;
     TextInputEditText caption_editText;
-    Button btn_post;
+    Button btn_post, btn_cancel;
     Uri imageUri;
     String caption, userId;
     DatabaseReference mDatabase;
@@ -58,6 +58,7 @@ public class AddPost_A extends AppCompatActivity {
         caption_layout = findViewById(R.id.caption_layout);
         btn_post = findViewById(R.id.btn_post);
         caption_editText = findViewById(R.id.caption_editText);
+        btn_cancel = findViewById(R.id.btn_cancel);
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -77,6 +78,15 @@ public class AddPost_A extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validatePost();
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AddPost_A.this, ViewMyPost_A.class);
+                startActivity(i);
+                finish();
             }
         });
 
@@ -157,9 +167,15 @@ public class AddPost_A extends AppCompatActivity {
         if(imageUri.equals(Uri.parse("https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/no_image_post.png?alt=media&token=0cac54d8-698e-4eee-8f29-4232a6e42601"))){
             hm.put("imageurl", "https://firebasestorage.googleapis.com/v0/b/cloudish-89d6b.appspot.com/o/no_image_post.png?alt=media&token=0cac54d8-698e-4eee-8f29-4232a6e42601");
             hm.put("caption", caption);
+            hm.put("poster_id",currentUserId);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            String datetime = dtf.format(now);
+            hm.put("datetime",datetime);
             mPost.updateChildren(hm);
             pd.dismiss();
         }else{
+            pd.dismiss();
             StorageReference storageReference = sr.child(System.currentTimeMillis()+"."+getExtension(imageUri));
             storageReference.putFile(imageUri).continueWithTask(new Continuation() {
                 @Override
@@ -183,10 +199,19 @@ public class AddPost_A extends AppCompatActivity {
                     String datetime = dtf.format(now);
                     hm.put("datetime",datetime);
                     mPost.updateChildren(hm);
-                    pd.dismiss();
+
                 }
             });
         }
+
+        goToViewPost();
+
+    }
+
+    private void goToViewPost() {
+        Intent i = new Intent(AddPost_A.this, ViewMyPost_A.class);
+        startActivity(i);
+        finish();
     }
 
     private String getExtension(Uri uri){

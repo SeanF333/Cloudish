@@ -8,12 +8,12 @@
 
     <TextView
         android:id="@+id/page_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/montserrat_bold"
-        android:text="Promote Album"
+        android:text="Finish Your Payment"
         android:textColor="@color/pop_orange"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,25 +22,24 @@
     <ImageView
         android:id="@+id/illustration"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/fly"
+        android:src="@drawable/waiting2"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/page_title" />
 
+
     <TextView
         android:id="@+id/no_album"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/page_desc"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="No Album"
         android:gravity="center"
-        android:visibility="gone"
-        />
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/page_desc"
@@ -50,31 +49,53 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="40dp"
         android:fontFamily="@font/poppins_medium"
-        android:text="Select Album that you want to promote, your selected album will appear in people's feed"
+        android:text="Transfer to VA 08888888111199"
         android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/illustration" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/album_rv"
-        android:padding="20dp"
+
+    <TextView
+        android:id="@+id/payment_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Payment Amount : "
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/page_desc"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+
+
+    <TextView
+        android:id="@+id/payment_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="300000"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/page_desc" />
+        app:layout_constraintTop_toBottomOf="@+id/payment_amount"
+        android:ellipsize="none"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/promote_btn"
+        android:id="@+id/okay_btn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/album_rv"
+        app:layout_constraintTop_toBottomOf="@id/payment_counter"
         app:cornerRadius="15dp"
-        android:text="Promote"
+        android:text="Okay"
         android:fontFamily="@font/montserrat_bold"/>
 
 

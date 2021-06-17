@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -72,7 +74,7 @@ public class PromoteAlbumRecyclerAdapter extends RecyclerView.Adapter<PromoteAlb
     public class PromoteAlbumViewHolder extends RecyclerView.ViewHolder{
 
         TextView tv, count;
-        ImageView iv;
+        ImageView iv,love;
         CardView cv;
         LinearLayout ll;
 
@@ -83,7 +85,7 @@ public class PromoteAlbumRecyclerAdapter extends RecyclerView.Adapter<PromoteAlb
             cv=itemView.findViewById(R.id.albumitem);
             ll=itemView.findViewById(R.id.bckg_album);
             count=itemView.findViewById(R.id.countlike);
-
+            love = itemView.findViewById(R.id.love);
         }
 
         public void bindAlbum(final Album a){
@@ -100,12 +102,18 @@ public class PromoteAlbumRecyclerAdapter extends RecyclerView.Adapter<PromoteAlb
                             public void onClick(View v) {
                                 if(a.isSelected){
                                     ll.setBackgroundColor(Color.WHITE);
+                                    love.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.pop_orange));
+                                    tv.setTextColor(Color.BLACK);
+                                    count.setTextColor(ContextCompat.getColor(view.getContext(), R.color.grey_out));
                                     a.isSelected = false;
                                     if(getSelectedAlbum().size() == 0){
                                         albumListener.onAlbumAction(false);
                                     }
                                 }else if(!a.isSelected){
                                     ll.setBackgroundColor(Color.parseColor("#3B117B"));
+                                    love.setColorFilter(Color.WHITE);
+                                    tv.setTextColor(Color.WHITE);
+                                    count.setTextColor(Color.WHITE);
                                     a.isSelected = true;
                                     albumListener.onAlbumAction(true);
                                 }

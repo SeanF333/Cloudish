@@ -32,8 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:fontFamily="@font/poppins_medium"
                 android:ellipsize="end"
+                android:fontFamily="@font/poppins_medium"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Title"
@@ -47,16 +47,17 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/love"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_lovr" />
 
                 <TextView
-                    android:fontFamily="@font/poppins_medium"
                     android:id="@+id/countlike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
                     android:text="0" />
 
 

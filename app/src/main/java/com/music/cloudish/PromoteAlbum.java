@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +41,7 @@ public class PromoteAlbum extends AppCompatActivity implements AlbumListener {
     ArrayList<Album> selectedAlbumList = new ArrayList<>();
     String userid;
     DatabaseReference mDatabase;
+    Integer album_count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +76,33 @@ public class PromoteAlbum extends AppCompatActivity implements AlbumListener {
     }
 
     private void promoteSelectedAlbum() {
-        List<Album> selectedAlbum = albumRecyclerAdapter.getSelectedAlbum();
-        Integer selectedAlbumCount = selectedAlbum.size();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle("Confirmation");
+        builder.setMessage("Are you sure want to promoted selected Album?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                List<Album> selectedAlbum = albumRecyclerAdapter.getSelectedAlbum();
+                List<String> promoted_album_id_list = new ArrayList<>();
+                for(Album m : selectedAlbum){
+                    promoted_album_id_list.add(m.getAlbumid());
+                }
 
-
-
+                Intent i = new Intent(PromoteAlbum.this, PaymentConfirmation_A.class);
+                i.putStringArrayListExtra("album_list", (ArrayList<String>)promoted_album_id_list);
+                startActivity(i);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void loadMyAlbum() {
@@ -88,11 +116,11 @@ public class PromoteAlbum extends AppCompatActivity implements AlbumListener {
                     userAlbumList.clear();
                     for(DataSnapshot s : snapshot.getChildren()){
                         Album album = s.getValue(Album.class);
-                        album.setAlbumid(s.getKey());
+                        String album_id = s.getKey();
+                        album.setAlbumid(album_id);
                         album.setSelected(false);
                         album.setAlbumcategory(s.child("category").getValue().toString());
-                        userAlbumList.add(album);
-                        albumRecyclerAdapter.notifyDataSetChanged();
+                        validateAlbum(album);
                     }
                 }else{
                     no_album.setVisibility(View.VISIBLE);
@@ -105,6 +133,37 @@ public class PromoteAlbum extends AppCompatActivity implements AlbumListener {
 
             }
         });
+    }
+
+    private void validateAlbum(Album a) {
+        String album_id = a.getAlbumid();
+        DatabaseReference mPromoted = mDatabase.child("Promoted").child(album_id);
+        mPromoted.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    album_count++;
+                    userAlbumList.add(a);
+                    albumRecyclerAdapter.notifyDataSetChanged();
+                }
+                setAlbumCount();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void setAlbumCount() {
+        if(album_count == 0){
+            no_album.setVisibility(View.VISIBLE);
+            album_rv.setVisibility(View.GONE);
+        }else{
+            no_album.setVisibility(View.GONE);
+            album_rv.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

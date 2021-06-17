@@ -51,7 +51,7 @@ public class ViewMyPost_A extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        postRecyclerAdapter = new PostRecyclerAdapter(postlist);
+        postRecyclerAdapter = new PostRecyclerAdapter(postlist, this);
         postRecycler.setHasFixedSize(true);
         postRecycler.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.HORIZONTAL));
         postRecycler.setAdapter(postRecyclerAdapter);

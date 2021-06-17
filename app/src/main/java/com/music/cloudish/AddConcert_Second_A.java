@@ -78,7 +78,7 @@ public class AddConcert_Second_A extends AppCompatActivity implements UserListen
     ArrayList<Song> songSearchList = new ArrayList<>();
     ArrayList<Song> songlist = new ArrayList<>();
     ArrayList<User> userlist = new ArrayList<>();
-    ArrayList<Performance> performances = new ArrayList<>();;
+    ArrayList<Performance> performances = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

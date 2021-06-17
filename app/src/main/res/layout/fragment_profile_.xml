@@ -342,7 +342,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:fontFamily="@font/poppins_medium"
-                    android:text="Promote Concert"
+                    android:text="Promote Album"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 

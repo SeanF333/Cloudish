@@ -128,6 +128,7 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
         });
     }
 
+
     private void validatePrivate(User a, String currentuserid, Context c) {
         DatabaseReference mUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(a.getId());
         mUsers.addListenerForSingleValueEvent(new ValueEventListener() {

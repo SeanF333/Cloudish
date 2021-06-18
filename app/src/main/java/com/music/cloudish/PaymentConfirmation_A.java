@@ -2,6 +2,7 @@ package com.music.cloudish;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -82,5 +83,12 @@ public class PaymentConfirmation_A extends AppCompatActivity {
     void cancelTimer() {
         if(cTimer!=null)
             cTimer.cancel();
+    }
+
+    @Override
+    protected void onDestroy() {
+        NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+        super.onDestroy();
     }
 }

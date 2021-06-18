@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -225,5 +226,12 @@ public class ViewConcertDetail_A extends AppCompatActivity implements UserListen
     @Override
     public void onSongAction(Boolean isSelected) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+        super.onDestroy();
     }
 }

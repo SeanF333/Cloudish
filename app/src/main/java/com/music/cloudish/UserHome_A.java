@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -126,5 +127,12 @@ public class UserHome_A extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+        super.onDestroy();
     }
 }

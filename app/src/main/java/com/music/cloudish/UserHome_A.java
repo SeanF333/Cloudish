@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,10 +23,15 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import Else.Notification;
 
 public class UserHome_A extends AppCompatActivity {
 
@@ -31,9 +40,10 @@ public class UserHome_A extends AppCompatActivity {
     TextView post_count, follower_count, following_count;
     TabLayout tabLayout;
     ViewPager viewPager;
-    String _artistid, _followercount, _followingcount;
+    String _artistid, _followercount, _followingcount, currentuserid, isPrivate;
     ProgressDialog pd;
     DatabaseReference df;
+    Button follow_btn;
     NestedScrollView nestedScrollView;
 
     @Override
@@ -49,8 +59,11 @@ public class UserHome_A extends AppCompatActivity {
         post_count = findViewById(R.id.post_count);
         follower_count = findViewById(R.id.followers_count);
         following_count = findViewById(R.id.following_count);
+        follow_btn = findViewById(R.id.follow_btn);
         nestedScrollView = findViewById(R.id.nestedscrollview);
         _artistid = getIntent().getStringExtra("artist_id");
+        isPrivate = getIntent().getStringExtra("artist_private");
+        currentuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Mengisi Tab Layout
 
@@ -67,8 +80,172 @@ public class UserHome_A extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setupWithViewPager(viewPager);
+        isFollowing();
+
+        follow_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                followBtnPressed();
+            }
+        });
+
 
         fillArtistInformation();
+    }
+
+    private void followBtnPressed() {
+        String follow_btn_str = follow_btn.getText().toString();
+        if(follow_btn_str.equals("Follow")){
+            if(isPrivate.equals("true")){
+                FirebaseDatabase.getInstance().getReference().child("Following").child(currentuserid).child(_artistid).setValue(false);
+                Notification n = new Notification(_artistid,currentuserid,"","","0");
+                DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(_artistid);
+                String uploadid=dff.push().getKey();
+                dff.child(uploadid).setValue(n);
+                follow_btn.setText("Requested");
+            }else{
+                DatabaseReference d = FirebaseDatabase.getInstance().getReference().child("Users").child(currentuserid);
+                d.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()){
+                            String uname = task.getResult().child("username").getValue().toString();
+                            Notification n = new Notification(_artistid,currentuserid,uname+" has starting to follow you.","","2");
+                            DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(_artistid);
+                            String uploadid=dff.push().getKey();
+                            dff.child(uploadid).setValue(n);
+                            refreshPages();
+                        }else {
+                            Toast.makeText(UserHome_A.this,"Error",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }else if(follow_btn_str.equals("Followed")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(UserHome_A.this);
+            builder.setCancelable(true);
+            builder.setTitle("Confirmation");
+            builder.setMessage("You may have to sent follow request again if you Unfollow this user, are you sure?");
+            builder.setPositiveButton("Yes",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ProgressDialog pd = new ProgressDialog(UserHome_A.this);
+                            pd.show();
+                            DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Following").child(currentuserid).child(_artistid);
+                            df.setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Follower").child(_artistid).child(currentuserid);
+                                        dff.setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    Query q = FirebaseDatabase.getInstance().getReference().child("Notification").child(_artistid).orderByChild("publisherid").equalTo(currentuserid);
+                                                    q.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                            if (task.isSuccessful()){
+                                                                for(DataSnapshot dsnap : task.getResult().getChildren()){
+                                                                    String messagee = dsnap.child("text").getValue().toString();
+                                                                    if (!messagee.endsWith("starting to follow you.")){
+                                                                        continue;
+                                                                    }
+                                                                    dsnap.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            pd.dismiss();
+                                                                            follow_btn.setText("Follow");
+                                                                            refreshPages();
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }else {
+                                                                pd.dismiss();
+                                                                Toast.makeText(UserHome_A.this,"Error", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    });
+
+                                                }else {
+                                                    pd.dismiss();
+                                                    Toast.makeText(UserHome_A.this,"Error", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+
+                                    }else {
+                                        pd.dismiss();
+                                        Toast.makeText(UserHome_A.this,"Error", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }else{
+            DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Following").child(currentuserid).child(_artistid);
+            df.setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        Query q = FirebaseDatabase.getInstance().getReference().child("Notification").child(_artistid).orderByChild("publisherid").equalTo(currentuserid);
+                        q.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if(task.isSuccessful())     {
+                                    for(DataSnapshot dsnap:task.getResult().getChildren()){
+                                        String mode = dsnap.child("mode").getValue().toString();
+                                        if(mode.equals("0")){
+                                            continue;
+                                        }
+                                        dsnap.getRef().setValue(null).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                pd.dismiss();
+                                                follow_btn.setText("Follow");
+                                                refreshPages();
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    }else{
+                        pd.dismiss();
+                    }
+                }
+            });
+        }
+    }
+
+    public void isFollowing(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Following").child(currentuserid);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.child(_artistid).exists()){
+                    follow_btn.setText("Follow");
+                }else if ((boolean)snapshot.child(_artistid).getValue()==false){
+                    follow_btn.setText("Requested");
+                }else {
+                    follow_btn.setText("Followed");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void fillArtistInformation() {
@@ -84,7 +261,7 @@ public class UserHome_A extends AppCompatActivity {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
                     String url = task.getResult().child("imageurl").getValue().toString();
-                    Log.d("UserHomeActivityURL", url);
+//                  Log.d("UserHomeActivityURL", url);
                     Glide.with(getApplication()).load(url).into(artist_img);
                     name_toolbar.setTitle('@' + task.getResult().child("username").getValue().toString());
                     DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Follower").child(_artistid);
@@ -108,7 +285,26 @@ public class UserHome_A extends AppCompatActivity {
                                                 }
                                             }
                                             following_count.setText(String.valueOf(count2));
-                                            pd.dismiss();
+                                            DatabaseReference mPost = FirebaseDatabase.getInstance().getReference().child("Posts");
+                                            mPost.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                    if(task.isSuccessful()){
+                                                        DataSnapshot posts = task.getResult();
+                                                        Integer counter = 0;
+                                                        for(DataSnapshot st : posts.getChildren()){
+                                                            if(st.child("poster_id").getValue().toString().equals(_artistid)){
+                                                                counter++;
+                                                            }
+                                                        }
+                                                        post_count.setText(String.valueOf(counter));
+                                                        pd.dismiss();
+                                                    }else{
+                                                        pd.dismiss();
+                                                    }
+                                                }
+                                            });
+
                                         } else {
                                             pd.dismiss();
                                             Toast.makeText(UserHome_A.this, "Error", Toast.LENGTH_SHORT).show();
@@ -123,6 +319,7 @@ public class UserHome_A extends AppCompatActivity {
                     });
                     pd.dismiss();
                 } else {
+                    pd.dismiss();
                     Toast.makeText(UserHome_A.this, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -134,5 +331,12 @@ public class UserHome_A extends AppCompatActivity {
         NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
         nMgr.cancelAll();
         super.onDestroy();
+    }
+
+    private void refreshPages(){
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
     }
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +29,7 @@ import Else.Album;
 
 public class UserHome_Album_F extends Fragment {
 
-    private String userid;
+    private String userid, currentuserid;
     RecyclerView albumRecycler;
     AlbumSearchRecyclerAdaptor albumRecyclerAdaptor;
     List<Pair<Album,String>> albumlist = new ArrayList<>();
@@ -50,12 +51,19 @@ public class UserHome_Album_F extends Fragment {
         albumRecycler = v.findViewById(R.id.result_album);
         no_album = v.findViewById(R.id.no_album);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        currentuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Set Adapter
         albumRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
         albumRecyclerAdaptor = new AlbumSearchRecyclerAdaptor(getContext(), albumlist);
         albumRecycler.setAdapter(albumRecyclerAdaptor);
 
+        checkPrivate();
+
+        return v;
+    }
+
+    private void loadAlbumData(){
         // Load album info from database
         DatabaseReference mAlbum =  mDatabase.child("Album").child(userid);
         mAlbum.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -83,6 +91,64 @@ public class UserHome_Album_F extends Fragment {
             }
         });
 
-        return v;
     }
+
+
+    private void checkPrivate() {
+
+        DatabaseReference mUser = mDatabase.child("Users").child(userid);
+        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){{
+                    String isPrivate = snapshot.child("private").getValue().toString();
+                    if(isPrivate.equals("true")){
+                        checkFollowing();
+                    }else{
+                        loadAlbumData();
+                    }
+                }}
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void checkFollowing() {
+        DatabaseReference mFollowing = mDatabase.child("Following").child(currentuserid);
+        mFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.child(userid).exists()){
+                    notValid();
+                }else if((boolean)snapshot.child(userid).getValue()==false){
+                    waitingToBeAcc();
+                }else{
+                    loadAlbumData();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void waitingToBeAcc(){
+        no_album.setVisibility(View.VISIBLE);
+        no_album.setText("Waiting for accepted");
+        albumRecycler.setVisibility(View.GONE);
+    }
+
+    private void notValid(){
+        no_album.setVisibility(View.VISIBLE);
+        no_album.setText("Follow this account first");
+        albumRecycler.setVisibility(View.GONE);
+    }
+
 }

@@ -140,6 +140,21 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/follow_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:textColor="@color/white"
+                app:cornerRadius="15dp" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
             android:gravity="center"

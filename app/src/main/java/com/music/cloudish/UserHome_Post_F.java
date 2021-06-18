@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +34,7 @@ public class UserHome_Post_F extends Fragment {
 
     RecyclerView postRecycler;
     DatabaseReference mPost;
-    String userid;
+    String userid, currentuserid;
     ArrayList<Post> postlist = new ArrayList<>();
     PostRecyclerAdapter postRecyclerAdapter;
     DatabaseReference mDatabase;
@@ -53,6 +54,7 @@ public class UserHome_Post_F extends Fragment {
         postRecycler = v.findViewById(R.id.result_post);
         no_post = v.findViewById(R.id.no_post);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        currentuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Set Adapter
         postRecyclerAdapter = new PostRecyclerAdapter(postlist,getContext());
@@ -60,9 +62,42 @@ public class UserHome_Post_F extends Fragment {
         postRecycler.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL));
         postRecycler.setAdapter(postRecyclerAdapter);
 
-        loadPost();
+        checkFollowing();
 
         return v;
+    }
+
+    private void checkFollowing() {
+        DatabaseReference mFollowing = mDatabase.child("Following").child(currentuserid);
+        mFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.child(userid).exists()){
+                    notValid();
+                }else if((boolean)snapshot.child(userid).getValue()==false){
+                    waitingToBeAcc();
+                }else{
+                    loadPost();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void waitingToBeAcc(){
+        no_post.setVisibility(View.VISIBLE);
+        no_post.setText("Waiting for accepted");
+        postRecycler.setVisibility(View.GONE);
+    }
+
+    private void notValid(){
+        no_post.setVisibility(View.VISIBLE);
+        no_post.setText("Follow this account first");
+        postRecycler.setVisibility(View.GONE);
     }
 
     private void loadPost() {

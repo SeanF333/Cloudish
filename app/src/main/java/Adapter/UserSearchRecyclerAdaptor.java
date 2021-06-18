@@ -48,7 +48,6 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
         View view;
         LayoutInflater li = LayoutInflater.from(context);
         view=li.inflate(R.layout.user_item_row, parent, false);
-
         return new MyViewHolder(view);
     }
 
@@ -65,8 +64,10 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
         holder.rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                validatePrivate(a, currentuserid, v.getContext());
+                Intent i = new Intent(v.getContext(), UserHome_A.class);
+                i.putExtra("artist_id", a.getId());
+                i.putExtra("artist_private", a.getIsprivate());
+                v.getContext().startActivity(i);
             }
         });
 
@@ -120,77 +121,7 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
                             }
                         }
                     });
-
-
                 }
-
-            }
-        });
-    }
-
-
-    private void validatePrivate(User a, String currentuserid, Context c) {
-        DatabaseReference mUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(a.getId());
-        mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    String _private = snapshot.child("private").getValue().toString();
-                    if(_private.equals("true")){
-                        Log.d("ini orang private", "True");
-                        checkFollowing(a.getId(), currentuserid,c);
-                    }else{
-                        Intent i = new Intent(c, UserHome_A.class);
-                        i.putExtra("artist_id", a.getId());
-                        c.startActivity(i);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void checkFollowing(String id, String currentuserid, Context c) {
-        DatabaseReference mFollowing = FirebaseDatabase.getInstance().getReference().child("Following").child(id).child(currentuserid);
-        mFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    checkFollower(id, currentuserid, c);
-                }else{
-                    return;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
-
-    private void checkFollower(String id, String currentuserid, Context c) {
-        DatabaseReference mFollower = FirebaseDatabase.getInstance().getReference().child("Follower").child(currentuserid).child(id);
-        mFollower.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    Intent i = new Intent(c, UserHome_A.class);
-                    i.putExtra("artist_id", id);
-                    c.startActivity(i);
-                }else{
-                    return;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }

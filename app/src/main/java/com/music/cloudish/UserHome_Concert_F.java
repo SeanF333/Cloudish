@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +35,7 @@ public class UserHome_Concert_F extends Fragment {
 
     RecyclerView concertRecycler;
     DatabaseReference mConcert;
-    String userid;
+    String userid, currentuserid;
     ArrayList<Concert> concertlist = new ArrayList<>();
     ConcertRecyclerAdapter concertRecyclerAdapter;
     DatabaseReference mDatabase;
@@ -58,6 +59,7 @@ public class UserHome_Concert_F extends Fragment {
         concertRecycler = v.findViewById(R.id.result_concert);
         no_concert = v.findViewById(R.id.no_concert);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        currentuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Set Adapter
         concertRecyclerAdapter = new ConcertRecyclerAdapter(concertlist);
@@ -65,9 +67,42 @@ public class UserHome_Concert_F extends Fragment {
         concertRecycler.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL));
         concertRecycler.setAdapter(concertRecyclerAdapter);
 
-        loadConcert();
+        checkFollowing();
 
         return v;
+    }
+
+    private void checkFollowing() {
+        DatabaseReference mFollowing = mDatabase.child("Following").child(currentuserid);
+        mFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.child(userid).exists()){
+                    notValid();
+                }else if((boolean)snapshot.child(userid).getValue()==false){
+                    waitingToBeAcc();
+                }else{
+                    loadConcert();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void waitingToBeAcc(){
+        no_concert.setVisibility(View.VISIBLE);
+        no_concert.setText("Waiting for accepted");
+        concertRecycler.setVisibility(View.GONE);
+    }
+
+    private void notValid(){
+        no_concert.setVisibility(View.VISIBLE);
+        no_concert.setText("Follow this account first");
+        concertRecycler.setVisibility(View.GONE);
     }
 
     private void loadConcert() {

@@ -88,6 +88,7 @@ public class PaymentConfirmation_A extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         NotificationManager nMgr = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        cancelTimer();
         nMgr.cancelAll();
         super.onDestroy();
     }

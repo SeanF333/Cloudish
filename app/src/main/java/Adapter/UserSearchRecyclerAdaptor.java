@@ -94,7 +94,6 @@ public class UserSearchRecyclerAdaptor extends RecyclerView.Adapter<UserSearchRe
                                 DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(a.getId());
                                 String uploadid=dff.push().getKey();
                                 dff.child(uploadid).setValue(n);
-
                             }else {
                                 Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show();
                             }

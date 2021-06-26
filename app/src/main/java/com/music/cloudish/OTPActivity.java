@@ -175,8 +175,11 @@ public class OTPActivity extends AppCompatActivity {
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(OTPActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(OTPActivity.this, "Your Number is in Wrong Format", Toast.LENGTH_LONG).show();
             pd.setVisibility(View.GONE);
+            Intent i = new Intent(OTPActivity.this, SignUp_A.class);
+            startActivity(i);
+            finish();
         }
     };
 

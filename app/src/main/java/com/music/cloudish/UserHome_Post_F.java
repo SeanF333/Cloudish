@@ -62,9 +62,33 @@ public class UserHome_Post_F extends Fragment {
         postRecycler.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL));
         postRecycler.setAdapter(postRecyclerAdapter);
 
-        checkFollowing();
+        checkPrivate();
 
         return v;
+    }
+
+    private void checkPrivate() {
+
+        DatabaseReference mUser = mDatabase.child("Users").child(userid);
+        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){{
+                    String isPrivate = snapshot.child("private").getValue().toString();
+                    if(isPrivate.equals("true")){
+                        checkFollowing();
+                    }else{
+                        loadPost();
+                    }
+                }}
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void checkFollowing() {

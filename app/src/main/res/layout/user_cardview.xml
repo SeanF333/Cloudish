@@ -33,10 +33,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Raissa Concert"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:fontFamily="@font/montserrat_bold"
+            android:maxLines="1"
+            android:text="Name"
             android:textColor="@color/black"
             android:textSize="14sp" />
 

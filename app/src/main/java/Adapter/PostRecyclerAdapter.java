@@ -109,6 +109,9 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
                 poster_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(posterid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid().trim())){
+                            return;
+                        }
                         Intent i = new Intent(v.getContext(), UserHome_A.class);
                         i.putExtra("artist_id", posterid);
                         v.getContext().startActivity(i);
@@ -122,6 +125,9 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             poster_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(posterid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid().trim())){
+                        return;
+                    }
                     Intent i = new Intent(v.getContext(), UserHome_A.class);
                     i.putExtra("artist_id", posterid);
                     v.getContext().startActivity(i);

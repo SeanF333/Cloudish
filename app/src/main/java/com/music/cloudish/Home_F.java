@@ -40,11 +40,6 @@ import java.util.Map;
 import Adapter.PostRecyclerAdapter;
 import Else.Post;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Home_F#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Home_F extends Fragment {
 
     LinearLayout liked,featured,hits;
@@ -60,7 +55,6 @@ public class Home_F extends Fragment {
         // Required empty public constructor
     }
     
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -64,6 +64,7 @@ public class UserHome_A extends AppCompatActivity {
         _artistid = getIntent().getStringExtra("artist_id");
         isPrivate = getIntent().getStringExtra("artist_private");
         currentuserid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d("isUserPrivate", isPrivate +" "+_artistid);
 
         // Mengisi Tab Layout
 
@@ -104,19 +105,38 @@ public class UserHome_A extends AppCompatActivity {
                 dff.child(uploadid).setValue(n);
                 follow_btn.setText("Requested");
             }else{
-                DatabaseReference d = FirebaseDatabase.getInstance().getReference().child("Users").child(currentuserid);
-                d.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+
+                FirebaseDatabase.getInstance().getReference().child("Following").child(currentuserid).child(_artistid).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()){
-                            String uname = task.getResult().child("username").getValue().toString();
-                            Notification n = new Notification(_artistid,currentuserid,uname+" has starting to follow you.","","2");
-                            DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(_artistid);
-                            String uploadid=dff.push().getKey();
-                            dff.child(uploadid).setValue(n);
-                            refreshPages();
+                            FirebaseDatabase.getInstance().getReference().child("Follower").child(_artistid).child(currentuserid).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        DatabaseReference d = FirebaseDatabase.getInstance().getReference().child("Users").child(currentuserid);
+                                        d.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                if (task.isSuccessful()){
+                                                    String uname = task.getResult().child("username").getValue().toString();
+                                                    Notification n = new Notification(_artistid,currentuserid,uname+" has starting to follow you.","","2");
+                                                    DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Notification").child(_artistid);
+                                                    String uploadid=dff.push().getKey();
+                                                    dff.child(uploadid).setValue(n);
+                                                    refreshPages();
+                                                }else {
+                                                    Toast.makeText(UserHome_A.this,"Error",Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }else {
+                                        Toast.makeText(UserHome_A.this,"Error, Please Try Again",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }else {
-                            Toast.makeText(UserHome_A.this,"Error",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UserHome_A.this,"Error, Please Try Again",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

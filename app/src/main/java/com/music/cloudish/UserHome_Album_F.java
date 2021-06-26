@@ -36,7 +36,6 @@ public class UserHome_Album_F extends Fragment {
     DatabaseReference mDatabase;
     TextView no_album;;
 
-
     public UserHome_Album_F(String userid) {
         this.userid = userid;
     }
@@ -65,6 +64,8 @@ public class UserHome_Album_F extends Fragment {
 
     private void loadAlbumData(){
         // Load album info from database
+        getActivity().overridePendingTransition(0, 0);
+
         DatabaseReference mAlbum =  mDatabase.child("Album").child(userid);
         mAlbum.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -92,7 +93,6 @@ public class UserHome_Album_F extends Fragment {
         });
 
     }
-
 
     private void checkPrivate() {
 
@@ -138,6 +138,7 @@ public class UserHome_Album_F extends Fragment {
             }
         });
     }
+
 
     private void waitingToBeAcc(){
         no_album.setVisibility(View.VISIBLE);

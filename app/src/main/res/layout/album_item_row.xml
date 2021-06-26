@@ -49,10 +49,11 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="12dp"
                     android:layout_height="15dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_lovr" />
+                    android:src="@drawable/ic_lovr"
+                    app:tint="@color/pop_orange" />
 
                 <TextView
                     android:id="@+id/countlike_s"
